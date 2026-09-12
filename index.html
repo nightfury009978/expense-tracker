@@ -1,1 +1,537 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker - Neon Glassmorphism Edition</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
+        body {
+            background-color: #0b0c16;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(255, 0, 122, 0.22) 0%, transparent 45%),
+                radial-gradient(circle at 90% 40%, rgba(0, 240, 255, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 50% 85%, rgba(112, 0, 255, 0.22) 0%, transparent 55%);
+            background-attachment: fixed;
+            color: #f3f4f6;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(18, 19, 43, 0.65);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card-neon {
+            background: rgba(22, 23, 50, 0.75);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 0, 122, 0.35);
+            box-shadow: 0 0 30px rgba(255, 0, 122, 0.2), inset 0 0 15px rgba(255, 0, 122, 0.08);
+        }
+
+        /* Neon Text Utilities */
+        .neon-text-pink {
+            color: #ff007a;
+            text-shadow: 0 0 12px rgba(255, 0, 122, 0.7);
+        }
+
+        .neon-text-cyan {
+            color: #00f0ff;
+            text-shadow: 0 0 12px rgba(0, 240, 255, 0.7);
+        }
+
+        .neon-btn-active {
+            background: linear-gradient(135deg, #ff007a 0%, #7000ff 100%);
+            box-shadow: 0 0 18px rgba(255, 0, 122, 0.5), 0 0 28px rgba(112, 0, 255, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .neon-glow-btn {
+            background: linear-gradient(135deg, #00f0ff 0%, #ff007a 100%);
+            box-shadow: 0 0 18px rgba(0, 240, 255, 0.45), 0 0 28px rgba(255, 0, 122, 0.35);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .neon-glow-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+        }
+
+        /* Category Pill selection styles */
+        .cat-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .cat-pill.active {
+            border-color: #00f0ff;
+            background: rgba(0, 240, 255, 0.18);
+            box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
+            color: #ffffff;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(11, 12, 22, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 0, 122, 0.4);
+            border-radius: 4px;
+        }
+
+        /* Custom Input Styling */
+        input, select {
+            background: rgba(11, 12, 22, 0.85) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            color: #ffffff !important;
+            outline: none !important;
+        }
+
+        input:focus, select:focus {
+            border-color: #00f0ff !important;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.35) !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12 pt-4 px-3 sm:px-6 flex justify-center items-start">
+
+    <div class="w-full max-w-md mx-auto space-y-5">
+        
+        <!-- Header Section -->
+        <header class="flex items-center justify-between px-2 pt-2">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight flex items-center gap-1.5">
+                    <span class="text-white">Expense</span>
+                    <span class="neon-text-cyan font-extrabold">tracker</span>
+                </h1>
+                <p class="text-xs text-gray-400 font-medium mt-0.5" id="sync-status">Offline Mode (Guest)</p>
+            </div>
+            
+            <div class="flex items-center space-x-2.5">
+                <!-- User Profile & Sign-in Button -->
+                <button id="auth-btn" onclick="openProfileModal()" title="Account & Preferences"
+                    class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center overflow-hidden relative border border-white/10 hover:border-pink-500/50 transition-all">
+                    <span id="auth-avatar-fallback" class="text-sm font-bold text-cyan-300">⚡</span>
+                    <img id="auth-avatar-img" class="w-full h-full object-cover hidden" alt="Avatar">
+                </button>
+
+                <!-- Settings Icon -->
+                <button onclick="openSettingsModal()" title="Settings" class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-gray-300 hover:text-white hover:border-cyan-400/40 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Time Period Selector -->
+        <div class="glass-card p-1.5 rounded-2xl flex items-center justify-between">
+            <button onclick="switchPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 transition-all duration-300">
+                Daily
+            </button>
+            <button onclick="switchPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 transition-all duration-300">
+                Weekly
+            </button>
+            <button onclick="switchPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs font-semibold rounded-xl neon-btn-active text-white transition-all duration-300">
+                Monthly
+            </button>
+        </div>
+
+        <!-- Primary Total Spent Card -->
+        <div class="glass-card-neon p-5 rounded-3xl relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="flex items-center justify-between text-xs text-gray-300">
+                <span id="period-label-total" class="font-medium uppercase tracking-wider text-pink-300">Total This Month</span>
+                <span id="user-badge" class="px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-semibold text-[10px] flex items-center gap-1">
+                    ₹ INR
+                </span>
+            </div>
+
+            <div class="mt-2 flex items-baseline space-x-1">
+                <span class="text-4xl font-extrabold tracking-tight text-white" id="main-total-amount">₹0.00</span>
+            </div>
+
+            <!-- Breakdown Mini Grid -->
+            <div class="grid grid-cols-2 gap-3 mt-4 pt-3 border-t border-white/10">
+                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/5">
+                    <p class="text-[10px] text-gray-400 font-medium">Today</p>
+                    <p class="text-sm font-bold text-cyan-300 mt-0.5" id="stat-today">₹0.00</p>
+                </div>
+                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/5">
+                    <p class="text-[10px] text-gray-400 font-medium">This Week</p>
+                    <p class="text-sm font-bold text-pink-400 mt-0.5" id="stat-week">₹0.00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Canvas Container -->
+        <div class="glass-card p-4 rounded-3xl">
+            <div class="flex justify-between items-center mb-2 px-1">
+                <h3 class="text-xs font-bold tracking-wider text-gray-300 uppercase">Spending Wave</h3>
+                <span class="text-[10px] text-cyan-400 bg-cyan-400/10 px-2 py-0.5 rounded-full border border-cyan-400/20">Live Analytics</span>
+            </div>
+            <div class="h-44 w-full relative">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Quick Add Form -->
+        <div class="glass-card p-5 rounded-3xl space-y-3">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-300 mb-1">Quick Add Expense</h2>
+
+            <form id="expenseForm" onsubmit="handleAddExpense(event)" class="space-y-3">
+                <div class="grid grid-cols-3 gap-2">
+                    <input type="text" id="expenseTitle" placeholder="Title (e.g. Chai / Coffee)" required
+                        class="col-span-2 px-3.5 py-2.5 rounded-xl text-xs w-full placeholder-gray-500 focus:outline-none">
+                    <div class="relative flex items-center">
+                        <span id="input-currency-symbol" class="absolute left-3 text-xs text-cyan-400 font-bold">₹</span>
+                        <input type="number" id="expenseAmount" placeholder="Amount" step="0.01" min="0.01" required
+                            class="pl-8 pr-3 py-2.5 rounded-xl text-xs w-full placeholder-gray-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Category Selection Pills -->
+                <div class="space-y-1.5">
+                    <label class="text-[10px] uppercase font-semibold text-gray-400">Category</label>
+                    <div class="grid grid-cols-3 gap-1.5" id="category-pills-container">
+                        <button type="button" onclick="selectCategoryPill('Food')" data-cat="Food" class="cat-pill active py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🍔 Food</button>
+                        <button type="button" onclick="selectCategoryPill('Transport')" data-cat="Transport" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🚗 Transport</button>
+                        <button type="button" onclick="selectCategoryPill('Shopping')" data-cat="Shopping" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🛍️ Shopping</button>
+                        <button type="button" onclick="selectCategoryPill('Entertainment')" data-cat="Entertainment" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🍿 Cinema</button>
+                        <button type="button" onclick="selectCategoryPill('Bills')" data-cat="Bills" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">💡 Bills</button>
+                        <button type="button" onclick="selectCategoryPill('Other')" data-cat="Other" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">📁 Other</button>
+                    </div>
+                </div>
+
+                <div class="pt-1">
+                    <input type="date" id="expenseDate" required class="px-3 py-2 rounded-xl text-xs w-full text-gray-300">
+                </div>
+
+                <button type="submit" 
+                    class="neon-glow-btn w-full py-3 rounded-xl text-xs font-bold text-white tracking-wide uppercase flex items-center justify-center space-x-2">
+                    <span>Add Expense</span>
+                    <span class="text-base font-black">+</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Recent Logs Section -->
+        <div class="glass-card p-5 rounded-3xl space-y-3">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-300">Recent Transactions</h3>
+                <span id="log-count" class="text-[10px] text-gray-400 bg-white/5 px-2 py-0.5 rounded-full">0 entries</span>
+            </div>
+
+            <!-- List container -->
+            <div id="transactionsList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1">
+                <!-- Dynamic JavaScript populated items -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md hidden px-4">
+        <div class="glass-card p-6 rounded-3xl w-full max-w-sm space-y-5 border border-white/10 animate-fade-in relative">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                    <span>⚙️</span> Preferences & Currency
+                </h3>
+                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white p-1 text-sm">✕</button>
+            </div>
+
+            <!-- User Auth Status Info -->
+            <div class="bg-white/5 p-3 rounded-2xl border border-white/5 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden border border-cyan-400/40">
+                        <span id="modal-avatar-fallback" class="text-xs font-bold text-cyan-400">👤</span>
+                        <img id="modal-avatar-img" class="w-full h-full object-cover hidden" alt="Avatar">
+                    </div>
+                    <div>
+                        <p id="modal-user-name" class="text-xs font-semibold text-white">Guest User</p>
+                        <p id="modal-user-email" class="text-[10px] text-gray-400">Local storage sync</p>
+                    </div>
+                </div>
+                <button id="modal-auth-action-btn" onclick="handleAuthClick()" class="px-2.5 py-1 text-[11px] font-semibold rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/30 transition-all">
+                    Sign In
+                </button>
+            </div>
+
+            <!-- Currency Selection -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-gray-300">Select Currency</label>
+                <select id="currency-select" onchange="handleCurrencyChange(this.value)" class="w-full px-3 py-2.5 rounded-xl text-xs text-white">
+                    <option value="INR" data-symbol="₹">₹ INR - Indian Rupee</option>
+                    <option value="USD" data-symbol="$">$ USD - US Dollar</option>
+                    <option value="EUR" data-symbol="€">€ EUR - Euro</option>
+                    <option value="GBP" data-symbol="£">£ GBP - British Pound</option>
+                    <option value="JPY" data-symbol="¥">¥ JPY - Japanese Yen</option>
+                    <option value="CAD" data-symbol="CA$">CA$ CAD - Canadian Dollar</option>
+                    <option value="AUD" data-symbol="A$">A$ AUD - Australian Dollar</option>
+                </select>
+            </div>
+
+            <!-- Save Button -->
+            <button onclick="closeSettingsModal()" class="neon-glow-btn w-full py-2.5 rounded-xl text-xs font-bold text-white uppercase tracking-wider">
+                Save & Close
+            </button>
+        </div>
+    </div>
+
+    <!-- User Profile & Authentication Modal -->
+    <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md hidden px-4">
+        <div class="glass-card p-6 rounded-3xl w-full max-w-sm space-y-5 border border-white/10 animate-fade-in relative">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                    <span>👤</span> Account Workspace
+                </h3>
+                <button onclick="closeProfileModal()" class="text-gray-400 hover:text-white p-1 text-sm">✕</button>
+            </div>
+
+            <div class="text-center space-y-3 py-2">
+                <div class="w-16 h-16 mx-auto rounded-3xl bg-slate-900 border-2 border-cyan-400/50 flex items-center justify-center overflow-hidden shadow-lg relative">
+                    <span id="account-avatar-fallback" class="text-2xl font-bold text-cyan-300">⚡</span>
+                    <img id="account-avatar-img" class="w-full h-full object-cover hidden" alt="Profile Picture">
+                </div>
+                <div>
+                    <h4 id="account-user-name" class="text-sm font-bold text-white">Guest User</h4>
+                    <p id="account-user-email" class="text-xs text-gray-400">Local Account Workspace</p>
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-white/10">
+                <button id="account-auth-btn" onclick="handleAuthClick()" class="neon-glow-btn w-full py-2.5 rounded-xl text-xs font-bold text-white uppercase tracking-wider flex items-center justify-center gap-2">
+                    <span id="account-auth-text">Sign In with Google</span>
+                </button>
+                <p class="text-[10px] text-center text-gray-400">Sign in to sync your expenses seamlessly across all your devices.</p>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global state references
+        window.firebaseApp = null;
+        window.firebaseAuth = null;
+        window.firebaseDb = null;
+        window.currentUser = null;
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'neon-expense-tracker';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+
+        if (firebaseConfig) {
+            try {
+                window.firebaseApp = initializeApp(firebaseConfig);
+                window.firebaseAuth = getAuth(window.firebaseApp);
+                window.firebaseDb = getFirestore(window.firebaseApp);
+
+                // Authentication setup
+                const initAuth = async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        try {
+                            await signInWithCustomToken(window.firebaseAuth, __initial_auth_token);
+                        } catch (e) {
+                            await signInAnonymously(window.firebaseAuth);
+                        }
+                    }
+                };
+                initAuth();
+
+                onAuthStateChanged(window.firebaseAuth, (user) => {
+                    window.currentUser = user;
+                    updateUserUI(user);
+                    if (user && !user.isAnonymous) {
+                        setupFirestoreSync(user.uid);
+                    } else {
+                        window.syncWithLocalStorage();
+                    }
+                });
+            } catch (err) {
+                console.warn("Firebase initialization skipped or failed, falling back to local storage.", err);
+            }
+        }
+
+        // Setup real-time Firestore sync
+        function setupFirestoreSync(uid) {
+            if (!window.firebaseDb) return;
+            const docRef = doc(window.firebaseDb, 'artifacts', appId, 'users', uid, 'expenses', 'data');
+            
+            document.getElementById('sync-status').innerText = 'Cloud Synced (Google Account)';
+            document.getElementById('sync-status').className = 'text-xs text-emerald-400 font-medium mt-0.5';
+
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data && Array.isArray(data.list)) {
+                        window.expenses = data.list;
+                        if (data.currency) window.currentCurrency = data.currency;
+                        window.renderApp();
+                    }
+                } else {
+                    saveToCloud(window.expenses, window.currentCurrency);
+                }
+            }, (error) => {
+                console.error("Firestore sync error:", error);
+            });
+        }
+
+        window.saveToCloud = async (expensesList, currency) => {
+            if (!window.currentUser || window.currentUser.isAnonymous || !window.firebaseDb) return;
+            try {
+                const docRef = doc(window.firebaseDb, 'artifacts', appId, 'users', window.currentUser.uid, 'expenses', 'data');
+                await setDoc(docRef, {
+                    list: expensesList,
+                    currency: currency,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+            } catch (err) {
+                console.error("Failed saving to Firestore", err);
+            }
+        };
+
+        // Google Sign-In & Logout Handler
+        window.handleAuthClick = async () => {
+            if (!window.firebaseAuth) {
+                window.showToast("Cloud sync unavailable in preview offline mode.");
+                return;
+            }
+
+            if (window.currentUser && !window.currentUser.isAnonymous) {
+                try {
+                    await signOut(window.firebaseAuth);
+                    window.showToast("Signed out successfully.");
+                    document.getElementById('sync-status').innerText = 'Offline Mode (Guest)';
+                    document.getElementById('sync-status').className = 'text-xs text-gray-400 font-medium mt-0.5';
+                    window.syncWithLocalStorage();
+                    window.closeProfileModal();
+                } catch (e) {
+                    window.showToast("Error signing out.");
+                }
+            } else {
+                const provider = new GoogleAuthProvider();
+                try {
+                    await signInWithPopup(window.firebaseAuth, provider);
+                    window.showToast("Signed in with Google!");
+                    window.closeProfileModal();
+                } catch (e) {
+                    console.error("Google Auth Error", e);
+                    window.showToast("Google Auth cancelled or failed.");
+                }
+            }
+        };
+
+        function updateUserUI(user) {
+            const avatarImg = document.getElementById('auth-avatar-img');
+            const avatarFallback = document.getElementById('auth-avatar-fallback');
+            const modalAvatarImg = document.getElementById('modal-avatar-img');
+            const modalAvatarFallback = document.getElementById('modal-avatar-fallback');
+            const modalUserName = document.getElementById('modal-user-name');
+            const modalUserEmail = document.getElementById('modal-user-email');
+            const modalAuthBtn = document.getElementById('modal-auth-action-btn');
+
+            const accAvatarImg = document.getElementById('account-avatar-img');
+            const accAvatarFallback = document.getElementById('account-avatar-fallback');
+            const accUserName = document.getElementById('account-user-name');
+            const accUserEmail = document.getElementById('account-user-email');
+            const accAuthText = document.getElementById('account-auth-text');
+
+            if (user && !user.isAnonymous) {
+                const photoURL = user.photoURL;
+                const name = user.displayName || 'Google User';
+                const email = user.email || '';
+
+                if (photoURL) {
+                    avatarImg.src = photoURL;
+                    avatarImg.classList.remove('hidden');
+                    avatarFallback.classList.add('hidden');
+
+                    modalAvatarImg.src = photoURL;
+                    modalAvatarImg.classList.remove('hidden');
+                    modalAvatarFallback.classList.add('hidden');
+
+                    accAvatarImg.src = photoURL;
+                    accAvatarImg.classList.remove('hidden');
+                    accAvatarFallback.classList.add('hidden');
+                }
+
+                modalUserName.innerText = name;
+                modalUserEmail.innerText = email;
+                modalAuthBtn.innerText = 'Sign Out';
+                modalAuthBtn.className = 'px-2.5 py-1 text-[11px] font-semibold rounded-xl bg-pink-500/20 text-pink-300 border border-pink-500/30 hover:bg-pink-500/30 transition-all';
+
+                accUserName.innerText = name;
+                accUserEmail.innerText = email;
+                accAuthText.innerText = 'Sign Out';
+            } else {
+                avatarImg.classList.add('hidden');
+                avatarFallback.classList.remove('hidden');
+                modalAvatarImg.classList.add('hidden');
+                modalAvatarFallback.classList.remove('hidden');
+                accAvatarImg.classList.add('hidden');
+                accAvatarFallback.classList.remove('hidden');
+
+                modalUserName.innerText = 'Guest User';
+                modalUserEmail.innerText = 'Local storage mode';
+                modalAuthBtn.innerText = 'Sign In';
+                modalAuthBtn.className = 'px-2.5 py-1 text-[11px] font-semibold rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/30 transition-all';
+
+                accUserName.innerText = 'Guest Workspace';
+                accUserEmail.innerText = 'Data stored locally';
+                accAuthText.innerText = 'Sign In with Google';
+            }
+        }
+    </script>
+
+    <script>
+        // Profile Modal Logic
+        function openProfileModal() {
+            document.getElementById('profile-modal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        function handleCurrencyChange(newCurrency) {
+            window.currentCurrency = newCurrency;
+            saveData();
+            window.renderApp();
+            showToast(`Currency changed to ${newCurrency} (${currencies[newCurrency]?.symbol || '₹'})`);
+        }
+    </script>
+</body>
+</html>
+```
