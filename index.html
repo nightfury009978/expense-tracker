@@ -2,100 +2,127 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraSpend - Neon Glassmorphism Expense Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AuraSpend - Expense Tracker</title>
+    
+    <!-- PWA / Web App Meta Tags -->
+    <meta name="theme-color" content="#090a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="application-name" content="AuraSpend">
+    <meta name="description" content="Sleek neon glassmorphism expense tracking app">
+    
+    <!-- Inline Web App Manifest for Direct PWA Installation -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"AuraSpend","short_name":"AuraSpend","start_url":".","display":"standalone","background_color":"#090a0f","theme_color":"#090a0f","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 rx=%22128%22 fill=%22%23090a0f%22/><circle cx=%22256%22 cy=%22256%22 r=%22220%22 fill=%22none%22 stroke=%22%2300f0ff%22 stroke-width=%2212%22 opacity=%220.4%22/><text x=%2250%%22 y=%2254%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-weight=%22900%22 font-size=%22210%22 fill=%22%2300f0ff%22>AS</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}'>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         * {
             font-family: 'Outfit', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         body {
-            background-color: #090a0f;
+            background-color: #07080d;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(236, 72, 153, 0.22) 0%, transparent 45%),
-                radial-gradient(circle at 85% 25%, rgba(0, 240, 255, 0.20) 0%, transparent 50%),
-                radial-gradient(circle at 50% 80%, rgba(139, 92, 246, 0.22) 0%, transparent 55%);
+                radial-gradient(circle at 10% 10%, rgba(236, 72, 153, 0.18) 0%, transparent 40%),
+                radial-gradient(circle at 90% 20%, rgba(0, 240, 255, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(139, 92, 246, 0.20) 0%, transparent 55%);
             background-attachment: fixed;
             color: #f3f4f6;
+            overflow-x: hidden;
         }
 
-        /* Glassmorphism utility */
+        /* Glassmorphism Cards with Edge Lighting */
         .glass-card {
-            background: rgba(15, 17, 32, 0.70);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(14, 16, 31, 0.72);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            position: relative;
+        }
+
+        /* Glowing Accent Edges */
+        .edge-glow-pink::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 15%; right: 15%; height: 1px;
+            background: linear-gradient(90deg, transparent, #ec4899, transparent);
+            box-shadow: 0 0 12px #ec4899;
+        }
+
+        .edge-glow-cyan::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 15%; right: 15%; height: 1px;
+            background: linear-gradient(90deg, transparent, #00f0ff, transparent);
+            box-shadow: 0 0 12px #00f0ff;
         }
 
         .glass-card-neon {
-            background: rgba(20, 22, 45, 0.85);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(236, 72, 153, 0.4);
-            box-shadow: 0 0 30px rgba(236, 72, 153, 0.2), inset 0 0 15px rgba(236, 72, 153, 0.08);
+            background: rgba(18, 20, 42, 0.85);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(236, 72, 153, 0.35);
+            box-shadow: 0 0 35px rgba(236, 72, 153, 0.18), inset 0 0 15px rgba(236, 72, 153, 0.06);
         }
 
-        /* Neon Text Utilities */
+        /* Neon Text Effects */
         .neon-text-pink {
             color: #ec4899;
-            text-shadow: 0 0 12px rgba(236, 72, 153, 0.8);
+            text-shadow: 0 0 14px rgba(236, 72, 153, 0.85);
         }
 
         .neon-text-cyan {
             color: #00f0ff;
-            text-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
+            text-shadow: 0 0 14px rgba(0, 240, 255, 0.85);
         }
 
         .neon-btn-active {
             background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-            box-shadow: 0 0 18px rgba(236, 72, 153, 0.45), 0 0 28px rgba(139, 92, 246, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.5), 0 0 30px rgba(139, 92, 246, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .neon-glow-btn {
             background: linear-gradient(135deg, #00f0ff 0%, #ec4899 100%);
-            box-shadow: 0 0 18px rgba(0, 240, 255, 0.4), 0 0 25px rgba(236, 72, 153, 0.3);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .neon-glow-btn:hover {
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.6), 0 0 35px rgba(236, 72, 153, 0.5);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.45), 0 0 30px rgba(236, 72, 153, 0.35);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .neon-glow-btn:active {
-            transform: scale(0.97);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+            transform: scale(0.96);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
         }
 
         /* Category Pill selection styles */
         .cat-pill {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.2s ease;
         }
 
         .cat-pill.active {
             border-color: #00f0ff;
             background: rgba(0, 240, 255, 0.18);
-            box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
             color: #ffffff;
         }
 
-        /* Custom scrollbar */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 4px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(9, 10, 15, 0.5);
+            background: rgba(7, 8, 13, 0.5);
         }
         ::-webkit-scrollbar-thumb {
             background: rgba(236, 72, 153, 0.4);
@@ -104,7 +131,7 @@
 
         /* Custom Input Styling */
         input, select {
-            background: rgba(11, 12, 24, 0.85) !important;
+            background: rgba(10, 11, 22, 0.9) !important;
             border: 1px solid rgba(255, 255, 255, 0.12) !important;
             color: #ffffff !important;
             outline: none !important;
@@ -112,7 +139,7 @@
 
         input:focus, select:focus {
             border-color: #00f0ff !important;
-            box-shadow: 0 0 12px rgba(0, 240, 255, 0.35) !important;
+            box-shadow: 0 0 14px rgba(0, 240, 255, 0.4) !important;
         }
 
         .chart-type-btn {
@@ -124,13 +151,10 @@
             background: rgba(236, 72, 153, 0.25);
             border-color: #ec4899;
             color: #ffffff;
-            box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
+            box-shadow: 0 0 14px rgba(236, 72, 153, 0.45);
         }
 
-        /* High-Tech Ambient Glow Container */
-        .chart-ambient-glow {
-            position: relative;
-        }
+        /* Dynamic Ambient Glow */
         .chart-ambient-glow::before {
             content: '';
             position: absolute;
@@ -138,8 +162,8 @@
             left: 10%;
             width: 40%;
             height: 60%;
-            background: rgba(0, 240, 255, 0.12);
-            filter: blur(40px);
+            background: rgba(0, 240, 255, 0.14);
+            filter: blur(45px);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
@@ -151,8 +175,8 @@
             right: 10%;
             width: 45%;
             height: 60%;
-            background: rgba(236, 72, 153, 0.14);
-            filter: blur(45px);
+            background: rgba(236, 72, 153, 0.16);
+            filter: blur(50px);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
@@ -172,26 +196,28 @@
 
     <div class="w-full max-w-md mx-auto space-y-5">
         
-        <!-- Header Section -->
-        <header class="flex items-center justify-between px-2 pt-2">
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight flex items-center gap-1.5">
-                    <span class="text-white">Aura</span>
-                    <span class="neon-text-cyan font-extrabold">Spend</span>
-                </h1>
-                <p class="text-xs text-gray-400 font-medium mt-0.5" id="sync-status">Offline Storage Mode</p>
+        <!-- Header & Custom "AS" Logo Branding -->
+        <header class="flex items-center justify-between px-2 pt-1">
+            <div class="flex items-center gap-3">
+                <!-- App Icon Logo: Glowing Neon AS -->
+                <div class="w-11 h-11 rounded-2xl glass-card border border-cyan-400/40 flex items-center justify-center relative overflow-hidden shadow-[0_0_20px_rgba(0,240,255,0.3)]">
+                    <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-pink-500/20"></div>
+                    <span class="font-black text-lg tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-purple-400 relative z-10">AS</span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight flex items-center gap-1">
+                        <span class="text-white">Aura</span>
+                        <span class="neon-text-cyan font-extrabold">Spend</span>
+                    </h1>
+                    <p class="text-[11px] text-gray-400 font-medium" id="sync-status">Offline Storage Mode</p>
+                </div>
             </div>
             
-            <div class="flex items-center space-x-2.5">
-                <!-- User Profile Modal Trigger -->
-                <button id="auth-btn" onclick="openProfileModal()" title="Account & Profile"
-                    class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center overflow-hidden border border-white/10 hover:border-pink-500/50 transition-all">
-                    <span class="text-base">⚡</span>
-                </button>
-
-                <!-- Settings Icon -->
-                <button onclick="openSettingsModal()" title="Settings & Currency" class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-gray-300 hover:text-white hover:border-cyan-400/40 transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center space-x-2">
+                <!-- Settings Button -->
+                <button onclick="openSettingsModal()" title="Settings & Currency" 
+                    class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-gray-300 hover:text-white border border-white/10 hover:border-cyan-400/40 active:scale-95 transition-all">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
@@ -200,31 +226,31 @@
         </header>
 
         <!-- Time Period Selector -->
-        <div class="glass-card p-1.5 rounded-2xl flex items-center justify-between">
-            <button onclick="switchPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 transition-all duration-300">
+        <div class="glass-card edge-glow-cyan p-1.5 rounded-2xl flex items-center justify-between">
+            <button onclick="switchPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 active:scale-95 transition-all">
                 Daily
             </button>
-            <button onclick="switchPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 transition-all duration-300">
+            <button onclick="switchPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 active:scale-95 transition-all">
                 Weekly
             </button>
-            <button onclick="switchPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs font-semibold rounded-xl neon-btn-active text-white transition-all duration-300">
+            <button onclick="switchPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs font-semibold rounded-xl neon-btn-active text-white active:scale-95 transition-all">
                 Monthly
             </button>
         </div>
 
-        <!-- Primary Total Spent Card -->
-        <div class="glass-card-neon p-5 rounded-3xl relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none"></div>
+        <!-- Total Spent Card -->
+        <div class="glass-card-neon edge-glow-pink p-5 rounded-3xl relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-pink-500/15 rounded-full blur-2xl pointer-events-none"></div>
             
             <div class="flex items-center justify-between text-xs text-gray-300">
-                <span id="period-label-total" class="font-medium uppercase tracking-wider text-pink-300">Total This Month</span>
-                <span id="user-badge" class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-semibold text-[10px] flex items-center gap-1">
+                <span id="period-label-total" class="font-bold uppercase tracking-wider text-pink-300">Total This Month</span>
+                <span id="user-badge" class="px-2.5 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 font-bold text-[10px]">
                     ₹ INR
                 </span>
             </div>
 
             <div class="mt-2 flex items-baseline space-x-1">
-                <span class="text-4xl font-extrabold tracking-tight text-white" id="main-total-amount">₹0.00</span>
+                <span class="text-4xl font-black tracking-tight text-white" id="main-total-amount">₹0.00</span>
             </div>
 
             <!-- Breakdown Mini Grid -->
@@ -240,40 +266,40 @@
             </div>
         </div>
 
-        <!-- Chart Canvas Container -->
-        <div class="glass-card p-4 rounded-3xl space-y-3 chart-ambient-glow relative overflow-hidden">
+        <!-- Expense Analytics Chart Section -->
+        <div class="glass-card edge-glow-cyan p-4 rounded-3xl space-y-3 chart-ambient-glow relative overflow-hidden">
             <div class="flex justify-between items-center px-1 relative z-10">
                 <div>
                     <h3 class="text-xs font-bold tracking-wider text-gray-200 uppercase flex items-center gap-1.5">
                         <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                         Expense Analytics
                     </h3>
-                    <p class="text-[10px] text-cyan-400" id="chart-sub-label">Multi-Layer Holographic Wave</p>
+                    <p class="text-[10px] text-cyan-400 font-medium" id="chart-sub-label">Multi-Layer Holographic Wave</p>
                 </div>
 
-                <!-- Interactive Chart View Mode Switcher -->
+                <!-- Chart Mode Switcher -->
                 <div class="flex items-center space-x-1 bg-white/5 p-1 rounded-xl border border-white/10">
-                    <button onclick="setChartType('spline')" id="btn-chart-spline" title="Glowing Wave"
-                        class="chart-type-btn active text-xs px-2.5 py-1 rounded-lg font-medium">
+                    <button onclick="setChartType('spline')" id="btn-chart-spline" title="Wave"
+                        class="chart-type-btn active text-xs px-2.5 py-1 rounded-lg font-medium active:scale-95">
                         🌊 Wave
                     </button>
-                    <button onclick="setChartType('doughnut')" id="btn-chart-doughnut" title="Neon Ring"
-                        class="chart-type-btn text-xs px-2.5 py-1 rounded-lg font-medium text-gray-400">
+                    <button onclick="setChartType('doughnut')" id="btn-chart-doughnut" title="Ring"
+                        class="chart-type-btn text-xs px-2.5 py-1 rounded-lg font-medium text-gray-400 active:scale-95">
                         ⭕ Ring
                     </button>
-                    <button onclick="setChartType('bar')" id="btn-chart-bar" title="Neon Bars"
-                        class="chart-type-btn text-xs px-2.5 py-1 rounded-lg font-medium text-gray-400">
+                    <button onclick="setChartType('bar')" id="btn-chart-bar" title="Bar"
+                        class="chart-type-btn text-xs px-2.5 py-1 rounded-lg font-medium text-gray-400 active:scale-95">
                         📊 Bar
                     </button>
                 </div>
             </div>
 
-            <!-- High-Impact Multi-Layered Neon Chart Container -->
+            <!-- Chart Canvas Container -->
             <div class="h-56 w-full relative pt-2 z-10">
                 <canvas id="expenseChart"></canvas>
             </div>
 
-            <!-- Category Glow Badges Bar -->
+            <!-- Dynamic Legend Bar -->
             <div class="flex items-center justify-between text-[10px] pt-1 border-t border-white/5 px-1 relative z-10" id="chart-legend-container">
                 <div class="flex items-center space-x-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></span>
@@ -286,18 +312,18 @@
             </div>
         </div>
 
-        <!-- Quick Add Form -->
-        <div class="glass-card p-5 rounded-3xl space-y-3">
+        <!-- Quick Add Expense Form -->
+        <div class="glass-card edge-glow-pink p-5 rounded-3xl space-y-3">
             <h2 class="text-xs font-bold uppercase tracking-wider text-gray-300 mb-1">Quick Add Expense</h2>
 
             <form id="expenseForm" onsubmit="handleAddExpense(event)" class="space-y-3">
                 <div class="grid grid-cols-3 gap-2">
-                    <input type="text" id="expenseTitle" placeholder="Title (e.g. Chai / Lunch)" required
-                        class="col-span-2 px-3.5 py-2.5 rounded-xl text-xs w-full placeholder-gray-500 focus:outline-none">
+                    <input type="text" id="expenseTitle" placeholder="Title (e.g. Snacks / Taxi)" required
+                        class="col-span-2 px-3.5 py-2.5 rounded-xl text-xs w-full placeholder-gray-500">
                     <div class="relative flex items-center">
                         <span id="input-currency-symbol" class="absolute left-3 text-xs text-cyan-400 font-bold">₹</span>
                         <input type="number" id="expenseAmount" placeholder="Amount" step="0.01" min="0.01" required
-                            class="pl-8 pr-3 py-2.5 rounded-xl text-xs w-full placeholder-gray-500 focus:outline-none">
+                            class="pl-8 pr-3 py-2.5 rounded-xl text-xs w-full placeholder-gray-500">
                     </div>
                 </div>
 
@@ -305,21 +331,21 @@
                 <div class="space-y-1.5">
                     <label class="text-[10px] uppercase font-semibold text-gray-400">Category</label>
                     <div class="grid grid-cols-3 gap-1.5" id="category-pills-container">
-                        <button type="button" onclick="selectCategoryPill('Food')" data-cat="Food" class="cat-pill active py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🍔 Food</button>
-                        <button type="button" onclick="selectCategoryPill('Transport')" data-cat="Transport" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🚗 Transport</button>
-                        <button type="button" onclick="selectCategoryPill('Shopping')" data-cat="Shopping" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🛍️ Shopping</button>
-                        <button type="button" onclick="selectCategoryPill('Bills')" data-cat="Bills" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">💡 Bills</button>
-                        <button type="button" onclick="selectCategoryPill('Entertainment')" data-cat="Entertainment" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🍿 Cinema</button>
-                        <button type="button" onclick="selectCategoryPill('Other')" data-cat="Other" class="cat-pill py-1.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">📁 Other</button>
+                        <button type="button" onclick="selectCategoryPill('Food')" data-cat="Food" class="cat-pill active py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🍔 Food</button>
+                        <button type="button" onclick="selectCategoryPill('Transport')" data-cat="Transport" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🚗 Transport</button>
+                        <button type="button" onclick="selectCategoryPill('Shopping')" data-cat="Shopping" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🛍️ Shopping</button>
+                        <button type="button" onclick="selectCategoryPill('Bills')" data-cat="Bills" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">💡 Bills</button>
+                        <button type="button" onclick="selectCategoryPill('Entertainment')" data-cat="Entertainment" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🍿 Cinema</button>
+                        <button type="button" onclick="selectCategoryPill('Other')" data-cat="Other" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">📁 Other</button>
                     </div>
                 </div>
 
-                <div class="pt-1">
+                <div>
                     <input type="date" id="expenseDate" required class="px-3 py-2 rounded-xl text-xs w-full text-gray-300">
                 </div>
 
                 <button type="submit" 
-                    class="neon-glow-btn w-full py-3 rounded-xl text-xs font-bold text-white tracking-wide uppercase flex items-center justify-center space-x-2 cursor-pointer">
+                    class="neon-glow-btn w-full py-3 rounded-xl text-xs font-bold text-white tracking-wide uppercase flex items-center justify-center space-x-2 cursor-pointer active:scale-95 transition-all">
                     <span>Add Expense</span>
                     <span class="text-base font-black">+</span>
                 </button>
@@ -327,23 +353,22 @@
         </div>
 
         <!-- Recent Logs Section -->
-        <div class="glass-card p-5 rounded-3xl space-y-3">
+        <div class="glass-card edge-glow-cyan p-5 rounded-3xl space-y-3">
             <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-gray-300">Recent Transactions</h3>
-                <span id="log-count" class="text-[10px] text-gray-400 bg-white/5 px-2 py-0.5 rounded-full">0 entries</span>
+                <span id="log-count" class="text-[10px] text-gray-400 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/5">0 entries</span>
             </div>
 
-            <!-- Dynamic List container -->
+            <!-- Dynamic List Container -->
             <div id="transactionsList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1">
             </div>
         </div>
 
     </div>
 
-    <!-- Modals Section -->
     <!-- Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md hidden px-4">
-        <div class="glass-card p-6 rounded-3xl w-full max-w-sm space-y-5 border border-white/10 animate-fade-in relative">
+    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden px-4">
+        <div class="glass-card edge-glow-cyan p-6 rounded-3xl w-full max-w-sm space-y-5 border border-white/10 animate-fade-in relative">
             <div class="flex items-center justify-between">
                 <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
                     <span>⚙️</span> Preferences & Currency
@@ -353,7 +378,7 @@
 
             <!-- Currency Selection -->
             <div class="space-y-2">
-                <label class="text-xs font-semibold text-gray-300">Select Currency</label>
+                <label class="text-xs font-semibold text-gray-300">Select Currency Symbol</label>
                 <select id="currency-select" onchange="handleCurrencyChange(this.value)" class="w-full px-3 py-2.5 rounded-xl text-xs text-white">
                     <option value="INR" data-symbol="₹">₹ INR - Indian Rupee</option>
                     <option value="USD" data-symbol="$">$ USD - US Dollar</option>
@@ -363,20 +388,20 @@
             </div>
 
             <div class="pt-2 border-t border-white/10">
-                <button onclick="requestResetData()" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30 transition-all">
+                <button onclick="requestResetData()" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30 active:scale-95 transition-all">
                     Reset All Data
                 </button>
             </div>
 
-            <button onclick="closeSettingsModal()" class="neon-glow-btn w-full py-2.5 rounded-xl text-xs font-bold text-white uppercase tracking-wider">
+            <button onclick="closeSettingsModal()" class="neon-glow-btn w-full py-2.5 rounded-xl text-xs font-bold text-white uppercase tracking-wider active:scale-95">
                 Save & Close
             </button>
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div id="confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden px-4">
-        <div class="glass-card p-6 rounded-3xl w-full max-w-xs space-y-4 border border-pink-500/30 text-center animate-fade-in relative">
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md hidden px-4">
+        <div class="glass-card edge-glow-pink p-6 rounded-3xl w-full max-w-xs space-y-4 border border-pink-500/40 text-center animate-fade-in relative">
             <div class="w-12 h-12 mx-auto rounded-full bg-red-500/20 border border-red-500/40 flex items-center justify-center text-xl text-red-400">
                 ⚠️
             </div>
@@ -384,547 +409,472 @@
             <p class="text-xs text-gray-300" id="confirm-desc">This action cannot be undone. All stored transaction history will be cleared.</p>
             
             <div class="flex gap-2 pt-2">
-                <button onclick="closeConfirmModal()" class="w-1/2 py-2.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition-all">
+                <button onclick="closeConfirmModal()" class="w-1/2 py-2.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all">
                     Cancel
                 </button>
-                <button id="confirm-action-btn" onclick="executePendingAction()" class="w-1/2 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg transition-all">
+                <button id="confirm-action-btn" onclick="executePendingAction()" class="w-1/2 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-lg active:scale-95 transition-all">
                     Confirm
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- User Profile Modal -->
-    <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md hidden px-4">
-        <div class="glass-card p-6 rounded-3xl w-full max-w-sm space-y-5 border border-white/10 animate-fade-in relative">
-            <div class="flex items-center justify-between">
-                <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <span>👤</span> User Profile
-                </h3>
-                <button onclick="closeProfileModal()" class="text-gray-400 hover:text-white p-1 text-sm">✕</button>
-            </div>
-
-            <div class="text-center space-y-3 py-2">
-                <div class="w-16 h-16 mx-auto rounded-3xl bg-slate-900 border-2 border-cyan-400/50 flex items-center justify-center overflow-hidden shadow-lg">
-                    <span class="text-2xl">⚡</span>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-white">Aura User</h4>
-                    <p class="text-xs text-gray-400">Local Storage Active</p>
-                </div>
-            </div>
-
-            <button onclick="closeProfileModal()" class="neon-glow-btn w-full py-2.5 rounded-xl text-xs font-bold text-white uppercase tracking-wider">
-                Close
-            </button>
-        </div>
-    </div>
-
+    <!-- JavaScript Logic -->
     <script>
-        // Data State
-        const defaultExpenses = [
-            { id: 101, title: 'Weekly Supermarket Groceries', amount: 1850, category: 'Food', date: getOffsetDate(0) },
-            { id: 102, title: 'Cab to Work', amount: 340, category: 'Transport', date: getOffsetDate(0) },
-            { id: 103, title: 'Electricity Bill', amount: 1250, category: 'Bills', date: getOffsetDate(-1) },
-            { id: 104, title: 'Movie Tickets & Snacks', amount: 650, category: 'Entertainment', date: getOffsetDate(-2) },
-            { id: 105, title: 'New Running Shoes', amount: 2400, category: 'Shopping', date: getOffsetDate(-4) },
-            { id: 106, title: 'Coffee & Breakfast', amount: 220, category: 'Food', date: getOffsetDate(-6) }
-        ];
+        // Global App State
+        let state = {
+            period: 'monthly',
+            chartType: 'spline',
+            selectedCategory: 'Food',
+            currency: 'INR',
+            currencySymbol: '₹',
+            transactions: []
+        };
 
-        let expenses = JSON.parse(localStorage.getItem('auraspend_expenses')) || defaultExpenses;
-        let currentPeriod = 'monthly';
-        let activeCategory = 'Food';
-        let currentChartType = 'spline'; // 'spline' | 'doughnut' | 'bar'
-        let currentCurrency = localStorage.getItem('auraspend_currency') || 'INR';
         let chartInstance = null;
-        let pendingAction = null; // Handler for custom confirm modal
+        let pendingAction = null;
 
-        const currencies = {
-            INR: { symbol: '₹' },
-            USD: { symbol: '$' },
-            EUR: { symbol: '€' },
-            GBP: { symbol: '£' }
+        const CATEGORY_COLORS = {
+            'Food': '#00f0ff',
+            'Transport': '#ec4899',
+            'Shopping': '#8b5cf6',
+            'Bills': '#f59e0b',
+            'Entertainment': '#10b981',
+            'Other': '#6b7280'
         };
 
-        const catIcons = {
-            Food: '🍔',
-            Transport: '🚗',
-            Shopping: '🛍️',
-            Bills: '💡',
-            Entertainment: '🍿',
-            Other: '📁'
-        };
+        // Initialize App
+        document.onload = initApp();
 
-        const catColors = {
-            Food: '#ec4899',
-            Transport: '#00f0ff',
-            Shopping: '#8b5cf6',
-            Bills: '#10b981',
-            Entertainment: '#f59e0b',
-            Other: '#6b7280'
-        };
-
-        // Date helper for initial mock values
-        function getOffsetDate(offsetDays) {
-            const d = new Date();
-            d.setDate(d.getDate() + offsetDays);
-            return d.toISOString().split('T')[0];
+        function initApp() {
+            loadFromLocalStorage();
+            setDefaultDate();
+            updateUI();
         }
 
-        // Initialize application logic after DOM loads
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('expenseDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('currency-select').value = currentCurrency;
-            updateCurrencyUI();
-            renderApp();
-        });
-
-        function saveData() {
-            localStorage.setItem('auraspend_expenses', JSON.stringify(expenses));
-            localStorage.setItem('auraspend_currency', currentCurrency);
-        }
-
-        function handleCurrencyChange(val) {
-            currentCurrency = val;
-            saveData();
-            updateCurrencyUI();
-            renderApp();
-        }
-
-        function updateCurrencyUI() {
-            const sym = currencies[currentCurrency].symbol;
-            document.getElementById('user-badge').innerText = `${sym} ${currentCurrency}`;
-            document.getElementById('input-currency-symbol').innerText = sym;
-        }
-
-        function selectCategoryPill(cat) {
-            activeCategory = cat;
-            document.querySelectorAll('.cat-pill').forEach(btn => {
-                if (btn.getAttribute('data-cat') === cat) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-        }
-
-        function switchPeriod(period) {
-            currentPeriod = period;
-            ['daily', 'weekly', 'monthly'].forEach(p => {
-                const btn = document.getElementById(`tab-${p}`);
-                if (p === period) {
-                    btn.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl neon-btn-active text-white transition-all duration-300';
-                } else {
-                    btn.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 transition-all duration-300';
-                }
-            });
-
-            const labels = { daily: 'Total Today', weekly: 'Total This Week', monthly: 'Total This Month' };
-            document.getElementById('period-label-total').innerText = labels[period];
-            renderApp();
-        }
-
-        function setChartType(type) {
-            currentChartType = type;
-            ['spline', 'doughnut', 'bar'].forEach(t => {
-                const btn = document.getElementById(`btn-chart-${t}`);
-                if (t === type) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            const subLabels = {
-                spline: 'Multi-Layer Holographic Wave',
-                doughnut: 'Neon Donut Ring',
-                bar: 'Horizontal Neon Bars'
-            };
-            document.getElementById('chart-sub-label').innerText = subLabels[type];
-            renderApp();
-        }
-
-        function getFilteredExpenses() {
+        function setDefaultDate() {
             const today = new Date().toISOString().split('T')[0];
-            const now = new Date();
+            document.getElementById('expenseDate').value = today;
+        }
 
-            return expenses.filter(exp => {
-                if (currentPeriod === 'daily') {
-                    return exp.date === today;
-                } else if (currentPeriod === 'weekly') {
-                    const expDate = new Date(exp.date);
-                    const diffTime = Math.abs(now - expDate);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    return diffDays <= 7;
+        // Local Storage Persistence
+        function loadFromLocalStorage() {
+            const savedTxs = localStorage.getItem('auraspend_txs');
+            const savedCurrency = localStorage.getItem('auraspend_currency');
+            const savedSymbol = localStorage.getItem('auraspend_symbol');
+
+            if (savedTxs) state.transactions = JSON.parse(savedTxs);
+            if (savedCurrency) state.currency = savedCurrency;
+            if (savedSymbol) state.currencySymbol = savedSymbol;
+
+            document.getElementById('currency-select').value = state.currency;
+            updateCurrencyDisplay();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('auraspend_txs', JSON.stringify(state.transactions));
+            localStorage.setItem('auraspend_currency', state.currency);
+            localStorage.setItem('auraspend_symbol', state.currencySymbol);
+        }
+
+        // Currency Handling
+        function handleCurrencyChange(val) {
+            const select = document.getElementById('currency-select');
+            const selectedOpt = select.options[select.selectedIndex];
+            state.currency = val;
+            state.currencySymbol = selectedOpt.getAttribute('data-symbol') || '₹';
+            saveToLocalStorage();
+            updateUI();
+        }
+
+        function updateCurrencyDisplay() {
+            document.getElementById('user-badge').innerText = `${state.currencySymbol} ${state.currency}`;
+            document.getElementById('input-currency-symbol').innerText = state.currencySymbol;
+        }
+
+        // Category Pill Selection
+        function selectCategoryPill(category) {
+            state.selectedCategory = category;
+            const pills = document.querySelectorAll('#category-pills-container .cat-pill');
+            pills.forEach(pill => {
+                if (pill.getAttribute('data-cat') === category) {
+                    pill.classList.add('active');
+                } else {
+                    pill.classList.remove('active');
                 }
-                return true; // monthly / overall view
             });
         }
 
-        function calculateStats() {
-            const todayStr = new Date().toISOString().split('T')[0];
-            const now = new Date();
-            const sym = currencies[currentCurrency].symbol;
-
-            let todayTotal = 0;
-            let weekTotal = 0;
-            let currentPeriodTotal = 0;
-
-            const filtered = getFilteredExpenses();
-            filtered.forEach(exp => {
-                currentPeriodTotal += exp.amount;
-            });
-
-            expenses.forEach(exp => {
-                if (exp.date === todayStr) {
-                    todayTotal += exp.amount;
-                }
-                const expDate = new Date(exp.date);
-                const diffTime = Math.abs(now - expDate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                if (diffDays <= 7) {
-                    weekTotal += exp.amount;
-                }
-            });
-
-            document.getElementById('main-total-amount').innerText = `${sym}${currentPeriodTotal.toFixed(2)}`;
-            document.getElementById('stat-today').innerText = `${sym}${todayTotal.toFixed(2)}`;
-            document.getElementById('stat-week').innerText = `${sym}${weekTotal.toFixed(2)}`;
-        }
-
+        // Add Expense Action
         function handleAddExpense(e) {
             e.preventDefault();
             const titleInput = document.getElementById('expenseTitle');
             const amountInput = document.getElementById('expenseAmount');
             const dateInput = document.getElementById('expenseDate');
 
-            const newExp = {
-                id: Date.now(),
-                title: titleInput.value.trim(),
-                amount: parseFloat(amountInput.value),
-                category: activeCategory,
-                date: dateInput.value
+            const title = titleInput.value.trim();
+            const amount = parseFloat(amountInput.value);
+            const date = dateInput.value;
+
+            if (!title || isNaN(amount) || amount <= 0 || !date) return;
+
+            const newTx = {
+                id: Date.now().toString(),
+                title,
+                amount,
+                category: state.selectedCategory,
+                date
             };
 
-            expenses.unshift(newExp);
-            saveData();
-            renderApp();
+            state.transactions.unshift(newTx);
+            saveToLocalStorage();
 
-            // Reset form input
             titleInput.value = '';
             amountInput.value = '';
+            setDefaultDate();
+
+            updateUI();
         }
 
-        function confirmDeleteTransaction(id) {
-            document.getElementById('confirm-title').innerText = 'Delete Transaction?';
-            document.getElementById('confirm-desc').innerText = 'Are you sure you want to remove this transaction entry?';
-            pendingAction = () => {
-                expenses = expenses.filter(exp => exp.id !== id);
-                saveData();
-                renderApp();
+        // Period Tab Switching
+        function switchPeriod(period) {
+            state.period = period;
+            ['daily', 'weekly', 'monthly'].forEach(p => {
+                const btn = document.getElementById(`tab-${p}`);
+                if (p === period) {
+                    btn.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl neon-btn-active text-white active:scale-95 transition-all';
+                } else {
+                    btn.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 active:scale-95 transition-all';
+                }
+            });
+
+            const labelMap = {
+                'daily': 'Total Today',
+                'weekly': 'Total This Week',
+                'monthly': 'Total This Month'
             };
-            document.getElementById('confirm-modal').classList.remove('hidden');
+            document.getElementById('period-label-total').innerText = labelMap[period];
+
+            updateUI();
         }
 
-        function requestResetData() {
-            document.getElementById('confirm-title').innerText = 'Reset All Data?';
-            document.getElementById('confirm-desc').innerText = 'This will permanently wipe all stored transaction logs.';
-            pendingAction = () => {
-                expenses = [];
-                saveData();
-                renderApp();
-                closeSettingsModal();
+        // Chart View Switcher
+        function setChartType(type) {
+            state.chartType = type;
+            ['spline', 'doughnut', 'bar'].forEach(t => {
+                const btn = document.getElementById(`btn-chart-${t}`);
+                if (t === type) {
+                    btn.classList.add('active');
+                    btn.classList.remove('text-gray-400');
+                } else {
+                    btn.classList.remove('active');
+                    btn.classList.add('text-gray-400');
+                }
+            });
+
+            const subLabels = {
+                'spline': 'Multi-Layer Holographic Wave',
+                'doughnut': 'Category Distribution Ring',
+                'bar': 'Category Breakdown Bars'
             };
-            document.getElementById('confirm-modal').classList.remove('hidden');
+            document.getElementById('chart-sub-label').innerText = subLabels[type];
+
+            renderChart();
         }
 
-        function executePendingAction() {
-            if (pendingAction) {
-                pendingAction();
-                pendingAction = null;
-            }
-            closeConfirmModal();
+        // Filtering Transactions by Selected Time Period
+        function getFilteredTransactions() {
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+
+            return state.transactions.filter(tx => {
+                const txDate = new Date(tx.date);
+                if (state.period === 'daily') {
+                    return tx.date === todayStr;
+                } else if (state.period === 'weekly') {
+                    const diffTime = Math.abs(now - txDate);
+                    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                    return diffDays <= 7;
+                } else {
+                    return txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
+                }
+            });
         }
 
-        function closeConfirmModal() {
-            document.getElementById('confirm-modal').classList.add('hidden');
+        // Total Calculations
+        function calculateTotals() {
+            const filtered = getFilteredTransactions();
+            const totalPeriod = filtered.reduce((acc, tx) => acc + tx.amount, 0);
+
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+            const todayTotal = state.transactions
+                .filter(tx => tx.date === todayStr)
+                .reduce((acc, tx) => acc + tx.amount, 0);
+
+            const weekTotal = state.transactions
+                .filter(tx => {
+                    const diffDays = Math.abs(now - new Date(tx.date)) / (1000 * 60 * 60 * 24);
+                    return diffDays <= 7;
+                })
+                .reduce((acc, tx) => acc + tx.amount, 0);
+
+            return { totalPeriod, todayTotal, weekTotal };
         }
 
-        function renderTransactionsList() {
-            const listContainer = document.getElementById('transactionsList');
-            const logCount = document.getElementById('log-count');
-            const sym = currencies[currentCurrency].symbol;
+        // Update UI Components
+        function updateUI() {
+            updateCurrencyDisplay();
+            const { totalPeriod, todayTotal, weekTotal } = calculateTotals();
 
-            logCount.innerText = `${expenses.length} entries`;
+            document.getElementById('main-total-amount').innerText = `${state.currencySymbol}${totalPeriod.toFixed(2)}`;
+            document.getElementById('stat-today').innerText = `${state.currencySymbol}${todayTotal.toFixed(2)}`;
+            document.getElementById('stat-week').innerText = `${state.currencySymbol}${weekTotal.toFixed(2)}`;
 
-            if (expenses.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="text-center py-6 text-gray-400 text-xs">
-                        ✨ No transactions recorded yet. Add your first expense above!
-                    </div>
-                `;
+            renderTransactionList();
+            renderChart();
+        }
+
+        // Render Transaction Logs List
+        function renderTransactionList() {
+            const container = document.getElementById('transactionsList');
+            const countLabel = document.getElementById('log-count');
+            container.innerHTML = '';
+
+            const txs = getFilteredTransactions();
+            countLabel.innerText = `${txs.length} entries`;
+
+            if (txs.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-gray-500 text-xs">
+                        No transactions logged for this period.
+                    </div>`;
                 return;
             }
 
-            listContainer.innerHTML = expenses.map(item => `
-                <div class="flex items-center justify-between p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-pink-500/30 transition-all">
+            txs.forEach(tx => {
+                const item = document.createElement('div');
+                item.className = 'glass-card p-3 rounded-2xl flex items-center justify-between hover:border-pink-500/30 transition-all border border-white/5';
+                
+                const catEmoji = {
+                    'Food': '🍔', 'Transport': '🚗', 'Shopping': '🛍️',
+                    'Bills': '💡', 'Entertainment': '🍿', 'Other': '📁'
+                }[tx.category] || '📁';
+
+                item.innerHTML = `
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-base" style="background: ${catColors[item.category] || '#6b7280'}22; border: 1px solid ${catColors[item.category] || '#6b7280'}55;">
-                            ${catIcons[item.category] || '📁'}
+                        <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sm">
+                            ${catEmoji}
                         </div>
                         <div>
-                            <h4 class="text-xs font-semibold text-white leading-tight">${escapeHtml(item.title)}</h4>
-                            <div class="flex items-center space-x-2 text-[10px] text-gray-400 mt-0.5">
-                                <span>${item.category}</span>
-                                <span>•</span>
-                                <span>${item.date}</span>
-                            </div>
+                            <p class="text-xs font-bold text-white">${escapeHtml(tx.title)}</p>
+                            <p class="text-[10px] text-gray-400">${tx.category} • ${tx.date}</p>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-3">
-                        <span class="text-xs font-bold text-cyan-300">${sym}${item.amount.toFixed(2)}</span>
-                        <button onclick="confirmDeleteTransaction(${item.id})" title="Delete" class="text-gray-500 hover:text-red-400 text-xs p-1 transition-colors">
-                            ✕
-                        </button>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs font-bold text-pink-400">-${state.currencySymbol}${tx.amount.toFixed(2)}</span>
+                        <button onclick="requestDeleteTx('${tx.id}')" class="text-gray-500 hover:text-red-400 text-xs p-1">✕</button>
                     </div>
-                </div>
-            `).join('');
+                `;
+                container.appendChild(item);
+            });
         }
 
         function escapeHtml(str) {
-            return str.replace(/[&<>"']/g, function(m) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-            });
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
+        // Render Responsive Visual Chart
         function renderChart() {
-            const canvas = document.getElementById('expenseChart');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
 
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
+            const categories = ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Other'];
+            const filteredTxs = getFilteredTransactions();
 
-            const currentData = getFilteredExpenses();
-
-            // Aggregate data by category for charts
-            const catTotals = {};
-            currentData.forEach(item => {
-                catTotals[item.category] = (catTotals[item.category] || 0) + item.amount;
+            const catTotals = categories.map(cat => {
+                return filteredTxs
+                    .filter(tx => tx.category === cat)
+                    .reduce((acc, tx) => acc + tx.amount, 0);
             });
 
-            const labels = Object.keys(catTotals).length ? Object.keys(catTotals) : ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment'];
-            const values = Object.keys(catTotals).length ? Object.values(catTotals) : [1200, 450, 800, 300, 650];
-            
-            // Secondary benchmark curve values for multi-layered wave effect
-            const secondaryValues = values.map(v => Math.max(v * 0.62, 120));
-            const backgroundColors = labels.map(cat => catColors[cat] || '#00f0ff');
+            const legendContainer = document.getElementById('chart-legend-container');
 
-            // 1. MULTI-LAYERED GLOWING SPLINE WAVE CHART
-            if (currentChartType === 'spline') {
-                const gradientCyan = ctx.createLinearGradient(0, 0, 0, 220);
-                gradientCyan.addColorStop(0, 'rgba(0, 240, 255, 0.45)');
-                gradientCyan.addColorStop(0.5, 'rgba(0, 240, 255, 0.15)');
-                gradientCyan.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
+            if (state.chartType === 'spline') {
+                legendContainer.innerHTML = `
+                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></span><span class="text-gray-300 font-medium">Primary Spending</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_8px_#ec4899]"></span><span class="text-gray-300 font-medium">Secondary Aura</span></div>
+                `;
 
-                const gradientPink = ctx.createLinearGradient(0, 0, 0, 220);
-                gradientPink.addColorStop(0, 'rgba(236, 72, 153, 0.35)');
-                gradientPink.addColorStop(0.5, 'rgba(139, 92, 246, 0.12)');
-                gradientPink.addColorStop(1, 'rgba(139, 92, 246, 0.0)');
+                const gradCyan = ctx.createLinearGradient(0, 0, 0, 200);
+                gradCyan.addColorStop(0, 'rgba(0, 240, 255, 0.45)');
+                gradCyan.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
+
+                const secondaryData = catTotals.map(val => val * 0.65);
 
                 chartInstance = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: labels,
+                        labels: categories,
                         datasets: [
                             {
-                                label: 'Primary Wave',
-                                data: values,
+                                label: 'Primary Spend',
+                                data: catTotals,
                                 borderColor: '#00f0ff',
-                                borderWidth: 3.5,
-                                tension: 0.45,
+                                borderWidth: 3,
                                 fill: true,
-                                backgroundColor: gradientCyan,
+                                backgroundColor: gradCyan,
+                                tension: 0.48,
                                 pointBackgroundColor: '#ffffff',
                                 pointBorderColor: '#00f0ff',
-                                pointBorderWidth: 3,
-                                pointRadius: 5,
-                                pointHoverRadius: 8,
-                                pointHoverBackgroundColor: '#ec4899',
-                                pointHoverBorderColor: '#ffffff'
+                                pointBorderWidth: 2,
+                                pointRadius: 4
                             },
                             {
-                                label: 'Secondary Wave',
-                                data: secondaryValues,
+                                label: 'Secondary Aura',
+                                data: secondaryData,
                                 borderColor: '#ec4899',
                                 borderWidth: 2,
                                 borderDash: [4, 4],
-                                tension: 0.45,
-                                fill: true,
-                                backgroundColor: gradientPink,
-                                pointBackgroundColor: '#ec4899',
-                                pointBorderColor: '#ffffff',
-                                pointBorderWidth: 2,
-                                pointRadius: 4,
-                                pointHoverRadius: 7
+                                fill: false,
+                                tension: 0.48,
+                                pointRadius: 3,
+                                pointBackgroundColor: '#ec4899'
                             }
                         ]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            mode: 'index',
-                            intersect: false,
-                        },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                backgroundColor: 'rgba(9, 10, 20, 0.92)',
-                                titleColor: '#00f0ff',
-                                bodyColor: '#ffffff',
-                                borderColor: 'rgba(236, 72, 153, 0.5)',
-                                borderWidth: 1,
-                                padding: 12,
-                                cornerRadius: 12,
-                                titleFont: { size: 12, weight: 'bold' },
-                                bodyFont: { size: 11 },
-                                callbacks: {
-                                    label: function(context) {
-                                        const sym = currencies[currentCurrency].symbol;
-                                        return ` ${context.dataset.label}: ${sym}${context.parsed.y.toFixed(2)}`;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                grid: { 
-                                    color: 'rgba(255, 255, 255, 0.04)',
-                                    drawBorder: false
-                                },
-                                ticks: { color: '#94a3b8', font: { size: 11, weight: '600' } }
-                            },
-                            y: {
-                                grid: { 
-                                    color: 'rgba(255, 255, 255, 0.06)',
-                                    drawBorder: false
-                                },
-                                ticks: { 
-                                    color: '#94a3b8', 
-                                    font: { size: 10 },
-                                    callback: function(value) {
-                                        return currencies[currentCurrency].symbol + value;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    options: getChartOptions()
                 });
-            } 
-            // 2. NEON DONUT / RING CHART TYPE
-            else if (currentChartType === 'doughnut') {
+
+            } else if (state.chartType === 'doughnut') {
+                legendContainer.innerHTML = `
+                    <div class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-[#00f0ff]"></span><span class="text-gray-400">Food</span></div>
+                    <div class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-[#ec4899]"></span><span class="text-gray-400">Trans</span></div>
+                    <div class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-[#8b5cf6]"></span><span class="text-gray-400">Shop</span></div>
+                    <div class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span><span class="text-gray-400">Bills</span></div>
+                `;
+
                 chartInstance = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: labels,
+                        labels: categories,
                         datasets: [{
-                            data: values,
-                            backgroundColor: backgroundColors,
-                            borderColor: '#090a0f',
-                            borderWidth: 4,
-                            hoverOffset: 8
+                            data: catTotals,
+                            backgroundColor: Object.values(CATEGORY_COLORS),
+                            borderWidth: 2,
+                            borderColor: '#0e101f',
+                            hoverOffset: 6
                         }]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '70%',
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'bottom',
-                                labels: { color: '#cbd5e1', font: { size: 10, weight: '600' }, boxWidth: 10, padding: 12 }
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(9, 10, 20, 0.92)',
-                                titleColor: '#00f0ff',
-                                bodyColor: '#ffffff',
-                                borderColor: 'rgba(236, 72, 153, 0.5)',
-                                borderWidth: 1,
-                                padding: 10,
-                                cornerRadius: 12
-                            }
-                        }
-                    }
-                });
-            }
-            // 3. HORIZONTAL NEON GRADIENT BAR CHART TYPE
-            else if (currentChartType === 'bar') {
-                chartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Spent',
-                            data: values,
-                            backgroundColor: backgroundColors,
-                            borderRadius: 10,
-                            borderSkipped: false
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
                             legend: { display: false },
                             tooltip: {
-                                backgroundColor: 'rgba(9, 10, 20, 0.92)',
-                                titleColor: '#00f0ff',
-                                bodyColor: '#ffffff',
-                                borderColor: 'rgba(236, 72, 153, 0.5)',
-                                borderWidth: 1,
-                                padding: 10,
-                                cornerRadius: 12
+                                callbacks: {
+                                    label: (context) => ` ${context.label}: ${state.currencySymbol}${context.raw.toFixed(2)}`
+                                }
                             }
                         },
-                        scales: {
-                            x: {
-                                grid: { color: 'rgba(255, 255, 255, 0.06)' },
-                                ticks: { color: '#94a3b8', font: { size: 10 } }
-                            },
-                            y: {
-                                grid: { display: false },
-                                ticks: { color: '#ffffff', font: { size: 11, weight: '600' } }
-                            }
-                        }
+                        cutout: '70%'
                     }
+                });
+
+            } else if (state.chartType === 'bar') {
+                legendContainer.innerHTML = `
+                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></span><span class="text-gray-300 font-medium">Category Bars</span></div>
+                `;
+
+                chartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: categories,
+                        datasets: [{
+                            label: 'Expenses',
+                            data: catTotals,
+                            backgroundColor: Object.values(CATEGORY_COLORS),
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: getChartOptions()
                 });
             }
         }
 
-        function renderApp() {
-            calculateStats();
-            renderTransactionsList();
-            renderChart();
+        function getChartOptions() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 17, 32, 0.95)',
+                        borderColor: '#00f0ff',
+                        borderWidth: 1,
+                        titleColor: '#ffffff',
+                        bodyColor: '#00f0ff',
+                        padding: 10,
+                        callbacks: {
+                            label: (context) => ` Total: ${state.currencySymbol}${context.raw.toFixed(2)}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#9ca3af', font: { size: 10 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#9ca3af', font: { size: 10 } }
+                    }
+                }
+            };
         }
 
-        // Modal Controls
+        // Modal Logic
         function openSettingsModal() {
             document.getElementById('settings-modal').classList.remove('hidden');
         }
+
         function closeSettingsModal() {
             document.getElementById('settings-modal').classList.add('hidden');
         }
-        function openProfileModal() {
-            document.getElementById('profile-modal').classList.remove('hidden');
+
+        function requestDeleteTx(id) {
+            pendingAction = () => {
+                state.transactions = state.transactions.filter(tx => tx.id !== id);
+                saveToLocalStorage();
+                updateUI();
+            };
+            document.getElementById('confirm-title').innerText = 'Delete Expense?';
+            document.getElementById('confirm-desc').innerText = 'Are you sure you want to remove this transaction entry?';
+            document.getElementById('confirm-modal').classList.remove('hidden');
         }
-        function closeProfileModal() {
-            document.getElementById('profile-modal').classList.add('hidden');
+
+        function requestResetData() {
+            closeSettingsModal();
+            pendingAction = () => {
+                state.transactions = [];
+                saveToLocalStorage();
+                updateUI();
+            };
+            document.getElementById('confirm-title').innerText = 'Reset All Data?';
+            document.getElementById('confirm-desc').innerText = 'This will erase all your transaction history stored on this device.';
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            pendingAction = null;
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        function executePendingAction() {
+            if (pendingAction) pendingAction();
+            closeConfirmModal();
         }
     </script>
 </body>
 </html>
-```
