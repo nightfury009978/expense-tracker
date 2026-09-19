@@ -2,878 +2,376 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AuraSpend - Expense Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Expense Tracker</title>
     
-    <!-- PWA / Web App Meta Tags -->
-    <meta name="theme-color" content="#090a0f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="application-name" content="AuraSpend">
-    <meta name="description" content="Sleek neon glassmorphism expense tracking app">
-    
-    <!-- Inline Web App Manifest for Direct PWA Installation -->
-    <link rel="manifest" href='data:application/manifest+json,{"name":"AuraSpend","short_name":"AuraSpend","start_url":".","display":"standalone","background_color":"#090a0f","theme_color":"#090a0f","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 rx=%22128%22 fill=%22%23090a0f%22/><circle cx=%22256%22 cy=%22256%22 r=%22220%22 fill=%22none%22 stroke=%22%2300f0ff%22 stroke-width=%2212%22 opacity=%220.4%22/><text x=%2250%%22 y=%2254%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-weight=%22900%22 font-size=%22210%22 fill=%22%2300f0ff%22>AS</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}'>
-
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         * {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
 
         body {
-            background-color: #07080d;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(236, 72, 153, 0.18) 0%, transparent 40%),
-                radial-gradient(circle at 90% 20%, rgba(0, 240, 255, 0.18) 0%, transparent 45%),
-                radial-gradient(circle at 50% 85%, rgba(139, 92, 246, 0.20) 0%, transparent 55%);
-            background-attachment: fixed;
-            color: #f3f4f6;
+            background-color: #080711;
+            color: #ffffff;
             overflow-x: hidden;
         }
 
-        /* Glassmorphism Cards with Edge Lighting */
+        /* Glassmorphism Card Style */
         .glass-card {
-            background: rgba(14, 16, 31, 0.72);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            background: rgba(18, 16, 35, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-            position: relative;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* Glowing Accent Edges */
-        .edge-glow-pink::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 15%; right: 15%; height: 1px;
-            background: linear-gradient(90deg, transparent, #ec4899, transparent);
-            box-shadow: 0 0 12px #ec4899;
+        /* Neon Glowing Borders & Text */
+        .neon-border-cyan {
+            border: 1px solid rgba(0, 240, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
         }
 
-        .edge-glow-cyan::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 15%; right: 15%; height: 1px;
-            background: linear-gradient(90deg, transparent, #00f0ff, transparent);
-            box-shadow: 0 0 12px #00f0ff;
-        }
-
-        .glass-card-neon {
-            background: rgba(18, 20, 42, 0.85);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(236, 72, 153, 0.35);
-            box-shadow: 0 0 35px rgba(236, 72, 153, 0.18), inset 0 0 15px rgba(236, 72, 153, 0.06);
-        }
-
-        /* Neon Text Effects */
-        .neon-text-pink {
-            color: #ec4899;
-            text-shadow: 0 0 14px rgba(236, 72, 153, 0.85);
+        .neon-border-pink {
+            border: 1px solid rgba(236, 72, 153, 0.5);
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.25);
         }
 
         .neon-text-cyan {
             color: #00f0ff;
-            text-shadow: 0 0 14px rgba(0, 240, 255, 0.85);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
         }
 
-        .neon-btn-active {
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.5), 0 0 30px rgba(139, 92, 246, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+        /* Active Tab Button */
+        .tab-btn-active {
+            background: linear-gradient(135deg, #00f0ff 0%, #a855f7 100%);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            color: #ffffff;
         }
 
-        .neon-glow-btn {
-            background: linear-gradient(135deg, #00f0ff 0%, #ec4899 100%);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.45), 0 0 30px rgba(236, 72, 153, 0.35);
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        /* Quick Add Submit Button */
+        .btn-glow-add {
+            background: linear-gradient(180deg, #00f0ff 0%, #d946ef 100%);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), 0 0 20px rgba(217, 70, 239, 0.4);
         }
 
-        .neon-glow-btn:active {
-            transform: scale(0.96);
-            box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
-        }
-
-        /* Category Pill selection styles */
+        /* Category Pill Styling */
         .cat-pill {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.2s ease;
         }
 
         .cat-pill.active {
             border-color: #00f0ff;
-            background: rgba(0, 240, 255, 0.18);
-            box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
             color: #ffffff;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(7, 8, 13, 0.5);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(236, 72, 153, 0.4);
-            border-radius: 4px;
-        }
-
-        /* Custom Input Styling */
-        input, select {
-            background: rgba(10, 11, 22, 0.9) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
-            color: #ffffff !important;
-            outline: none !important;
-        }
-
-        input:focus, select:focus {
-            border-color: #00f0ff !important;
-            box-shadow: 0 0 14px rgba(0, 240, 255, 0.4) !important;
-        }
-
-        .chart-type-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.25s ease;
-        }
-        .chart-type-btn.active {
-            background: rgba(236, 72, 153, 0.25);
-            border-color: #ec4899;
-            color: #ffffff;
-            box-shadow: 0 0 14px rgba(236, 72, 153, 0.45);
-        }
-
-        /* Dynamic Ambient Glow */
-        .chart-ambient-glow::before {
-            content: '';
-            position: absolute;
-            top: 20%;
-            left: 10%;
-            width: 40%;
-            height: 60%;
-            background: rgba(0, 240, 255, 0.14);
-            filter: blur(45px);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .chart-ambient-glow::after {
-            content: '';
-            position: absolute;
-            bottom: 20%;
-            right: 10%;
-            width: 45%;
-            height: 60%;
-            background: rgba(236, 72, 153, 0.16);
-            filter: blur(50px);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
-<body class="min-h-screen pb-12 pt-4 px-3 sm:px-6 flex justify-center items-start">
+<body class="min-h-screen pb-10 pt-4 px-4 flex justify-center items-start">
 
-    <div class="w-full max-w-md mx-auto space-y-5">
+    <div class="w-full max-w-sm mx-auto space-y-4">
         
-        <!-- Header & Custom "AS" Logo Branding -->
-        <header class="flex items-center justify-between px-2 pt-1">
-            <div class="flex items-center gap-3">
-                <!-- App Icon Logo: Glowing Neon AS -->
-                <div class="w-11 h-11 rounded-2xl glass-card border border-cyan-400/40 flex items-center justify-center relative overflow-hidden shadow-[0_0_20px_rgba(0,240,255,0.3)]">
-                    <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-pink-500/20"></div>
-                    <span class="font-black text-lg tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-purple-400 relative z-10">AS</span>
+        <!-- Header -->
+        <header class="flex items-center justify-between px-1">
+            <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-1">
+                <span>Expense tracker</span>
+            </h1>
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full overflow-hidden border border-cyan-400/50">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-full h-full object-cover">
                 </div>
-                <div>
-                    <h1 class="text-2xl font-black tracking-tight flex items-center gap-1">
-                        <span class="text-white">Aura</span>
-                        <span class="neon-text-cyan font-extrabold">Spend</span>
-                    </h1>
-                    <p class="text-[11px] text-gray-400 font-medium" id="sync-status">Offline Storage Mode</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center space-x-2">
-                <!-- Settings Button -->
-                <button onclick="openSettingsModal()" title="Settings & Currency" 
-                    class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-gray-300 hover:text-white border border-white/10 hover:border-cyan-400/40 active:scale-95 transition-all">
-                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button onclick="clearAllData()" class="text-gray-400 hover:text-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                 </button>
             </div>
         </header>
 
         <!-- Time Period Selector -->
-        <div class="glass-card edge-glow-cyan p-1.5 rounded-2xl flex items-center justify-between">
-            <button onclick="switchPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 active:scale-95 transition-all">
+        <div class="glass-card p-1 rounded-2xl flex items-center justify-between">
+            <button onclick="setPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-400 transition">
                 Daily
             </button>
-            <button onclick="switchPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 active:scale-95 transition-all">
+            <button onclick="setPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-400 transition">
                 Weekly
             </button>
-            <button onclick="switchPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs font-semibold rounded-xl neon-btn-active text-white active:scale-95 transition-all">
+            <button onclick="setPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs font-semibold rounded-xl tab-btn-active transition">
                 Monthly
             </button>
         </div>
 
-        <!-- Total Spent Card -->
-        <div class="glass-card-neon edge-glow-pink p-5 rounded-3xl relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-pink-500/15 rounded-full blur-2xl pointer-events-none"></div>
-            
-            <div class="flex items-center justify-between text-xs text-gray-300">
-                <span id="period-label-total" class="font-bold uppercase tracking-wider text-pink-300">Total This Month</span>
-                <span id="user-badge" class="px-2.5 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 font-bold text-[10px]">
-                    ₹ INR
-                </span>
+        <!-- Total Overview Card -->
+        <div class="glass-card neon-border-cyan p-4 rounded-3xl space-y-3 relative overflow-hidden">
+            <div class="flex items-center justify-between text-xs text-gray-400">
+                <span id="period-title">Total This Month</span>
+                <span class="text-emerald-400 font-medium flex items-center gap-0.5">▲ +4.5%</span>
             </div>
 
-            <div class="mt-2 flex items-baseline space-x-1">
-                <span class="text-4xl font-black tracking-tight text-white" id="main-total-amount">₹0.00</span>
+            <div class="text-3xl font-extrabold tracking-tight text-white" id="main-total-amount">
+                ₹1,245.50
             </div>
 
-            <!-- Breakdown Mini Grid -->
-            <div class="grid grid-cols-2 gap-3 mt-4 pt-3 border-t border-white/10">
-                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/5">
-                    <p class="text-[10px] text-gray-400 font-medium">Today</p>
-                    <p class="text-sm font-bold text-cyan-300 mt-0.5" id="stat-today">₹0.00</p>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/5 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-cyan-400"></div>
+                    <p class="text-[10px] text-gray-400">Today</p>
+                    <p class="text-xs font-bold text-white mt-0.5" id="stat-today">₹24.50</p>
                 </div>
-                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/5">
-                    <p class="text-[10px] text-gray-400 font-medium">This Week</p>
-                    <p class="text-sm font-bold text-pink-400 mt-0.5" id="stat-week">₹0.00</p>
+                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/5 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-pink-500"></div>
+                    <p class="text-[10px] text-gray-400">This Week</p>
+                    <p class="text-xs font-bold text-white mt-0.5" id="stat-week">₹320.00</p>
                 </div>
             </div>
         </div>
 
-        <!-- Expense Analytics Chart Section -->
-        <div class="glass-card edge-glow-cyan p-4 rounded-3xl space-y-3 chart-ambient-glow relative overflow-hidden">
-            <div class="flex justify-between items-center px-1 relative z-10">
-                <div>
-                    <h3 class="text-xs font-bold tracking-wider text-gray-200 uppercase flex items-center gap-1.5">
-                        <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                        Expense Analytics
-                    </h3>
-                    <p class="text-[10px] text-cyan-400 font-medium" id="chart-sub-label">Multi-Layer Holographic Wave</p>
-                </div>
-
-                <!-- Chart Mode Switcher -->
-                <div class="flex items-center space-x-1 bg-white/5 p-1 rounded-xl border border-white/10">
-                    <button onclick="setChartType('spline')" id="btn-chart-spline" title="Wave"
-                        class="chart-type-btn active text-xs px-2.5 py-1 rounded-lg font-medium active:scale-95">
-                        🌊 Wave
-                    </button>
-                    <button onclick="setChartType('doughnut')" id="btn-chart-doughnut" title="Ring"
-                        class="chart-type-btn text-xs px-2.5 py-1 rounded-lg font-medium text-gray-400 active:scale-95">
-                        ⭕ Ring
-                    </button>
-                    <button onclick="setChartType('bar')" id="btn-chart-bar" title="Bar"
-                        class="chart-type-btn text-xs px-2.5 py-1 rounded-lg font-medium text-gray-400 active:scale-95">
-                        📊 Bar
-                    </button>
-                </div>
+        <!-- Dual Wave Dynamic Chart -->
+        <div class="glass-card p-3 rounded-3xl relative">
+            <div class="h-32 w-full relative">
+                <canvas id="waveChart"></canvas>
             </div>
-
-            <!-- Chart Canvas Container -->
-            <div class="h-56 w-full relative pt-2 z-10">
-                <canvas id="expenseChart"></canvas>
-            </div>
-
-            <!-- Dynamic Legend Bar -->
-            <div class="flex items-center justify-between text-[10px] pt-1 border-t border-white/5 px-1 relative z-10" id="chart-legend-container">
-                <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></span>
-                    <span class="text-gray-300 font-medium">Primary Wave</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_8px_#ec4899]"></span>
-                    <span class="text-gray-300 font-medium">Secondary Wave</span>
-                </div>
+            <!-- Indicator Dots -->
+            <div class="flex justify-center items-center space-x-1.5 mt-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 opacity-40"></span>
+                <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 opacity-40"></span>
             </div>
         </div>
 
-        <!-- Quick Add Expense Form -->
-        <div class="glass-card edge-glow-pink p-5 rounded-3xl space-y-3">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-300 mb-1">Quick Add Expense</h2>
+        <!-- Quick Add Section -->
+        <div class="glass-card neon-border-pink p-4 rounded-3xl space-y-3">
+            <h2 class="text-xs font-bold text-gray-200">Quick Add</h2>
 
-            <form id="expenseForm" onsubmit="handleAddExpense(event)" class="space-y-3">
-                <div class="grid grid-cols-3 gap-2">
-                    <input type="text" id="expenseTitle" placeholder="Title (e.g. Snacks / Taxi)" required
-                        class="col-span-2 px-3.5 py-2.5 rounded-xl text-xs w-full placeholder-gray-500">
-                    <div class="relative flex items-center">
-                        <span id="input-currency-symbol" class="absolute left-3 text-xs text-cyan-400 font-bold">₹</span>
-                        <input type="number" id="expenseAmount" placeholder="Amount" step="0.01" min="0.01" required
-                            class="pl-8 pr-3 py-2.5 rounded-xl text-xs w-full placeholder-gray-500">
+            <form onsubmit="handleAddExpense(event)" class="flex gap-2">
+                <div class="flex-1 space-y-2">
+                    <div class="flex bg-black/40 border border-white/10 rounded-xl px-3 py-1.5 items-center">
+                        <input type="text" id="expTitle" placeholder="Add Expense" required 
+                            class="bg-transparent text-xs w-full focus:outline-none text-white placeholder-gray-500">
+                        <span class="text-cyan-400 font-bold text-xs ml-1">₹</span>
+                        <input type="number" id="expAmount" placeholder="0" step="0.01" required 
+                            class="bg-transparent text-xs w-16 focus:outline-none text-white text-right placeholder-gray-500">
+                    </div>
+
+                    <!-- Category Pills -->
+                    <div class="flex flex-wrap gap-1" id="cat-pill-group">
+                        <button type="button" onclick="selectCat('Food')" data-cat="Food" class="cat-pill active px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🍿 Food</button>
+                        <button type="button" onclick="selectCat('Transport')" data-cat="Transport" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🚗 Transport</button>
+                        <button type="button" onclick="selectCat('Shopping')" data-cat="Shopping" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🛍️ Shopping</button>
+                        <button type="button" onclick="selectCat('Entertainment')" data-cat="Entertainment" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🎬 Entertainment</button>
+                        <button type="button" onclick="selectCat('Bills')" data-cat="Bills" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">💡 Bills</button>
                     </div>
                 </div>
 
-                <!-- Category Selection Pills -->
-                <div class="space-y-1.5">
-                    <label class="text-[10px] uppercase font-semibold text-gray-400">Category</label>
-                    <div class="grid grid-cols-3 gap-1.5" id="category-pills-container">
-                        <button type="button" onclick="selectCategoryPill('Food')" data-cat="Food" class="cat-pill active py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🍔 Food</button>
-                        <button type="button" onclick="selectCategoryPill('Transport')" data-cat="Transport" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🚗 Transport</button>
-                        <button type="button" onclick="selectCategoryPill('Shopping')" data-cat="Shopping" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🛍️ Shopping</button>
-                        <button type="button" onclick="selectCategoryPill('Bills')" data-cat="Bills" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">💡 Bills</button>
-                        <button type="button" onclick="selectCategoryPill('Entertainment')" data-cat="Entertainment" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">🍿 Cinema</button>
-                        <button type="button" onclick="selectCategoryPill('Other')" data-cat="Other" class="cat-pill py-2 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1 font-medium">📁 Other</button>
-                    </div>
-                </div>
-
-                <div>
-                    <input type="date" id="expenseDate" required class="px-3 py-2 rounded-xl text-xs w-full text-gray-300">
-                </div>
-
-                <button type="submit" 
-                    class="neon-glow-btn w-full py-3 rounded-xl text-xs font-bold text-white tracking-wide uppercase flex items-center justify-center space-x-2 cursor-pointer active:scale-95 transition-all">
-                    <span>Add Expense</span>
-                    <span class="text-base font-black">+</span>
+                <!-- Glow Add Button -->
+                <button type="submit" class="btn-glow-add w-12 rounded-2xl flex items-center justify-center text-white text-2xl font-light active:scale-95 transition">
+                    +
                 </button>
             </form>
         </div>
 
-        <!-- Recent Logs Section -->
-        <div class="glass-card edge-glow-cyan p-5 rounded-3xl space-y-3">
-            <div class="flex items-center justify-between">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-300">Recent Transactions</h3>
-                <span id="log-count" class="text-[10px] text-gray-400 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/5">0 entries</span>
-            </div>
-
-            <!-- Dynamic List Container -->
-            <div id="transactionsList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1">
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden px-4">
-        <div class="glass-card edge-glow-cyan p-6 rounded-3xl w-full max-w-sm space-y-5 border border-white/10 animate-fade-in relative">
-            <div class="flex items-center justify-between">
-                <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <span>⚙️</span> Preferences & Currency
-                </h3>
-                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white p-1 text-sm">✕</button>
-            </div>
-
-            <!-- Currency Selection -->
-            <div class="space-y-2">
-                <label class="text-xs font-semibold text-gray-300">Select Currency Symbol</label>
-                <select id="currency-select" onchange="handleCurrencyChange(this.value)" class="w-full px-3 py-2.5 rounded-xl text-xs text-white">
-                    <option value="INR" data-symbol="₹">₹ INR - Indian Rupee</option>
-                    <option value="USD" data-symbol="$">$ USD - US Dollar</option>
-                    <option value="EUR" data-symbol="€">€ EUR - Euro</option>
-                    <option value="GBP" data-symbol="£">£ GBP - British Pound</option>
-                </select>
-            </div>
-
-            <div class="pt-2 border-t border-white/10">
-                <button onclick="requestResetData()" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30 active:scale-95 transition-all">
-                    Reset All Data
-                </button>
-            </div>
-
-            <button onclick="closeSettingsModal()" class="neon-glow-btn w-full py-2.5 rounded-xl text-xs font-bold text-white uppercase tracking-wider active:scale-95">
-                Save & Close
-            </button>
-        </div>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div id="confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md hidden px-4">
-        <div class="glass-card edge-glow-pink p-6 rounded-3xl w-full max-w-xs space-y-4 border border-pink-500/40 text-center animate-fade-in relative">
-            <div class="w-12 h-12 mx-auto rounded-full bg-red-500/20 border border-red-500/40 flex items-center justify-center text-xl text-red-400">
-                ⚠️
-            </div>
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider" id="confirm-title">Reset All Expenses?</h3>
-            <p class="text-xs text-gray-300" id="confirm-desc">This action cannot be undone. All stored transaction history will be cleared.</p>
+        <!-- Recent Expenses Section -->
+        <div class="space-y-2">
+            <h3 class="text-xs font-bold text-gray-300 px-1">Recent Expenses</h3>
             
-            <div class="flex gap-2 pt-2">
-                <button onclick="closeConfirmModal()" class="w-1/2 py-2.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all">
-                    Cancel
-                </button>
-                <button id="confirm-action-btn" onclick="executePendingAction()" class="w-1/2 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-lg active:scale-95 transition-all">
-                    Confirm
-                </button>
+            <div id="expenses-list" class="grid grid-cols-2 gap-2">
+                <!-- Dynamic Items Inserted Here -->
             </div>
         </div>
+
     </div>
 
     <!-- JavaScript Logic -->
     <script>
-        // Global App State
-        let state = {
-            period: 'monthly',
-            chartType: 'spline',
-            selectedCategory: 'Food',
-            currency: 'INR',
-            currencySymbol: '₹',
-            transactions: []
-        };
-
+        let selectedCategory = 'Food';
+        let currentPeriod = 'monthly';
         let chartInstance = null;
-        let pendingAction = null;
 
-        const CATEGORY_COLORS = {
-            'Food': '#00f0ff',
-            'Transport': '#ec4899',
-            'Shopping': '#8b5cf6',
-            'Bills': '#f59e0b',
-            'Entertainment': '#10b981',
-            'Other': '#6b7280'
-        };
+        // Default Data
+        let transactions = JSON.parse(localStorage.getItem('auraspend_inr_txs')) || [
+            { id: 1, title: 'Starbucks', amount: 4.50, category: 'Food', sub: 'Bills' },
+            { id: 2, title: 'Uber', amount: 15.20, category: 'Transport', sub: 'Entertainment' },
+            { id: 3, title: 'Uber', amount: 15.20, category: 'Transport', sub: 'Shopping' },
+            { id: 4, title: 'Uber', amount: 4.50, category: 'Food', sub: 'Entertainment' }
+        ];
 
-        // Initialize App
-        document.onload = initApp();
-
-        function initApp() {
-            loadFromLocalStorage();
-            setDefaultDate();
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChart();
             updateUI();
-        }
+        });
 
-        function setDefaultDate() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('expenseDate').value = today;
-        }
-
-        // Local Storage Persistence
-        function loadFromLocalStorage() {
-            const savedTxs = localStorage.getItem('auraspend_txs');
-            const savedCurrency = localStorage.getItem('auraspend_currency');
-            const savedSymbol = localStorage.getItem('auraspend_symbol');
-
-            if (savedTxs) state.transactions = JSON.parse(savedTxs);
-            if (savedCurrency) state.currency = savedCurrency;
-            if (savedSymbol) state.currencySymbol = savedSymbol;
-
-            document.getElementById('currency-select').value = state.currency;
-            updateCurrencyDisplay();
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('auraspend_txs', JSON.stringify(state.transactions));
-            localStorage.setItem('auraspend_currency', state.currency);
-            localStorage.setItem('auraspend_symbol', state.currencySymbol);
-        }
-
-        // Currency Handling
-        function handleCurrencyChange(val) {
-            const select = document.getElementById('currency-select');
-            const selectedOpt = select.options[select.selectedIndex];
-            state.currency = val;
-            state.currencySymbol = selectedOpt.getAttribute('data-symbol') || '₹';
-            saveToLocalStorage();
-            updateUI();
-        }
-
-        function updateCurrencyDisplay() {
-            document.getElementById('user-badge').innerText = `${state.currencySymbol} ${state.currency}`;
-            document.getElementById('input-currency-symbol').innerText = state.currencySymbol;
-        }
-
-        // Category Pill Selection
-        function selectCategoryPill(category) {
-            state.selectedCategory = category;
-            const pills = document.querySelectorAll('#category-pills-container .cat-pill');
-            pills.forEach(pill => {
-                if (pill.getAttribute('data-cat') === category) {
-                    pill.classList.add('active');
-                } else {
-                    pill.classList.remove('active');
-                }
-            });
-        }
-
-        // Add Expense Action
-        function handleAddExpense(e) {
-            e.preventDefault();
-            const titleInput = document.getElementById('expenseTitle');
-            const amountInput = document.getElementById('expenseAmount');
-            const dateInput = document.getElementById('expenseDate');
-
-            const title = titleInput.value.trim();
-            const amount = parseFloat(amountInput.value);
-            const date = dateInput.value;
-
-            if (!title || isNaN(amount) || amount <= 0 || !date) return;
-
-            const newTx = {
-                id: Date.now().toString(),
-                title,
-                amount,
-                category: state.selectedCategory,
-                date
-            };
-
-            state.transactions.unshift(newTx);
-            saveToLocalStorage();
-
-            titleInput.value = '';
-            amountInput.value = '';
-            setDefaultDate();
-
-            updateUI();
-        }
-
-        // Period Tab Switching
-        function switchPeriod(period) {
-            state.period = period;
-            ['daily', 'weekly', 'monthly'].forEach(p => {
-                const btn = document.getElementById(`tab-${p}`);
-                if (p === period) {
-                    btn.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl neon-btn-active text-white active:scale-95 transition-all';
-                } else {
-                    btn.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-300 active:scale-95 transition-all';
-                }
-            });
-
-            const labelMap = {
-                'daily': 'Total Today',
-                'weekly': 'Total This Week',
-                'monthly': 'Total This Month'
-            };
-            document.getElementById('period-label-total').innerText = labelMap[period];
-
-            updateUI();
-        }
-
-        // Chart View Switcher
-        function setChartType(type) {
-            state.chartType = type;
-            ['spline', 'doughnut', 'bar'].forEach(t => {
-                const btn = document.getElementById(`btn-chart-${t}`);
-                if (t === type) {
+        function selectCat(cat) {
+            selectedCategory = cat;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
                     btn.classList.add('active');
-                    btn.classList.remove('text-gray-400');
                 } else {
                     btn.classList.remove('active');
-                    btn.classList.add('text-gray-400');
                 }
             });
-
-            const subLabels = {
-                'spline': 'Multi-Layer Holographic Wave',
-                'doughnut': 'Category Distribution Ring',
-                'bar': 'Category Breakdown Bars'
-            };
-            document.getElementById('chart-sub-label').innerText = subLabels[type];
-
-            renderChart();
         }
 
-        // Filtering Transactions by Selected Time Period
-        function getFilteredTransactions() {
-            const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
+        function handleAddExpense(e) {
+            e.preventDefault();
+            const title = document.getElementById('expTitle').value.trim();
+            const amount = parseFloat(document.getElementById('expAmount').value);
 
-            return state.transactions.filter(tx => {
-                const txDate = new Date(tx.date);
-                if (state.period === 'daily') {
-                    return tx.date === todayStr;
-                } else if (state.period === 'weekly') {
-                    const diffTime = Math.abs(now - txDate);
-                    const diffDays = diffTime / (1000 * 60 * 60 * 24);
-                    return diffDays <= 7;
+            if (!title || isNaN(amount)) return;
+
+            const newTx = {
+                id: Date.now(),
+                title: title,
+                amount: amount,
+                category: selectedCategory,
+                sub: 'Bills'
+            };
+
+            transactions.unshift(newTx);
+            saveData();
+            
+            document.getElementById('expTitle').value = '';
+            document.getElementById('expAmount').value = '';
+            
+            updateUI();
+        }
+
+        function deleteTx(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            saveData();
+            updateUI();
+        }
+
+        function clearAllData() {
+            if(confirm('Reset all expense records?')) {
+                transactions = [];
+                saveData();
+                updateUI();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('auraspend_inr_txs', JSON.stringify(transactions));
+        }
+
+        function setPeriod(p) {
+            currentPeriod = p;
+            ['daily', 'weekly', 'monthly'].forEach(tab => {
+                const el = document.getElementById(`tab-${tab}`);
+                if (tab === p) {
+                    el.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl tab-btn-active transition';
                 } else {
-                    return txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
+                    el.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-400 transition';
                 }
             });
+
+            document.getElementById('period-title').innerText = 
+                p === 'daily' ? 'Total Today' : p === 'weekly' ? 'Total This Week' : 'Total This Month';
+
+            updateUI();
         }
 
-        // Total Calculations
-        function calculateTotals() {
-            const filtered = getFilteredTransactions();
-            const totalPeriod = filtered.reduce((acc, tx) => acc + tx.amount, 0);
-
-            const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
-            const todayTotal = state.transactions
-                .filter(tx => tx.date === todayStr)
-                .reduce((acc, tx) => acc + tx.amount, 0);
-
-            const weekTotal = state.transactions
-                .filter(tx => {
-                    const diffDays = Math.abs(now - new Date(tx.date)) / (1000 * 60 * 60 * 24);
-                    return diffDays <= 7;
-                })
-                .reduce((acc, tx) => acc + tx.amount, 0);
-
-            return { totalPeriod, todayTotal, weekTotal };
-        }
-
-        // Update UI Components
         function updateUI() {
-            updateCurrencyDisplay();
-            const { totalPeriod, todayTotal, weekTotal } = calculateTotals();
+            const list = document.getElementById('expenses-list');
+            list.innerHTML = '';
 
-            document.getElementById('main-total-amount').innerText = `${state.currencySymbol}${totalPeriod.toFixed(2)}`;
-            document.getElementById('stat-today').innerText = `${state.currencySymbol}${todayTotal.toFixed(2)}`;
-            document.getElementById('stat-week').innerText = `${state.currencySymbol}${weekTotal.toFixed(2)}`;
+            let total = 0;
+            transactions.forEach(tx => total += tx.amount);
 
-            renderTransactionList();
-            renderChart();
-        }
+            document.getElementById('main-total-amount').innerText = `₹${total.toFixed(2)}`;
+            document.getElementById('stat-today').innerText = `₹${(total * 0.1).toFixed(2)}`;
+            document.getElementById('stat-week').innerText = `₹${(total * 0.45).toFixed(2)}`;
 
-        // Render Transaction Logs List
-        function renderTransactionList() {
-            const container = document.getElementById('transactionsList');
-            const countLabel = document.getElementById('log-count');
-            container.innerHTML = '';
-
-            const txs = getFilteredTransactions();
-            countLabel.innerText = `${txs.length} entries`;
-
-            if (txs.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-8 text-gray-500 text-xs">
-                        No transactions logged for this period.
-                    </div>`;
-                return;
-            }
-
-            txs.forEach(tx => {
-                const item = document.createElement('div');
-                item.className = 'glass-card p-3 rounded-2xl flex items-center justify-between hover:border-pink-500/30 transition-all border border-white/5';
+            transactions.forEach(tx => {
+                const card = document.createElement('div');
+                card.className = 'glass-card p-2.5 rounded-2xl flex items-center justify-between border border-white/5 relative group';
                 
-                const catEmoji = {
-                    'Food': '🍔', 'Transport': '🚗', 'Shopping': '🛍️',
-                    'Bills': '💡', 'Entertainment': '🍿', 'Other': '📁'
-                }[tx.category] || '📁';
+                const iconMap = {
+                    'Food': '☕',
+                    'Transport': '🚗',
+                    'Shopping': '🛍️',
+                    'Entertainment': '🎬',
+                    'Bills': '💡'
+                };
 
-                item.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sm">
-                            ${catEmoji}
+                card.innerHTML = `
+                    <div class="flex items-center space-x-2 overflow-hidden">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-xs">
+                            ${iconMap[tx.category] || '📁'}
                         </div>
-                        <div>
-                            <p class="text-xs font-bold text-white">${escapeHtml(tx.title)}</p>
-                            <p class="text-[10px] text-gray-400">${tx.category} • ${tx.date}</p>
+                        <div class="truncate">
+                            <p class="text-[11px] font-bold text-white truncate">${tx.title}</p>
+                            <span class="text-[9px] text-gray-400 bg-white/5 px-1.5 py-0.5 rounded border border-white/5">${tx.category}</span>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xs font-bold text-pink-400">-${state.currencySymbol}${tx.amount.toFixed(2)}</span>
-                        <button onclick="requestDeleteTx('${tx.id}')" class="text-gray-500 hover:text-red-400 text-xs p-1">✕</button>
+                    <div class="text-right">
+                        <p class="text-xs font-bold text-white">-₹${tx.amount.toFixed(2)}</p>
+                        <button onclick="deleteTx(${tx.id})" class="text-[9px] text-red-400 opacity-60 hover:opacity-100">delete</button>
                     </div>
                 `;
-                container.appendChild(item);
+                list.appendChild(card);
             });
         }
 
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
-        // Render Responsive Visual Chart
         function renderChart() {
-            const ctx = document.getElementById('expenseChart').getContext('2d');
-            if (chartInstance) chartInstance.destroy();
+            const ctx = document.getElementById('waveChart').getContext('2d');
+            
+            const gradCyan = ctx.createLinearGradient(0, 0, 0, 120);
+            gradCyan.addColorStop(0, 'rgba(0, 240, 255, 0.4)');
+            gradCyan.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
 
-            const categories = ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Other'];
-            const filteredTxs = getFilteredTransactions();
+            const gradPink = ctx.createLinearGradient(0, 0, 0, 120);
+            gradPink.addColorStop(0, 'rgba(236, 72, 153, 0.4)');
+            gradPink.addColorStop(1, 'rgba(236, 72, 153, 0.0)');
 
-            const catTotals = categories.map(cat => {
-                return filteredTxs
-                    .filter(tx => tx.category === cat)
-                    .reduce((acc, tx) => acc + tx.amount, 0);
-            });
-
-            const legendContainer = document.getElementById('chart-legend-container');
-
-            if (state.chartType === 'spline') {
-                legendContainer.innerHTML = `
-                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></span><span class="text-gray-300 font-medium">Primary Spending</span></div>
-                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_8px_#ec4899]"></span><span class="text-gray-300 font-medium">Secondary Aura</span></div>
-                `;
-
-                const gradCyan = ctx.createLinearGradient(0, 0, 0, 200);
-                gradCyan.addColorStop(0, 'rgba(0, 240, 255, 0.45)');
-                gradCyan.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
-
-                const secondaryData = catTotals.map(val => val * 0.65);
-
-                chartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: categories,
-                        datasets: [
-                            {
-                                label: 'Primary Spend',
-                                data: catTotals,
-                                borderColor: '#00f0ff',
-                                borderWidth: 3,
-                                fill: true,
-                                backgroundColor: gradCyan,
-                                tension: 0.48,
-                                pointBackgroundColor: '#ffffff',
-                                pointBorderColor: '#00f0ff',
-                                pointBorderWidth: 2,
-                                pointRadius: 4
-                            },
-                            {
-                                label: 'Secondary Aura',
-                                data: secondaryData,
-                                borderColor: '#ec4899',
-                                borderWidth: 2,
-                                borderDash: [4, 4],
-                                fill: false,
-                                tension: 0.48,
-                                pointRadius: 3,
-                                pointBackgroundColor: '#ec4899'
-                            }
-                        ]
-                    },
-                    options: getChartOptions()
-                });
-
-            } else if (state.chartType === 'doughnut') {
-                legendContainer.innerHTML = `
-                    <div class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-[#00f0ff]"></span><span class="text-gray-400">Food</span></div>
-                    <div class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-[#ec4899]"></span><span class="text-gray-400">Trans</span></div>
-                    <div class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-[#8b5cf6]"></span><span class="text-gray-400">Shop</span></div>
-                    <div class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span><span class="text-gray-400">Bills</span></div>
-                `;
-
-                chartInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: categories,
-                        datasets: [{
-                            data: catTotals,
-                            backgroundColor: Object.values(CATEGORY_COLORS),
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [
+                        {
+                            data: [30, 45, 25, 60, 40, 70, 50],
+                            borderColor: '#00f0ff',
                             borderWidth: 2,
-                            borderColor: '#0e101f',
-                            hoverOffset: 6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: (context) => ` ${context.label}: ${state.currencySymbol}${context.raw.toFixed(2)}`
-                                }
-                            }
+                            fill: true,
+                            backgroundColor: gradCyan,
+                            tension: 0.4,
+                            pointRadius: 0
                         },
-                        cutout: '70%'
-                    }
-                });
-
-            } else if (state.chartType === 'bar') {
-                legendContainer.innerHTML = `
-                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></span><span class="text-gray-300 font-medium">Category Bars</span></div>
-                `;
-
-                chartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: categories,
-                        datasets: [{
-                            label: 'Expenses',
-                            data: catTotals,
-                            backgroundColor: Object.values(CATEGORY_COLORS),
-                            borderRadius: 8,
-                            borderSkipped: false
-                        }]
-                    },
-                    options: getChartOptions()
-                });
-            }
-        }
-
-        function getChartOptions() {
-            return {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(15, 17, 32, 0.95)',
-                        borderColor: '#00f0ff',
-                        borderWidth: 1,
-                        titleColor: '#ffffff',
-                        bodyColor: '#00f0ff',
-                        padding: 10,
-                        callbacks: {
-                            label: (context) => ` Total: ${state.currencySymbol}${context.raw.toFixed(2)}`
+                        {
+                            data: [15, 25, 40, 20, 55, 30, 65],
+                            borderColor: '#ec4899',
+                            borderWidth: 2,
+                            fill: true,
+                            backgroundColor: gradPink,
+                            tension: 0.4,
+                            pointRadius: 0
                         }
-                    }
+                    ]
                 },
-                scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#9ca3af', font: { size: 10 } }
-                    },
-                    y: {
-                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#9ca3af', font: { size: 10 } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
                     }
                 }
-            };
-        }
-
-        // Modal Logic
-        function openSettingsModal() {
-            document.getElementById('settings-modal').classList.remove('hidden');
-        }
-
-        function closeSettingsModal() {
-            document.getElementById('settings-modal').classList.add('hidden');
-        }
-
-        function requestDeleteTx(id) {
-            pendingAction = () => {
-                state.transactions = state.transactions.filter(tx => tx.id !== id);
-                saveToLocalStorage();
-                updateUI();
-            };
-            document.getElementById('confirm-title').innerText = 'Delete Expense?';
-            document.getElementById('confirm-desc').innerText = 'Are you sure you want to remove this transaction entry?';
-            document.getElementById('confirm-modal').classList.remove('hidden');
-        }
-
-        function requestResetData() {
-            closeSettingsModal();
-            pendingAction = () => {
-                state.transactions = [];
-                saveToLocalStorage();
-                updateUI();
-            };
-            document.getElementById('confirm-title').innerText = 'Reset All Data?';
-            document.getElementById('confirm-desc').innerText = 'This will erase all your transaction history stored on this device.';
-            document.getElementById('confirm-modal').classList.remove('hidden');
-        }
-
-        function closeConfirmModal() {
-            pendingAction = null;
-            document.getElementById('confirm-modal').classList.add('hidden');
-        }
-
-        function executePendingAction() {
-            if (pendingAction) pendingAction();
-            closeConfirmModal();
+            });
         }
     </script>
 </body>
