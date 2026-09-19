@@ -22,9 +22,9 @@
         body {
             background-color: #05040a;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(236, 72, 153, 0.22) 0%, transparent 40%),
-                radial-gradient(circle at 85% 20%, rgba(0, 240, 255, 0.22) 0%, transparent 45%),
-                radial-gradient(circle at 50% 85%, rgba(168, 85, 247, 0.25) 0%, transparent 50%);
+                radial-gradient(circle at 15% 15%, rgba(236, 72, 153, 0.28) 0%, transparent 40%),
+                radial-gradient(circle at 85% 20%, rgba(0, 240, 255, 0.28) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(168, 85, 247, 0.3) 0%, transparent 50%);
             background-attachment: fixed;
             color: #ffffff;
             overflow-x: hidden;
@@ -32,34 +32,36 @@
 
         /* Glassmorphism Styling */
         .glass-card {
-            background: rgba(15, 13, 29, 0.75);
+            background: rgba(15, 13, 29, 0.8);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         /* Glowing Accent Borders */
         .neon-border-cyan {
-            border: 1px solid rgba(0, 240, 255, 0.7);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.35), inset 0 0 10px rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.8);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), inset 0 0 12px rgba(0, 240, 255, 0.15);
         }
 
         .neon-border-pink {
-            border: 1px solid rgba(236, 72, 153, 0.7);
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.35), inset 0 0 10px rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.8);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.4), inset 0 0 12px rgba(236, 72, 153, 0.15);
         }
 
-        /* Button Gradients */
+        /* Ultra Bright & Shining Navigation Tab Buttons */
         .tab-btn-active {
-            background: linear-gradient(135deg, #00f0ff 0%, #a855f7 100%);
-            box-shadow: 0 0 18px rgba(0, 240, 255, 0.5);
+            background: linear-gradient(135deg, #00f0ff 0%, #d946ef 50%, #8b5cf6 100%);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.85), 0 0 15px rgba(217, 70, 239, 0.7);
             color: #ffffff;
+            font-weight: 800;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
         }
 
         .btn-glow-add {
             background: linear-gradient(180deg, #00f0ff 0%, #ec4899 100%);
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.6), 0 0 25px rgba(236, 72, 153, 0.5);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.7), 0 0 25px rgba(236, 72, 153, 0.6);
         }
 
         .btn-glow-add:active {
@@ -75,21 +77,22 @@
 
         .cat-pill.active {
             border-color: #00f0ff;
-            background: rgba(0, 240, 255, 0.25);
-            box-shadow: 0 0 14px rgba(0, 240, 255, 0.5);
+            background: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.6);
             color: #ffffff;
+            font-weight: 700;
         }
 
         input, select {
             background: rgba(10, 8, 20, 0.85) !important;
-            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
             color: #ffffff !important;
             outline: none !important;
         }
 
         input:focus, select:focus {
             border-color: #00f0ff !important;
-            box-shadow: 0 0 12px rgba(0, 240, 255, 0.5) !important;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.6) !important;
         }
 
         ::-webkit-scrollbar { width: 0px; }
@@ -102,12 +105,13 @@
         <!-- Header -->
         <header class="flex items-center justify-between px-1">
             <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-pink-500">Expense tracker</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-purple-500 drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">Expense tracker</span>
             </h1>
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full overflow-hidden border border-cyan-400/80 shadow-[0_0_10px_#00f0ff]">
+                <!-- User Profile Icon Button -->
+                <button onclick="openAuthModal()" class="w-8 h-8 rounded-full overflow-hidden border-2 border-cyan-400 shadow-[0_0_12px_#00f0ff] active:scale-95 transition relative">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-full h-full object-cover">
-                </div>
+                </button>
                 <!-- Settings Button -->
                 <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl glass-card flex items-center justify-center text-gray-300 hover:text-white border border-white/20 active:scale-95 transition">
                     <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,14 +122,14 @@
         </header>
 
         <!-- Time Period Selector -->
-        <div class="glass-card p-1 rounded-2xl flex items-center justify-between border border-white/10">
-            <button onclick="setPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-400 transition">
+        <div class="glass-card p-1 rounded-2xl flex items-center justify-between border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+            <button onclick="setPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
                 Daily
             </button>
-            <button onclick="setPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-400 transition">
+            <button onclick="setPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
                 Weekly
             </button>
-            <button onclick="setPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs font-semibold rounded-xl tab-btn-active transition">
+            <button onclick="setPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs rounded-xl tab-btn-active transition">
                 Monthly
             </button>
         </div>
@@ -137,7 +141,7 @@
                 <span class="text-emerald-400 font-bold flex items-center gap-0.5">▲ Live</span>
             </div>
 
-            <div class="text-3xl font-black tracking-tight text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]" id="main-total-amount">
+            <div class="text-3xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]" id="main-total-amount">
                 ₹0.00
             </div>
 
@@ -155,14 +159,14 @@
             </div>
         </div>
 
-        <!-- Interactive 3-Chart Carousel -->
-        <div class="glass-card p-3 rounded-3xl relative">
+        <!-- Swipeable Interactive 3-Chart Carousel -->
+        <div class="glass-card p-3 rounded-3xl relative" id="chart-container">
             <div class="flex justify-between items-center px-1 mb-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400" id="chart-type-label">Wave Analytics</span>
-                <span class="text-[9px] text-cyan-400 font-semibold cursor-pointer" onclick="nextChartType()">Tap to switch graph ⚙️</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300" id="chart-type-label">Wave Analytics</span>
+                <span class="text-[9px] text-cyan-400 font-semibold">👈 Swipe or tap to inspect 👉</span>
             </div>
             
-            <div class="h-36 w-full relative cursor-pointer" onclick="nextChartType()">
+            <div class="h-36 w-full relative touch-pan-y" id="chart-swipe-area">
                 <canvas id="waveChart"></canvas>
             </div>
 
@@ -212,6 +216,51 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- User Auth & Profile Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden px-4">
+        <div class="glass-card neon-border-cyan p-5 rounded-3xl w-full max-w-xs space-y-4 relative">
+            <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                <div class="flex space-x-3">
+                    <button onclick="switchAuthTab('login')" id="auth-tab-login" class="text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1">🔐 Login</button>
+                    <button onclick="switchAuthTab('signup')" id="auth-tab-signup" class="text-xs font-bold text-gray-400 pb-1">📝 Sign Up</button>
+                </div>
+                <button onclick="closeAuthModal()" class="text-gray-400 hover:text-white text-sm p-1">✕</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="auth-form-login" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-3">
+                <div>
+                    <label class="text-[10px] text-gray-400 font-semibold block mb-1">Username</label>
+                    <input type="text" id="login-username" required placeholder="Enter username" class="w-full px-3 py-2 rounded-xl text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-400 font-semibold block mb-1">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-3 py-2 rounded-xl text-xs">
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-[0_0_15px_rgba(0,240,255,0.4)] active:scale-95 transition">
+                    Login
+                </button>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form id="auth-form-signup" onsubmit="handleAuthSubmit(event, 'signup')" class="space-y-3 hidden">
+                <div>
+                    <label class="text-[10px] text-gray-400 font-semibold block mb-1">New Username</label>
+                    <input type="text" id="signup-username" required placeholder="Create username" class="w-full px-3 py-2 rounded-xl text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-400 font-semibold block mb-1">New Password</label>
+                    <input type="password" id="signup-password" required placeholder="••••••••" class="w-full px-3 py-2 rounded-xl text-xs">
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-[0_0_15px_rgba(236,72,153,0.4)] active:scale-95 transition">
+                    Register Account
+                </button>
+            </form>
+
+            <div id="auth-status" class="text-[10px] text-center font-semibold text-emerald-400 hidden"></div>
+        </div>
     </div>
 
     <!-- Settings & History Modal -->
@@ -277,17 +326,47 @@
         let historyChartInstance = null;
 
         // Persistent Transactions State
-        let transactions = JSON.parse(localStorage.getItem('auraspend_v2_txs')) || [
+        let transactions = JSON.parse(localStorage.getItem('auraspend_v3_txs')) || [
             { id: 1, title: 'Starbucks Coffee', amount: 180.00, category: 'Food', date: new Date().toISOString() },
             { id: 2, title: 'Cab Ride', amount: 250.00, category: 'Transport', date: new Date().toISOString() },
             { id: 3, title: 'Grocery Shopping', amount: 640.00, category: 'Shopping', date: new Date().toISOString() }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Set history month dropdown to current month
             document.getElementById('hist-month').value = new Date().getMonth();
+            setupTouchSwipe();
             updateUI();
         });
+
+        // Touch Swipe Event Setup for Chart Carousel
+        function setupTouchSwipe() {
+            const swipeArea = document.getElementById('chart-swipe-area');
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            swipeArea.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            swipeArea.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipeGesture();
+            }, { passive: true });
+
+            function handleSwipeGesture() {
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 30) { // minimum swipe distance threshold
+                    if (diff > 0) {
+                        // Swiped Left -> Next Chart
+                        activeChartIndex = (activeChartIndex + 1) % 3;
+                    } else {
+                        // Swiped Right -> Previous Chart
+                        activeChartIndex = (activeChartIndex - 1 + 3) % 3;
+                    }
+                    renderActiveChart();
+                }
+            }
+        }
 
         function selectCat(cat) {
             selectedCategory = cat;
@@ -336,7 +415,7 @@
         }
 
         function saveData() {
-            localStorage.setItem('auraspend_v2_txs', JSON.stringify(transactions));
+            localStorage.setItem('auraspend_v3_txs', JSON.stringify(transactions));
         }
 
         function setPeriod(p) {
@@ -344,8 +423,8 @@
             ['daily', 'weekly', 'monthly'].forEach(tab => {
                 const el = document.getElementById(`tab-${tab}`);
                 el.className = tab === p 
-                    ? 'w-1/3 py-2 text-xs font-semibold rounded-xl tab-btn-active transition' 
-                    : 'w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-400 transition';
+                    ? 'w-1/3 py-2 text-xs rounded-xl tab-btn-active transition' 
+                    : 'w-1/3 py-2 text-xs rounded-xl text-gray-400 transition';
             });
 
             document.getElementById('period-title').innerText = 
@@ -354,16 +433,13 @@
             updateUI();
         }
 
-        // Calculation Filters based on Date/Time
+        // Filter Stats Logic
         function getFilteredStats() {
             const now = new Date();
             const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
 
-            // Calculate start of week (Sunday)
             const dayOfWeek = now.getDay();
             const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayOfWeek).getTime();
-
-            // Calculate start of month
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
 
             let todayTotal = 0;
@@ -408,21 +484,25 @@
 
             transactions.forEach(tx => {
                 const card = document.createElement('div');
-                card.className = 'glass-card p-2.5 rounded-2xl flex items-center justify-between border border-white/5 relative';
+                card.className = 'glass-card p-2.5 rounded-2xl flex flex-col justify-between border border-white/5 relative';
+
+                const dateObj = new Date(tx.date);
+                const formattedTime = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + ', ' + 
+                                      dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
 
                 card.innerHTML = `
-                    <div class="flex items-center space-x-2 overflow-hidden">
-                        <div class="w-7 h-7 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center text-xs">
-                            ${iconMap[tx.category] || '📁'}
-                        </div>
-                        <div class="truncate">
+                    <div class="flex items-center justify-between overflow-hidden mb-1">
+                        <div class="flex items-center space-x-1.5 overflow-hidden">
+                            <div class="w-6 h-6 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center text-[10px]">
+                                ${iconMap[tx.category] || '📁'}
+                            </div>
                             <p class="text-[11px] font-bold text-white truncate">${escapeHtml(tx.title)}</p>
-                            <span class="text-[9px] text-cyan-300 font-medium">${tx.category}</span>
                         </div>
+                        <button onclick="deleteTx(${tx.id})" class="text-[10px] text-gray-500 hover:text-red-400 px-1">✕</button>
                     </div>
-                    <div class="text-right">
+                    <div class="flex items-end justify-between mt-1 pt-1 border-t border-white/5">
+                        <span class="text-[8px] text-gray-400 font-medium">${formattedTime}</span>
                         <p class="text-xs font-bold text-pink-400">-₹${tx.amount.toFixed(2)}</p>
-                        <button onclick="deleteTx(${tx.id})" class="text-[9px] text-gray-500 hover:text-red-400">delete</button>
                     </div>
                 `;
                 list.appendChild(card);
@@ -431,12 +511,6 @@
 
         function escapeHtml(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
-        // Chart Navigation
-        function nextChartType() {
-            activeChartIndex = (activeChartIndex + 1) % 3;
-            renderActiveChart();
         }
 
         function setChartTypeIndex(idx) {
@@ -448,14 +522,12 @@
             const ctx = document.getElementById('waveChart').getContext('2d');
             if (chartInstance) chartInstance.destroy();
 
-            // Update Indicators
+            // Indicators
             [0, 1, 2].forEach(i => {
                 const dot = document.getElementById(`dot-${i}`);
-                if (i === activeChartIndex) {
-                    dot.className = 'w-2 h-2 rounded-full bg-cyan-400 cursor-pointer transition-all shadow-[0_0_10px_#00f0ff]';
-                } else {
-                    dot.className = 'w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all';
-                }
+                dot.className = i === activeChartIndex 
+                    ? 'w-2 h-2 rounded-full bg-cyan-400 cursor-pointer transition-all shadow-[0_0_10px_#00f0ff]' 
+                    : 'w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all';
             });
 
             const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills'];
@@ -465,18 +537,30 @@
                     .reduce((acc, tx) => acc + tx.amount, 0);
             });
 
-            const labels = ['Wave Analytics', 'Category Breakdown (Histogram)', 'Category Distribution (Pie)'];
+            const labels = ['Spline Wave Analytics', 'Category Breakdown (Histogram)', 'Category Distribution (Pie)'];
             document.getElementById('chart-type-label').innerText = labels[activeChartIndex];
 
+            // Interactive Tooltip Config for Numerical Display on Tap
+            const interactiveTooltip = {
+                enabled: true,
+                backgroundColor: 'rgba(10, 8, 20, 0.9)',
+                titleColor: '#00f0ff',
+                bodyColor: '#ffffff',
+                borderColor: '#00f0ff',
+                borderWidth: 1,
+                padding: 8,
+                displayColors: false,
+                callbacks: {
+                    label: function(context) {
+                        return `${context.label}: ₹${context.raw.toFixed(2)}`;
+                    }
+                }
+            };
+
             if (activeChartIndex === 0) {
-                // Dual Wave Spline Chart
                 const gradCyan = ctx.createLinearGradient(0, 0, 0, 140);
                 gradCyan.addColorStop(0, 'rgba(0, 240, 255, 0.45)');
                 gradCyan.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
-
-                const gradPink = ctx.createLinearGradient(0, 0, 0, 140);
-                gradPink.addColorStop(0, 'rgba(236, 72, 153, 0.45)');
-                gradPink.addColorStop(1, 'rgba(236, 72, 153, 0.0)');
 
                 chartInstance = new Chart(ctx, {
                     type: 'line',
@@ -484,44 +568,52 @@
                         labels: categories,
                         datasets: [
                             {
+                                label: 'Spending',
                                 data: catTotals,
                                 borderColor: '#00f0ff',
                                 borderWidth: 3,
                                 fill: true,
                                 backgroundColor: gradCyan,
                                 tension: 0.45,
-                                pointRadius: 3,
+                                pointRadius: 5,
+                                pointHoverRadius: 8,
                                 pointBackgroundColor: '#00f0ff'
-                            },
-                            {
-                                data: catTotals.map(v => v * 0.6),
-                                borderColor: '#ec4899',
-                                borderWidth: 2,
-                                fill: true,
-                                backgroundColor: gradPink,
-                                tension: 0.45,
-                                pointRadius: 0
                             }
                         ]
                     },
-                    options: getBaseChartOptions()
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, tooltip: interactiveTooltip },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 } } },
+                            y: { display: false }
+                        }
+                    }
                 });
             } else if (activeChartIndex === 1) {
-                // Bar Chart
                 chartInstance = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: categories,
                         datasets: [{
+                            label: 'Amount Spent',
                             data: catTotals,
                             backgroundColor: ['#00f0ff', '#ec4899', '#8b5cf6', '#f59e0b', '#10b981'],
                             borderRadius: 8
                         }]
                     },
-                    options: getBaseChartOptions()
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, tooltip: interactiveTooltip },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 } } },
+                            y: { display: false }
+                        }
+                    }
                 });
             } else if (activeChartIndex === 2) {
-                // Doughnut Chart
                 chartInstance = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
@@ -535,26 +627,56 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        plugins: { legend: { display: false }, tooltip: interactiveTooltip },
                         cutout: '70%'
                     }
                 });
             }
         }
 
-        function getBaseChartOptions() {
-            return {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 } } },
-                    y: { display: false }
-                }
-            };
+        // Auth Modal Controls
+        function openAuthModal() {
+            document.getElementById('auth-modal').classList.remove('hidden');
         }
 
-        // Settings & History Modal Functions
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.getElementById('auth-status').classList.add('hidden');
+        }
+
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('auth-tab-login').className = 'text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1';
+                document.getElementById('auth-tab-signup').className = 'text-xs font-bold text-gray-400 pb-1';
+                document.getElementById('auth-form-login').classList.remove('hidden');
+                document.getElementById('auth-form-signup').classList.add('hidden');
+            } else {
+                document.getElementById('auth-tab-signup').className = 'text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1';
+                document.getElementById('auth-tab-login').className = 'text-xs font-bold text-gray-400 pb-1';
+                document.getElementById('auth-form-signup').classList.remove('hidden');
+                document.getElementById('auth-form-login').classList.add('hidden');
+            }
+        }
+
+        function handleAuthSubmit(e, type) {
+            e.preventDefault();
+            const statusEl = document.getElementById('auth-status');
+            statusEl.classList.remove('hidden');
+            
+            if (type === 'login') {
+                const username = document.getElementById('login-username').value;
+                statusEl.innerText = `Logged in successfully as ${username}!`;
+            } else {
+                const username = document.getElementById('signup-username').value;
+                statusEl.innerText = `Registered successfully for ${username}!`;
+            }
+
+            setTimeout(() => {
+                closeAuthModal();
+            }, 1200);
+        }
+
+        // Settings Modal Controls
         function openSettingsModal() {
             document.getElementById('settings-modal').classList.remove('hidden');
             renderHistoryData();
