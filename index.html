@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Expense Tracker</title>
+    <title>AuraSpend - Expense Tracker</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -20,82 +20,97 @@
         }
 
         body {
-            background-color: #080711;
+            background-color: #05040a;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(236, 72, 153, 0.22) 0%, transparent 40%),
+                radial-gradient(circle at 85% 20%, rgba(0, 240, 255, 0.22) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(168, 85, 247, 0.25) 0%, transparent 50%);
+            background-attachment: fixed;
             color: #ffffff;
             overflow-x: hidden;
         }
 
-        /* Glassmorphism Card Style */
+        /* Glassmorphism Styling */
         .glass-card {
-            background: rgba(18, 16, 35, 0.65);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            background: rgba(15, 13, 29, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
-        /* Neon Glowing Borders & Text */
+        /* Glowing Accent Borders */
         .neon-border-cyan {
-            border: 1px solid rgba(0, 240, 255, 0.5);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+            border: 1px solid rgba(0, 240, 255, 0.7);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.35), inset 0 0 10px rgba(0, 240, 255, 0.1);
         }
 
         .neon-border-pink {
-            border: 1px solid rgba(236, 72, 153, 0.5);
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.25);
+            border: 1px solid rgba(236, 72, 153, 0.7);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.35), inset 0 0 10px rgba(236, 72, 153, 0.1);
         }
 
-        .neon-text-cyan {
-            color: #00f0ff;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
-        }
-
-        /* Active Tab Button */
+        /* Button Gradients */
         .tab-btn-active {
             background: linear-gradient(135deg, #00f0ff 0%, #a855f7 100%);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            box-shadow: 0 0 18px rgba(0, 240, 255, 0.5);
             color: #ffffff;
         }
 
-        /* Quick Add Submit Button */
         .btn-glow-add {
-            background: linear-gradient(180deg, #00f0ff 0%, #d946ef 100%);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), 0 0 20px rgba(217, 70, 239, 0.4);
+            background: linear-gradient(180deg, #00f0ff 0%, #ec4899 100%);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.6), 0 0 25px rgba(236, 72, 153, 0.5);
+        }
+
+        .btn-glow-add:active {
+            transform: scale(0.95);
         }
 
         /* Category Pill Styling */
         .cat-pill {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             transition: all 0.2s ease;
         }
 
         .cat-pill.active {
             border-color: #00f0ff;
-            background: rgba(0, 240, 255, 0.2);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+            background: rgba(0, 240, 255, 0.25);
+            box-shadow: 0 0 14px rgba(0, 240, 255, 0.5);
             color: #ffffff;
         }
 
-        /* Scrollbar Styling */
+        input, select {
+            background: rgba(10, 8, 20, 0.85) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+            outline: none !important;
+        }
+
+        input:focus, select:focus {
+            border-color: #00f0ff !important;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.5) !important;
+        }
+
         ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
-<body class="min-h-screen pb-10 pt-4 px-4 flex justify-center items-start">
+<body class="min-h-screen pb-10 pt-4 px-3 flex justify-center items-start">
 
     <div class="w-full max-w-sm mx-auto space-y-4">
         
         <!-- Header -->
         <header class="flex items-center justify-between px-1">
-            <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-1">
-                <span>Expense tracker</span>
+            <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-pink-500">Expense tracker</span>
             </h1>
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full overflow-hidden border border-cyan-400/50">
+                <div class="w-8 h-8 rounded-full overflow-hidden border border-cyan-400/80 shadow-[0_0_10px_#00f0ff]">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-full h-full object-cover">
                 </div>
-                <button onclick="clearAllData()" class="text-gray-400 hover:text-white transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Settings Button -->
+                <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl glass-card flex items-center justify-center text-gray-300 hover:text-white border border-white/20 active:scale-95 transition">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                     </svg>
                 </button>
@@ -103,7 +118,7 @@
         </header>
 
         <!-- Time Period Selector -->
-        <div class="glass-card p-1 rounded-2xl flex items-center justify-between">
+        <div class="glass-card p-1 rounded-2xl flex items-center justify-between border border-white/10">
             <button onclick="setPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-400 transition">
                 Daily
             </button>
@@ -118,53 +133,59 @@
         <!-- Total Overview Card -->
         <div class="glass-card neon-border-cyan p-4 rounded-3xl space-y-3 relative overflow-hidden">
             <div class="flex items-center justify-between text-xs text-gray-400">
-                <span id="period-title">Total This Month</span>
-                <span class="text-emerald-400 font-medium flex items-center gap-0.5">▲ +4.5%</span>
+                <span id="period-title" class="font-bold uppercase tracking-wider text-cyan-300">Total This Month</span>
+                <span class="text-emerald-400 font-bold flex items-center gap-0.5">▲ Live</span>
             </div>
 
-            <div class="text-3xl font-extrabold tracking-tight text-white" id="main-total-amount">
-                ₹1,245.50
+            <div class="text-3xl font-black tracking-tight text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]" id="main-total-amount">
+                ₹0.00
             </div>
 
             <div class="grid grid-cols-2 gap-2 pt-1">
-                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/5 relative overflow-hidden">
-                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-cyan-400"></div>
-                    <p class="text-[10px] text-gray-400">Today</p>
-                    <p class="text-xs font-bold text-white mt-0.5" id="stat-today">₹24.50</p>
+                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></div>
+                    <p class="text-[10px] text-gray-400 font-medium">Today</p>
+                    <p class="text-xs font-bold text-cyan-300 mt-0.5" id="stat-today">₹0.00</p>
                 </div>
-                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/5 relative overflow-hidden">
-                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-pink-500"></div>
-                    <p class="text-[10px] text-gray-400">This Week</p>
-                    <p class="text-xs font-bold text-white mt-0.5" id="stat-week">₹320.00</p>
+                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-pink-500 shadow-[0_0_8px_#ec4899]"></div>
+                    <p class="text-[10px] text-gray-400 font-medium">This Week</p>
+                    <p class="text-xs font-bold text-pink-400 mt-0.5" id="stat-week">₹0.00</p>
                 </div>
             </div>
         </div>
 
-        <!-- Dual Wave Dynamic Chart -->
+        <!-- Interactive 3-Chart Carousel -->
         <div class="glass-card p-3 rounded-3xl relative">
-            <div class="h-32 w-full relative">
+            <div class="flex justify-between items-center px-1 mb-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400" id="chart-type-label">Wave Analytics</span>
+                <span class="text-[9px] text-cyan-400 font-semibold cursor-pointer" onclick="nextChartType()">Tap to switch graph ⚙️</span>
+            </div>
+            
+            <div class="h-36 w-full relative cursor-pointer" onclick="nextChartType()">
                 <canvas id="waveChart"></canvas>
             </div>
+
             <!-- Indicator Dots -->
-            <div class="flex justify-center items-center space-x-1.5 mt-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 opacity-40"></span>
-                <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></span>
-                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 opacity-40"></span>
+            <div class="flex justify-center items-center space-x-2 mt-2">
+                <span id="dot-0" onclick="setChartTypeIndex(0)" class="w-2 h-2 rounded-full bg-cyan-400 cursor-pointer transition-all shadow-[0_0_10px_#00f0ff]"></span>
+                <span id="dot-1" onclick="setChartTypeIndex(1)" class="w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all"></span>
+                <span id="dot-2" onclick="setChartTypeIndex(2)" class="w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all"></span>
             </div>
         </div>
 
         <!-- Quick Add Section -->
         <div class="glass-card neon-border-pink p-4 rounded-3xl space-y-3">
-            <h2 class="text-xs font-bold text-gray-200">Quick Add</h2>
+            <h2 class="text-xs font-bold uppercase tracking-wider text-pink-300">Quick Add</h2>
 
             <form onsubmit="handleAddExpense(event)" class="flex gap-2">
                 <div class="flex-1 space-y-2">
-                    <div class="flex bg-black/40 border border-white/10 rounded-xl px-3 py-1.5 items-center">
-                        <input type="text" id="expTitle" placeholder="Add Expense" required 
+                    <div class="flex bg-black/50 border border-white/15 rounded-xl px-3 py-2 items-center">
+                        <input type="text" id="expTitle" placeholder="Expense title" required 
                             class="bg-transparent text-xs w-full focus:outline-none text-white placeholder-gray-500">
                         <span class="text-cyan-400 font-bold text-xs ml-1">₹</span>
-                        <input type="number" id="expAmount" placeholder="0" step="0.01" required 
-                            class="bg-transparent text-xs w-16 focus:outline-none text-white text-right placeholder-gray-500">
+                        <input type="number" id="expAmount" placeholder="0" step="0.01" min="0.01" required 
+                            class="bg-transparent text-xs w-16 focus:outline-none text-white text-right placeholder-gray-500 font-bold">
                     </div>
 
                     <!-- Category Pills -->
@@ -177,8 +198,7 @@
                     </div>
                 </div>
 
-                <!-- Glow Add Button -->
-                <button type="submit" class="btn-glow-add w-12 rounded-2xl flex items-center justify-center text-white text-2xl font-light active:scale-95 transition">
+                <button type="submit" class="btn-glow-add w-12 rounded-2xl flex items-center justify-center text-white text-2xl font-black active:scale-95 transition">
                     +
                 </button>
             </form>
@@ -186,8 +206,7 @@
 
         <!-- Recent Expenses Section -->
         <div class="space-y-2">
-            <h3 class="text-xs font-bold text-gray-300 px-1">Recent Expenses</h3>
-            
+            <h3 class="text-xs font-bold text-gray-300 uppercase tracking-wider px-1">Recent Expenses</h3>
             <div id="expenses-list" class="grid grid-cols-2 gap-2">
                 <!-- Dynamic Items Inserted Here -->
             </div>
@@ -195,33 +214,85 @@
 
     </div>
 
+    <!-- Settings & History Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden px-4">
+        <div class="glass-card neon-border-cyan p-5 rounded-3xl w-full max-w-xs space-y-4 relative">
+            <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                <div class="flex space-x-3">
+                    <button onclick="switchModalTab('history')" id="modal-tab-history" class="text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1">📜 History</button>
+                    <button onclick="switchModalTab('settings')" id="modal-tab-settings" class="text-xs font-bold text-gray-400 pb-1">⚙️ Settings</button>
+                </div>
+                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white text-sm p-1">✕</button>
+            </div>
+
+            <!-- History Tab Content -->
+            <div id="modal-content-history" class="space-y-3">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-semibold block mb-1">Month</label>
+                        <select id="hist-month" onchange="renderHistoryData()" class="w-full px-2 py-1.5 rounded-xl text-xs">
+                            <option value="0">January</option><option value="1">February</option>
+                            <option value="2">March</option><option value="3">April</option>
+                            <option value="4">May</option><option value="5">June</option>
+                            <option value="6">July</option><option value="7">August</option>
+                            <option value="8">September</option><option value="9">October</option>
+                            <option value="10">November</option><option value="11">December</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-semibold block mb-1">Year</label>
+                        <select id="hist-year" onchange="renderHistoryData()" class="w-full px-2 py-1.5 rounded-xl text-xs">
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-black/40 p-3 rounded-2xl border border-white/10 space-y-1 text-center">
+                    <span class="text-[10px] text-gray-400 uppercase font-medium">Selected Month Spending</span>
+                    <p class="text-xl font-extrabold text-cyan-300" id="hist-total">₹0.00</p>
+                </div>
+
+                <div class="h-28 w-full relative">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Settings Tab Content -->
+            <div id="modal-content-settings" class="space-y-3 hidden">
+                <p class="text-xs text-gray-300">Manage storage settings or wipe all transaction records from your device.</p>
+                <button onclick="clearAllData()" class="w-full py-2.5 rounded-xl text-xs font-bold bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500/30 active:scale-95 transition">
+                    ⚠️ Reset All Data
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript Logic -->
     <script>
         let selectedCategory = 'Food';
         let currentPeriod = 'monthly';
+        let activeChartIndex = 0; // 0: Wave, 1: Bar, 2: Doughnut
         let chartInstance = null;
+        let historyChartInstance = null;
 
-        // Default Data
-        let transactions = JSON.parse(localStorage.getItem('auraspend_inr_txs')) || [
-            { id: 1, title: 'Starbucks', amount: 4.50, category: 'Food', sub: 'Bills' },
-            { id: 2, title: 'Uber', amount: 15.20, category: 'Transport', sub: 'Entertainment' },
-            { id: 3, title: 'Uber', amount: 15.20, category: 'Transport', sub: 'Shopping' },
-            { id: 4, title: 'Uber', amount: 4.50, category: 'Food', sub: 'Entertainment' }
+        // Persistent Transactions State
+        let transactions = JSON.parse(localStorage.getItem('auraspend_v2_txs')) || [
+            { id: 1, title: 'Starbucks Coffee', amount: 180.00, category: 'Food', date: new Date().toISOString() },
+            { id: 2, title: 'Cab Ride', amount: 250.00, category: 'Transport', date: new Date().toISOString() },
+            { id: 3, title: 'Grocery Shopping', amount: 640.00, category: 'Shopping', date: new Date().toISOString() }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderChart();
+            // Set history month dropdown to current month
+            document.getElementById('hist-month').value = new Date().getMonth();
             updateUI();
         });
 
         function selectCat(cat) {
             selectedCategory = cat;
-            document.querySelectorAll('.cat-pill').forEach(btn => {
-                if (btn.getAttribute('data-cat') === cat) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+            document.querySelectorAll('#cat-pill-group .cat-pill').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
             });
         }
 
@@ -230,14 +301,14 @@
             const title = document.getElementById('expTitle').value.trim();
             const amount = parseFloat(document.getElementById('expAmount').value);
 
-            if (!title || isNaN(amount)) return;
+            if (!title || isNaN(amount) || amount <= 0) return;
 
             const newTx = {
                 id: Date.now(),
                 title: title,
                 amount: amount,
                 category: selectedCategory,
-                sub: 'Bills'
+                date: new Date().toISOString()
             };
 
             transactions.unshift(newTx);
@@ -256,26 +327,25 @@
         }
 
         function clearAllData() {
-            if(confirm('Reset all expense records?')) {
+            if(confirm('Are you sure you want to erase all stored expense history?')) {
                 transactions = [];
                 saveData();
+                closeSettingsModal();
                 updateUI();
             }
         }
 
         function saveData() {
-            localStorage.setItem('auraspend_inr_txs', JSON.stringify(transactions));
+            localStorage.setItem('auraspend_v2_txs', JSON.stringify(transactions));
         }
 
         function setPeriod(p) {
             currentPeriod = p;
             ['daily', 'weekly', 'monthly'].forEach(tab => {
                 const el = document.getElementById(`tab-${tab}`);
-                if (tab === p) {
-                    el.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl tab-btn-active transition';
-                } else {
-                    el.className = 'w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-400 transition';
-                }
+                el.className = tab === p 
+                    ? 'w-1/3 py-2 text-xs font-semibold rounded-xl tab-btn-active transition' 
+                    : 'w-1/3 py-2 text-xs font-semibold rounded-xl text-gray-400 transition';
             });
 
             document.getElementById('period-title').innerText = 
@@ -284,90 +354,269 @@
             updateUI();
         }
 
+        // Calculation Filters based on Date/Time
+        function getFilteredStats() {
+            const now = new Date();
+            const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+            // Calculate start of week (Sunday)
+            const dayOfWeek = now.getDay();
+            const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayOfWeek).getTime();
+
+            // Calculate start of month
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+
+            let todayTotal = 0;
+            let weekTotal = 0;
+            let monthTotal = 0;
+
+            transactions.forEach(tx => {
+                const txTime = new Date(tx.date).getTime();
+                if (txTime >= startOfToday) todayTotal += tx.amount;
+                if (txTime >= startOfWeek) weekTotal += tx.amount;
+                if (txTime >= startOfMonth) monthTotal += tx.amount;
+            });
+
+            return { todayTotal, weekTotal, monthTotal };
+        }
+
         function updateUI() {
+            const { todayTotal, weekTotal, monthTotal } = getFilteredStats();
+
+            document.getElementById('stat-today').innerText = `₹${todayTotal.toFixed(2)}`;
+            document.getElementById('stat-week').innerText = `₹${weekTotal.toFixed(2)}`;
+
+            const mainTotal = currentPeriod === 'daily' ? todayTotal : currentPeriod === 'weekly' ? weekTotal : monthTotal;
+            document.getElementById('main-total-amount').innerText = `₹${mainTotal.toFixed(2)}`;
+
+            renderTransactionList();
+            renderActiveChart();
+        }
+
+        function renderTransactionList() {
             const list = document.getElementById('expenses-list');
             list.innerHTML = '';
 
-            let total = 0;
-            transactions.forEach(tx => total += tx.amount);
+            if (transactions.length === 0) {
+                list.innerHTML = `<div class="col-span-2 text-center py-6 text-gray-500 text-xs">No transactions recorded yet.</div>`;
+                return;
+            }
 
-            document.getElementById('main-total-amount').innerText = `₹${total.toFixed(2)}`;
-            document.getElementById('stat-today').innerText = `₹${(total * 0.1).toFixed(2)}`;
-            document.getElementById('stat-week').innerText = `₹${(total * 0.45).toFixed(2)}`;
+            const iconMap = {
+                'Food': '🍿', 'Transport': '🚗', 'Shopping': '🛍️', 'Entertainment': '🎬', 'Bills': '💡'
+            };
 
             transactions.forEach(tx => {
                 const card = document.createElement('div');
-                card.className = 'glass-card p-2.5 rounded-2xl flex items-center justify-between border border-white/5 relative group';
-                
-                const iconMap = {
-                    'Food': '☕',
-                    'Transport': '🚗',
-                    'Shopping': '🛍️',
-                    'Entertainment': '🎬',
-                    'Bills': '💡'
-                };
+                card.className = 'glass-card p-2.5 rounded-2xl flex items-center justify-between border border-white/5 relative';
 
                 card.innerHTML = `
                     <div class="flex items-center space-x-2 overflow-hidden">
-                        <div class="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-xs">
+                        <div class="w-7 h-7 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center text-xs">
                             ${iconMap[tx.category] || '📁'}
                         </div>
                         <div class="truncate">
-                            <p class="text-[11px] font-bold text-white truncate">${tx.title}</p>
-                            <span class="text-[9px] text-gray-400 bg-white/5 px-1.5 py-0.5 rounded border border-white/5">${tx.category}</span>
+                            <p class="text-[11px] font-bold text-white truncate">${escapeHtml(tx.title)}</p>
+                            <span class="text-[9px] text-cyan-300 font-medium">${tx.category}</span>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs font-bold text-white">-₹${tx.amount.toFixed(2)}</p>
-                        <button onclick="deleteTx(${tx.id})" class="text-[9px] text-red-400 opacity-60 hover:opacity-100">delete</button>
+                        <p class="text-xs font-bold text-pink-400">-₹${tx.amount.toFixed(2)}</p>
+                        <button onclick="deleteTx(${tx.id})" class="text-[9px] text-gray-500 hover:text-red-400">delete</button>
                     </div>
                 `;
                 list.appendChild(card);
             });
         }
 
-        function renderChart() {
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // Chart Navigation
+        function nextChartType() {
+            activeChartIndex = (activeChartIndex + 1) % 3;
+            renderActiveChart();
+        }
+
+        function setChartTypeIndex(idx) {
+            activeChartIndex = idx;
+            renderActiveChart();
+        }
+
+        function renderActiveChart() {
             const ctx = document.getElementById('waveChart').getContext('2d');
-            
-            const gradCyan = ctx.createLinearGradient(0, 0, 0, 120);
-            gradCyan.addColorStop(0, 'rgba(0, 240, 255, 0.4)');
-            gradCyan.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
+            if (chartInstance) chartInstance.destroy();
 
-            const gradPink = ctx.createLinearGradient(0, 0, 0, 120);
-            gradPink.addColorStop(0, 'rgba(236, 72, 153, 0.4)');
-            gradPink.addColorStop(1, 'rgba(236, 72, 153, 0.0)');
+            // Update Indicators
+            [0, 1, 2].forEach(i => {
+                const dot = document.getElementById(`dot-${i}`);
+                if (i === activeChartIndex) {
+                    dot.className = 'w-2 h-2 rounded-full bg-cyan-400 cursor-pointer transition-all shadow-[0_0_10px_#00f0ff]';
+                } else {
+                    dot.className = 'w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all';
+                }
+            });
 
-            chartInstance = new Chart(ctx, {
-                type: 'line',
+            const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills'];
+            const catTotals = categories.map(cat => {
+                return transactions
+                    .filter(tx => tx.category === cat)
+                    .reduce((acc, tx) => acc + tx.amount, 0);
+            });
+
+            const labels = ['Wave Analytics', 'Category Breakdown (Histogram)', 'Category Distribution (Pie)'];
+            document.getElementById('chart-type-label').innerText = labels[activeChartIndex];
+
+            if (activeChartIndex === 0) {
+                // Dual Wave Spline Chart
+                const gradCyan = ctx.createLinearGradient(0, 0, 0, 140);
+                gradCyan.addColorStop(0, 'rgba(0, 240, 255, 0.45)');
+                gradCyan.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
+
+                const gradPink = ctx.createLinearGradient(0, 0, 0, 140);
+                gradPink.addColorStop(0, 'rgba(236, 72, 153, 0.45)');
+                gradPink.addColorStop(1, 'rgba(236, 72, 153, 0.0)');
+
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: categories,
+                        datasets: [
+                            {
+                                data: catTotals,
+                                borderColor: '#00f0ff',
+                                borderWidth: 3,
+                                fill: true,
+                                backgroundColor: gradCyan,
+                                tension: 0.45,
+                                pointRadius: 3,
+                                pointBackgroundColor: '#00f0ff'
+                            },
+                            {
+                                data: catTotals.map(v => v * 0.6),
+                                borderColor: '#ec4899',
+                                borderWidth: 2,
+                                fill: true,
+                                backgroundColor: gradPink,
+                                tension: 0.45,
+                                pointRadius: 0
+                            }
+                        ]
+                    },
+                    options: getBaseChartOptions()
+                });
+            } else if (activeChartIndex === 1) {
+                // Bar Chart
+                chartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: categories,
+                        datasets: [{
+                            data: catTotals,
+                            backgroundColor: ['#00f0ff', '#ec4899', '#8b5cf6', '#f59e0b', '#10b981'],
+                            borderRadius: 8
+                        }]
+                    },
+                    options: getBaseChartOptions()
+                });
+            } else if (activeChartIndex === 2) {
+                // Doughnut Chart
+                chartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: categories,
+                        datasets: [{
+                            data: catTotals.every(v => v === 0) ? [1, 1, 1, 1, 1] : catTotals,
+                            backgroundColor: ['#00f0ff', '#ec4899', '#8b5cf6', '#f59e0b', '#10b981'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        cutout: '70%'
+                    }
+                });
+            }
+        }
+
+        function getBaseChartOptions() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 } } },
+                    y: { display: false }
+                }
+            };
+        }
+
+        // Settings & History Modal Functions
+        function openSettingsModal() {
+            document.getElementById('settings-modal').classList.remove('hidden');
+            renderHistoryData();
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function switchModalTab(tab) {
+            if (tab === 'history') {
+                document.getElementById('modal-tab-history').className = 'text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1';
+                document.getElementById('modal-tab-settings').className = 'text-xs font-bold text-gray-400 pb-1';
+                document.getElementById('modal-content-history').classList.remove('hidden');
+                document.getElementById('modal-content-settings').classList.add('hidden');
+                renderHistoryData();
+            } else {
+                document.getElementById('modal-tab-settings').className = 'text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1';
+                document.getElementById('modal-tab-history').className = 'text-xs font-bold text-gray-400 pb-1';
+                document.getElementById('modal-content-settings').classList.remove('hidden');
+                document.getElementById('modal-content-history').classList.add('hidden');
+            }
+        }
+
+        function renderHistoryData() {
+            const month = parseInt(document.getElementById('hist-month').value);
+            const year = parseInt(document.getElementById('hist-year').value);
+
+            const filtered = transactions.filter(tx => {
+                const d = new Date(tx.date);
+                return d.getMonth() === month && d.getFullYear() === year;
+            });
+
+            const total = filtered.reduce((acc, tx) => acc + tx.amount, 0);
+            document.getElementById('hist-total').innerText = `₹${total.toFixed(2)}`;
+
+            const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills'];
+            const catTotals = categories.map(cat => {
+                return filtered
+                    .filter(tx => tx.category === cat)
+                    .reduce((acc, tx) => acc + tx.amount, 0);
+            });
+
+            const ctx = document.getElementById('historyChart').getContext('2d');
+            if (historyChartInstance) historyChartInstance.destroy();
+
+            historyChartInstance = new Chart(ctx, {
+                type: 'bar',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [
-                        {
-                            data: [30, 45, 25, 60, 40, 70, 50],
-                            borderColor: '#00f0ff',
-                            borderWidth: 2,
-                            fill: true,
-                            backgroundColor: gradCyan,
-                            tension: 0.4,
-                            pointRadius: 0
-                        },
-                        {
-                            data: [15, 25, 40, 20, 55, 30, 65],
-                            borderColor: '#ec4899',
-                            borderWidth: 2,
-                            fill: true,
-                            backgroundColor: gradPink,
-                            tension: 0.4,
-                            pointRadius: 0
-                        }
-                    ]
+                    labels: ['Food', 'Trans', 'Shop', 'Ent', 'Bills'],
+                    datasets: [{
+                        data: catTotals,
+                        backgroundColor: '#00f0ff',
+                        borderRadius: 6
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { display: false },
+                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 8 } } },
                         y: { display: false }
                     }
                 }
