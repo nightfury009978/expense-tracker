@@ -13,6 +13,8 @@
     
     <!-- App Manifest & Local App Icons -->
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="web-app-manifest-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="web-app-manifest-512x512.png">
     <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="shortcut icon" href="favicon.ico">
@@ -491,19 +493,14 @@
             updateUI();
         }
 
-        // Automatic Time Filtering (Daily midnight reset, Weekly Monday reset, Monthly reset)
+        // Automatic Time Filtering
         function getFilteredStats() {
             const now = new Date();
             
-            // Daily reset at 12:00 AM midnight
             const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-
-            // Weekly reset at 12:00 AM every Monday
             const dayOfWeek = now.getDay(); 
             const distToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
             const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distToMonday).getTime();
-
-            // Monthly reset on 1st day of month
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
 
             let todayTotal = 0;
@@ -713,7 +710,7 @@
             }
         }
 
-        // Auth Modal & Validation Logic
+        // Auth Modal Controls
         function openAuthModal() {
             const modal = document.getElementById('auth-modal');
             modal.classList.remove('hidden');
@@ -768,7 +765,6 @@
                     return;
                 }
 
-                // Register user details
                 registeredUsers[username.toLowerCase()] = { username: username, password: password };
                 localStorage.setItem('auraspend_registered_users', JSON.stringify(registeredUsers));
 
@@ -778,7 +774,6 @@
                 statusEl.className = "text-[10px] text-center font-semibold text-emerald-400";
                 statusEl.innerText = `Registered successfully! Please log in to proceed.`;
 
-                // Switch user to login form after registration
                 setTimeout(() => {
                     switchAuthTab('login');
                     document.getElementById('login-username').value = username;
@@ -796,7 +791,6 @@
                     return;
                 }
 
-                // Credentials verified
                 currentUser = foundUser.username;
                 localStorage.setItem('auraspend_active_user', currentUser);
 
