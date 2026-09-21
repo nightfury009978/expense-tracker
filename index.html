@@ -886,5 +886,16 @@
             });
         }
     </script>
+
+    <!-- PWA Service Worker Registration & Caching Handler -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker registered successfully:', reg.scope))
+            .catch(err => console.error('Service Worker registration failed:', err));
+        });
+      }
+    </script>
 </body>
 </html>
