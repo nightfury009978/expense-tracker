@@ -9,12 +9,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         * {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Outfit', sans-serif;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
@@ -32,7 +32,7 @@
 
         /* Glassmorphism Styling */
         .glass-card {
-            background: rgba(15, 13, 29, 0.8);
+            background: rgba(15, 13, 29, 0.82);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -42,12 +42,12 @@
         /* Glowing Accent Borders */
         .neon-border-cyan {
             border: 1px solid rgba(0, 240, 255, 0.8);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), inset 0 0 12px rgba(0, 240, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.35), inset 0 0 12px rgba(0, 240, 255, 0.12);
         }
 
         .neon-border-pink {
             border: 1px solid rgba(236, 72, 153, 0.8);
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.4), inset 0 0 12px rgba(236, 72, 153, 0.15);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.35), inset 0 0 12px rgba(236, 72, 153, 0.12);
         }
 
         /* Ultra Bright & Shining Navigation Tab Buttons */
@@ -109,11 +109,11 @@
             </h1>
             <div class="flex items-center space-x-3">
                 <!-- User Profile Icon Button -->
-                <button onclick="openAuthModal()" class="w-8 h-8 rounded-full overflow-hidden border-2 border-cyan-400 shadow-[0_0_12px_#00f0ff] active:scale-95 transition relative">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-full h-full object-cover">
+                <button type="button" onclick="openAuthModal()" class="w-9 h-9 rounded-full overflow-hidden border-2 border-cyan-400 shadow-[0_0_12px_#00f0ff] active:scale-95 transition relative flex items-center justify-center bg-gray-900">
+                    <img id="user-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-full h-full object-cover">
                 </button>
                 <!-- Settings Button -->
-                <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl glass-card flex items-center justify-center text-gray-300 hover:text-white border border-white/20 active:scale-95 transition">
+                <button type="button" onclick="openSettingsModal()" class="w-9 h-9 rounded-xl glass-card flex items-center justify-center text-gray-300 hover:text-white border border-white/20 active:scale-95 transition">
                     <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                     </svg>
@@ -123,13 +123,13 @@
 
         <!-- Time Period Selector -->
         <div class="glass-card p-1 rounded-2xl flex items-center justify-between border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-            <button onclick="setPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
+            <button onclick="setPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs rounded-xl tab-btn-active transition">
                 Daily
             </button>
             <button onclick="setPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
                 Weekly
             </button>
-            <button onclick="setPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs rounded-xl tab-btn-active transition">
+            <button onclick="setPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
                 Monthly
             </button>
         </div>
@@ -137,11 +137,11 @@
         <!-- Total Overview Card -->
         <div class="glass-card neon-border-cyan p-4 rounded-3xl space-y-3 relative overflow-hidden">
             <div class="flex items-center justify-between text-xs text-gray-400">
-                <span id="period-title" class="font-bold uppercase tracking-wider text-cyan-300">Total This Month</span>
+                <span id="period-title" class="font-bold uppercase tracking-wider text-cyan-300">Total Today</span>
                 <span class="text-emerald-400 font-bold flex items-center gap-0.5">▲ Live</span>
             </div>
 
-            <div class="text-3xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]" id="main-total-amount">
+            <div class="text-4xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]" id="main-total-amount">
                 ₹0.00
             </div>
 
@@ -159,11 +159,11 @@
             </div>
         </div>
 
-        <!-- Swipeable Interactive 3-Chart Carousel -->
+        <!-- Swipeable Interactive Analytics Carousel -->
         <div class="glass-card p-3 rounded-3xl relative" id="chart-container">
             <div class="flex justify-between items-center px-1 mb-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300" id="chart-type-label">Wave Analytics</span>
-                <span class="text-[9px] text-cyan-400 font-semibold">👈 Swipe or tap to inspect 👉</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300" id="chart-type-label">Spline Wave Analytics</span>
+                <span class="text-[9px] text-cyan-400 font-semibold">👈 Swipe or tap 👉</span>
             </div>
             
             <div class="h-36 w-full relative touch-pan-y" id="chart-swipe-area">
@@ -222,7 +222,7 @@
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden px-4">
         <div class="glass-card neon-border-cyan p-5 rounded-3xl w-full max-w-xs space-y-4 relative">
             <div class="flex items-center justify-between border-b border-white/10 pb-2">
-                <div class="flex space-x-3">
+                <div class="flex space-x-3" id="auth-modal-tabs">
                     <button onclick="switchAuthTab('login')" id="auth-tab-login" class="text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1">🔐 Login</button>
                     <button onclick="switchAuthTab('signup')" id="auth-tab-signup" class="text-xs font-bold text-gray-400 pb-1">📝 Sign Up</button>
                 </div>
@@ -258,6 +258,20 @@
                     Register Account
                 </button>
             </form>
+
+            <!-- User Session Profile View (If Logged In) -->
+            <div id="user-profile-view" class="space-y-3 hidden text-center">
+                <div class="w-16 h-16 rounded-full mx-auto border-2 border-cyan-400 shadow-[0_0_15px_#00f0ff] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-white" id="profile-display-name">User</h3>
+                    <p class="text-[10px] text-cyan-400">Account Active</p>
+                </div>
+                <button onclick="handleLogout()" class="w-full py-2 rounded-xl text-xs font-bold bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500/30 active:scale-95 transition">
+                    Logout
+                </button>
+            </div>
 
             <div id="auth-status" class="text-[10px] text-center font-semibold text-emerald-400 hidden"></div>
         </div>
@@ -320,17 +334,16 @@
     <!-- JavaScript Logic -->
     <script>
         let selectedCategory = 'Food';
-        let currentPeriod = 'monthly';
+        let currentPeriod = 'daily';
         let activeChartIndex = 0; // 0: Wave, 1: Bar, 2: Doughnut
         let chartInstance = null;
         let historyChartInstance = null;
 
-        // Persistent Transactions State
-        let transactions = JSON.parse(localStorage.getItem('auraspend_v3_txs')) || [
-            { id: 1, title: 'Starbucks Coffee', amount: 180.00, category: 'Food', date: new Date().toISOString() },
-            { id: 2, title: 'Cab Ride', amount: 250.00, category: 'Transport', date: new Date().toISOString() },
-            { id: 3, title: 'Grocery Shopping', amount: 640.00, category: 'Shopping', date: new Date().toISOString() }
-        ];
+        // User Auth State
+        let currentUser = localStorage.getItem('auraspend_user') || null;
+
+        // Empty default transactions for clean prototype startup
+        let transactions = JSON.parse(localStorage.getItem('auraspend_v3_txs')) || [];
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('hist-month').value = new Date().getMonth();
@@ -355,12 +368,10 @@
 
             function handleSwipeGesture() {
                 const diff = touchStartX - touchEndX;
-                if (Math.abs(diff) > 30) { // minimum swipe distance threshold
+                if (Math.abs(diff) > 30) {
                     if (diff > 0) {
-                        // Swiped Left -> Next Chart
                         activeChartIndex = (activeChartIndex + 1) % 3;
                     } else {
-                        // Swiped Right -> Previous Chart
                         activeChartIndex = (activeChartIndex - 1 + 3) % 3;
                     }
                     renderActiveChart();
@@ -433,13 +444,19 @@
             updateUI();
         }
 
-        // Filter Stats Logic
+        // Automatic Time-Based Filtering Logic (Daily midnight reset, Weekly Monday reset, Monthly reset)
         function getFilteredStats() {
             const now = new Date();
+            
+            // Start of today (Midnight 00:00:00)
             const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
 
-            const dayOfWeek = now.getDay();
-            const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayOfWeek).getTime();
+            // Start of current week (Monday at 00:00:00)
+            const dayOfWeek = now.getDay(); 
+            const distToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1); // Monday is start of week
+            const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distToMonday).getTime();
+
+            // Start of current month (1st day at 00:00:00)
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
 
             let todayTotal = 0;
@@ -522,7 +539,7 @@
             const ctx = document.getElementById('waveChart').getContext('2d');
             if (chartInstance) chartInstance.destroy();
 
-            // Indicators
+            // Update Dots
             [0, 1, 2].forEach(i => {
                 const dot = document.getElementById(`dot-${i}`);
                 dot.className = i === activeChartIndex 
@@ -531,19 +548,34 @@
             });
 
             const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills'];
+            
+            // Filter current active period data for chart
+            const now = new Date();
+            let cutoffTime = 0;
+            if (currentPeriod === 'daily') {
+                cutoffTime = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            } else if (currentPeriod === 'weekly') {
+                const dayOfWeek = now.getDay();
+                const distToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+                cutoffTime = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distToMonday).getTime();
+            } else {
+                cutoffTime = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+            }
+
+            const currentPeriodTxs = transactions.filter(t => new Date(t.date).getTime() >= cutoffTime);
+
             const catTotals = categories.map(cat => {
-                return transactions
+                return currentPeriodTxs
                     .filter(tx => tx.category === cat)
                     .reduce((acc, tx) => acc + tx.amount, 0);
             });
 
-            const labels = ['Spline Wave Analytics', 'Category Breakdown (Histogram)', 'Category Distribution (Pie)'];
+            const labels = ['Spline Wave Analytics', 'Category Breakdown', 'Distribution Dynamic'];
             document.getElementById('chart-type-label').innerText = labels[activeChartIndex];
 
-            // Interactive Tooltip Config for Numerical Display on Tap
             const interactiveTooltip = {
                 enabled: true,
-                backgroundColor: 'rgba(10, 8, 20, 0.9)',
+                backgroundColor: 'rgba(10, 8, 20, 0.95)',
                 titleColor: '#00f0ff',
                 bodyColor: '#ffffff',
                 borderColor: '#00f0ff',
@@ -566,27 +598,25 @@
                     type: 'line',
                     data: {
                         labels: categories,
-                        datasets: [
-                            {
-                                label: 'Spending',
-                                data: catTotals,
-                                borderColor: '#00f0ff',
-                                borderWidth: 3,
-                                fill: true,
-                                backgroundColor: gradCyan,
-                                tension: 0.45,
-                                pointRadius: 5,
-                                pointHoverRadius: 8,
-                                pointBackgroundColor: '#00f0ff'
-                            }
-                        ]
+                        datasets: [{
+                            label: 'Spending',
+                            data: catTotals,
+                            borderColor: '#00f0ff',
+                            borderWidth: 3,
+                            fill: true,
+                            backgroundColor: gradCyan,
+                            tension: 0.45,
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            pointBackgroundColor: '#00f0ff'
+                        }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false }, tooltip: interactiveTooltip },
                         scales: {
-                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 } } },
+                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9, family: 'Outfit' } } },
                             y: { display: false }
                         }
                     }
@@ -608,7 +638,7 @@
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false }, tooltip: interactiveTooltip },
                         scales: {
-                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 } } },
+                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9, family: 'Outfit' } } },
                             y: { display: false }
                         }
                     }
@@ -636,7 +666,20 @@
 
         // Auth Modal Controls
         function openAuthModal() {
-            document.getElementById('auth-modal').classList.remove('hidden');
+            const modal = document.getElementById('auth-modal');
+            modal.classList.remove('hidden');
+
+            if (currentUser) {
+                document.getElementById('auth-modal-tabs').classList.add('hidden');
+                document.getElementById('auth-form-login').classList.add('hidden');
+                document.getElementById('auth-form-signup').classList.add('hidden');
+                document.getElementById('user-profile-view').classList.remove('hidden');
+                document.getElementById('profile-display-name').innerText = currentUser;
+            } else {
+                document.getElementById('auth-modal-tabs').classList.remove('hidden');
+                document.getElementById('user-profile-view').classList.add('hidden');
+                switchAuthTab('login');
+            }
         }
 
         function closeAuthModal() {
@@ -663,17 +706,29 @@
             const statusEl = document.getElementById('auth-status');
             statusEl.classList.remove('hidden');
             
+            let username = "";
             if (type === 'login') {
-                const username = document.getElementById('login-username').value;
+                username = document.getElementById('login-username').value.trim();
                 statusEl.innerText = `Logged in successfully as ${username}!`;
             } else {
-                const username = document.getElementById('signup-username').value;
+                username = document.getElementById('signup-username').value.trim();
                 statusEl.innerText = `Registered successfully for ${username}!`;
+            }
+
+            if (username) {
+                currentUser = username;
+                localStorage.setItem('auraspend_user', username);
             }
 
             setTimeout(() => {
                 closeAuthModal();
-            }, 1200);
+            }, 1000);
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('auraspend_user');
+            closeAuthModal();
         }
 
         // Settings Modal Controls
@@ -738,7 +793,7 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 8 } } },
+                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 8, family: 'Outfit' } } },
                         y: { display: false }
                     }
                 }
