@@ -1,8 +1,11 @@
 {
+  "id": "auraspend-pwa-app",
   "name": "Aura Spend",
   "short_name": "AuraSpend",
+  "description": "Track your daily expenses, monitor weekly spending patterns, and view interactive financial analytics.",
   "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#05040a",
   "theme_color": "#05040a",
   "icons": [
@@ -17,6 +20,22 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "AuraSpend Dashboard"
+    },
+    {
+      "src": "web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "AuraSpend Analytics"
     }
   ]
 }
