@@ -50,7 +50,7 @@
             box-shadow: 0 0 20px rgba(236, 72, 153, 0.35), inset 0 0 12px rgba(236, 72, 153, 0.12);
         }
 
-        /* Ultra Bright & Shining Navigation Tab Buttons */
+        /* Navigation Tab Buttons */
         .tab-btn-active {
             background: linear-gradient(135deg, #00f0ff 0%, #d946ef 50%, #8b5cf6 100%);
             box-shadow: 0 0 25px rgba(0, 240, 255, 0.85), 0 0 15px rgba(217, 70, 239, 0.7);
@@ -121,98 +121,117 @@
             </div>
         </header>
 
-        <!-- Time Period Selector -->
-        <div class="glass-card p-1 rounded-2xl flex items-center justify-between border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-            <button onclick="setPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs rounded-xl tab-btn-active transition">
-                Daily
-            </button>
-            <button onclick="setPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
-                Weekly
-            </button>
-            <button onclick="setPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
-                Monthly
+        <!-- Locked Screen Overlay Message -->
+        <div id="logged-out-lockscreen" class="glass-card neon-border-cyan p-6 rounded-3xl text-center space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto text-2xl border border-cyan-400/40 shadow-[0_0_15px_#00f0ff]">
+                🔒
+            </div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Access Locked</h2>
+            <p class="text-xs text-gray-400">Please log in or register an account to manage your expenses.</p>
+            <button onclick="openAuthModal()" class="w-full py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-400 to-purple-500 text-white shadow-[0_0_15px_rgba(0,240,255,0.4)] active:scale-95 transition">
+                Login / Register
             </button>
         </div>
 
-        <!-- Total Overview Card -->
-        <div class="glass-card neon-border-cyan p-4 rounded-3xl space-y-3 relative overflow-hidden">
-            <div class="flex items-center justify-between text-xs text-gray-400">
-                <span id="period-title" class="font-bold uppercase tracking-wider text-cyan-300">Total Today</span>
-                <span class="text-emerald-400 font-bold flex items-center gap-0.5">▲ Live</span>
-            </div>
-
-            <div class="text-4xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]" id="main-total-amount">
-                ₹0.00
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 pt-1">
-                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10 relative overflow-hidden">
-                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></div>
-                    <p class="text-[10px] text-gray-400 font-medium">Today</p>
-                    <p class="text-xs font-bold text-cyan-300 mt-0.5" id="stat-today">₹0.00</p>
-                </div>
-                <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10 relative overflow-hidden">
-                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-pink-500 shadow-[0_0_8px_#ec4899]"></div>
-                    <p class="text-[10px] text-gray-400 font-medium">This Week</p>
-                    <p class="text-xs font-bold text-pink-400 mt-0.5" id="stat-week">₹0.00</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Swipeable Interactive Analytics Carousel -->
-        <div class="glass-card p-3 rounded-3xl relative" id="chart-container">
-            <div class="flex justify-between items-center px-1 mb-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300" id="chart-type-label">Spline Wave Analytics</span>
-                <span class="text-[9px] text-cyan-400 font-semibold">👈 Swipe or tap 👉</span>
-            </div>
-            
-            <div class="h-36 w-full relative touch-pan-y" id="chart-swipe-area">
-                <canvas id="waveChart"></canvas>
-            </div>
-
-            <!-- Indicator Dots -->
-            <div class="flex justify-center items-center space-x-2 mt-2">
-                <span id="dot-0" onclick="setChartTypeIndex(0)" class="w-2 h-2 rounded-full bg-cyan-400 cursor-pointer transition-all shadow-[0_0_10px_#00f0ff]"></span>
-                <span id="dot-1" onclick="setChartTypeIndex(1)" class="w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all"></span>
-                <span id="dot-2" onclick="setChartTypeIndex(2)" class="w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all"></span>
-            </div>
-        </div>
-
-        <!-- Quick Add Section -->
-        <div class="glass-card neon-border-pink p-4 rounded-3xl space-y-3">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-pink-300">Quick Add</h2>
-
-            <form onsubmit="handleAddExpense(event)" class="flex gap-2">
-                <div class="flex-1 space-y-2">
-                    <div class="flex bg-black/50 border border-white/15 rounded-xl px-3 py-2 items-center">
-                        <input type="text" id="expTitle" placeholder="Expense title" required 
-                            class="bg-transparent text-xs w-full focus:outline-none text-white placeholder-gray-500">
-                        <span class="text-cyan-400 font-bold text-xs ml-1">₹</span>
-                        <input type="number" id="expAmount" placeholder="0" step="0.01" min="0.01" required 
-                            class="bg-transparent text-xs w-16 focus:outline-none text-white text-right placeholder-gray-500 font-bold">
-                    </div>
-
-                    <!-- Category Pills -->
-                    <div class="flex flex-wrap gap-1" id="cat-pill-group">
-                        <button type="button" onclick="selectCat('Food')" data-cat="Food" class="cat-pill active px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🍿 Food</button>
-                        <button type="button" onclick="selectCat('Transport')" data-cat="Transport" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🚗 Transport</button>
-                        <button type="button" onclick="selectCat('Shopping')" data-cat="Shopping" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🛍️ Shopping</button>
-                        <button type="button" onclick="selectCat('Entertainment')" data-cat="Entertainment" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🎬 Entertainment</button>
-                        <button type="button" onclick="selectCat('Bills')" data-cat="Bills" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">💡 Bills</button>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-glow-add w-12 rounded-2xl flex items-center justify-center text-white text-2xl font-black active:scale-95 transition">
-                    +
+        <!-- App Dashboard Container (Hidden until logged in) -->
+        <div id="app-dashboard" class="space-y-4 hidden">
+            <!-- Time Period Selector -->
+            <div class="glass-card p-1 rounded-2xl flex items-center justify-between border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                <button onclick="setPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs rounded-xl tab-btn-active transition">
+                    Daily
                 </button>
-            </form>
-        </div>
+                <button onclick="setPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
+                    Weekly
+                </button>
+                <button onclick="setPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
+                    Monthly
+                </button>
+            </div>
 
-        <!-- Recent Expenses Section -->
-        <div class="space-y-2">
-            <h3 class="text-xs font-bold text-gray-300 uppercase tracking-wider px-1">Recent Expenses</h3>
-            <div id="expenses-list" class="grid grid-cols-2 gap-2">
-                <!-- Dynamic Items Inserted Here -->
+            <!-- Total Overview Card -->
+            <div class="glass-card neon-border-cyan p-4 rounded-3xl space-y-3 relative overflow-hidden">
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                    <span id="period-title" class="font-bold uppercase tracking-wider text-cyan-300">Total Today</span>
+                    <span class="text-emerald-400 font-bold flex items-center gap-0.5">▲ Live</span>
+                </div>
+
+                <div class="text-4xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]" id="main-total-amount">
+                    ₹0.00
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                    <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10 relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></div>
+                        <p class="text-[10px] text-gray-400 font-medium">Today</p>
+                        <p class="text-xs font-bold text-cyan-300 mt-0.5" id="stat-today">₹0.00</p>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10 relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-pink-500 shadow-[0_0_8px_#ec4899]"></div>
+                        <p class="text-[10px] text-gray-400 font-medium">This Week</p>
+                        <p class="text-xs font-bold text-pink-400 mt-0.5" id="stat-week">₹0.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Swipeable Interactive Analytics Carousel -->
+            <div class="glass-card p-3 rounded-3xl relative" id="chart-container">
+                <div class="flex justify-between items-center px-1 mb-1">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300" id="chart-type-label">Spline Wave Analytics</span>
+                    <span class="text-[9px] text-cyan-400 font-semibold">👈 Swipe or tap 👉</span>
+                </div>
+                
+                <div class="h-36 w-full relative touch-pan-y" id="chart-swipe-area">
+                    <canvas id="waveChart"></canvas>
+                </div>
+
+                <!-- Indicator Dots -->
+                <div class="flex justify-center items-center space-x-2 mt-2">
+                    <span id="dot-0" onclick="setChartTypeIndex(0)" class="w-2 h-2 rounded-full bg-cyan-400 cursor-pointer transition-all shadow-[0_0_10px_#00f0ff]"></span>
+                    <span id="dot-1" onclick="setChartTypeIndex(1)" class="w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all"></span>
+                    <span id="dot-2" onclick="setChartTypeIndex(2)" class="w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all"></span>
+                </div>
+            </div>
+
+            <!-- Quick Add Section with Expanded Categories -->
+            <div class="glass-card neon-border-pink p-4 rounded-3xl space-y-3">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-pink-300">Quick Add</h2>
+
+                <form onsubmit="handleAddExpense(event)" class="flex gap-2">
+                    <div class="flex-1 space-y-2">
+                        <div class="flex bg-black/50 border border-white/15 rounded-xl px-3 py-2 items-center">
+                            <input type="text" id="expTitle" placeholder="Expense title" required 
+                                class="bg-transparent text-xs w-full focus:outline-none text-white placeholder-gray-500">
+                            <span class="text-cyan-400 font-bold text-xs ml-1">₹</span>
+                            <input type="number" id="expAmount" placeholder="0" step="0.01" min="0.01" required 
+                                class="bg-transparent text-xs w-16 focus:outline-none text-white text-right placeholder-gray-500 font-bold">
+                        </div>
+
+                        <!-- Extended Category Pills -->
+                        <div class="flex flex-wrap gap-1 max-h-24 overflow-y-auto pr-1" id="cat-pill-group">
+                            <button type="button" onclick="selectCat('Food')" data-cat="Food" class="cat-pill active px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🍿 Food</button>
+                            <button type="button" onclick="selectCat('Transport')" data-cat="Transport" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🚗 Transport</button>
+                            <button type="button" onclick="selectCat('Shopping')" data-cat="Shopping" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🛍️ Shopping</button>
+                            <button type="button" onclick="selectCat('Entertainment')" data-cat="Entertainment" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🎬 Entertainment</button>
+                            <button type="button" onclick="selectCat('Bills')" data-cat="Bills" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">💡 Bills</button>
+                            <button type="button" onclick="selectCat('Fitness')" data-cat="Fitness" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🏋️ Fitness</button>
+                            <button type="button" onclick="selectCat('Health')" data-cat="Health" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🩺 Health</button>
+                            <button type="button" onclick="selectCat('Education')" data-cat="Education" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">📚 Education</button>
+                            <button type="button" onclick="selectCat('Travel')" data-cat="Travel" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">✈️ Travel</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-glow-add w-12 rounded-2xl flex items-center justify-center text-white text-2xl font-black active:scale-95 transition">
+                        +
+                    </button>
+                </form>
+            </div>
+
+            <!-- Recent Expenses Section -->
+            <div class="space-y-2">
+                <h3 class="text-xs font-bold text-gray-300 uppercase tracking-wider px-1">Recent Expenses</h3>
+                <div id="expenses-list" class="grid grid-cols-2 gap-2">
+                    <!-- Dynamic Items Inserted Here -->
+                </div>
             </div>
         </div>
 
@@ -259,7 +278,7 @@
                 </button>
             </form>
 
-            <!-- User Session Profile View (If Logged In) -->
+            <!-- User Session Profile View (When Logged In) -->
             <div id="user-profile-view" class="space-y-3 hidden text-center">
                 <div class="w-16 h-16 rounded-full mx-auto border-2 border-cyan-400 shadow-[0_0_15px_#00f0ff] overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover">
@@ -339,17 +358,32 @@
         let chartInstance = null;
         let historyChartInstance = null;
 
-        // User Auth State
-        let currentUser = localStorage.getItem('auraspend_user') || null;
+        // User Auth & Session States
+        let currentUser = localStorage.getItem('auraspend_active_user') || null;
+        let registeredUsers = JSON.parse(localStorage.getItem('auraspend_registered_users')) || {};
 
-        // Empty default transactions for clean prototype startup
+        // Transactions State
         let transactions = JSON.parse(localStorage.getItem('auraspend_v3_txs')) || [];
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('hist-month').value = new Date().getMonth();
             setupTouchSwipe();
-            updateUI();
+            checkAppLockState();
         });
+
+        function checkAppLockState() {
+            const dashboard = document.getElementById('app-dashboard');
+            const lockscreen = document.getElementById('logged-out-lockscreen');
+
+            if (currentUser) {
+                dashboard.classList.remove('hidden');
+                lockscreen.classList.add('hidden');
+                updateUI();
+            } else {
+                dashboard.classList.add('hidden');
+                lockscreen.classList.remove('hidden');
+            }
+        }
 
         // Touch Swipe Event Setup for Chart Carousel
         function setupTouchSwipe() {
@@ -444,19 +478,19 @@
             updateUI();
         }
 
-        // Automatic Time-Based Filtering Logic (Daily midnight reset, Weekly Monday reset, Monthly reset)
+        // Automatic Time Filtering (Daily midnight reset, Weekly Monday reset, Monthly reset)
         function getFilteredStats() {
             const now = new Date();
             
-            // Start of today (Midnight 00:00:00)
+            // Daily reset at 12:00 AM midnight
             const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
 
-            // Start of current week (Monday at 00:00:00)
+            // Weekly reset at 12:00 AM every Monday
             const dayOfWeek = now.getDay(); 
-            const distToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1); // Monday is start of week
+            const distToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
             const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distToMonday).getTime();
 
-            // Start of current month (1st day at 00:00:00)
+            // Monthly reset on 1st day of month
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
 
             let todayTotal = 0;
@@ -474,6 +508,8 @@
         }
 
         function updateUI() {
+            if (!currentUser) return;
+
             const { todayTotal, weekTotal, monthTotal } = getFilteredStats();
 
             document.getElementById('stat-today').innerText = `₹${todayTotal.toFixed(2)}`;
@@ -496,7 +532,9 @@
             }
 
             const iconMap = {
-                'Food': '🍿', 'Transport': '🚗', 'Shopping': '🛍️', 'Entertainment': '🎬', 'Bills': '💡'
+                'Food': '🍿', 'Transport': '🚗', 'Shopping': '🛍️', 
+                'Entertainment': '🎬', 'Bills': '💡', 'Fitness': '🏋️', 
+                'Health': '🩺', 'Education': '📚', 'Travel': '✈️'
             };
 
             transactions.forEach(tx => {
@@ -539,7 +577,6 @@
             const ctx = document.getElementById('waveChart').getContext('2d');
             if (chartInstance) chartInstance.destroy();
 
-            // Update Dots
             [0, 1, 2].forEach(i => {
                 const dot = document.getElementById(`dot-${i}`);
                 dot.className = i === activeChartIndex 
@@ -547,9 +584,8 @@
                     : 'w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all';
             });
 
-            const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills'];
+            const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills', 'Fitness', 'Health', 'Education', 'Travel'];
             
-            // Filter current active period data for chart
             const now = new Date();
             let cutoffTime = 0;
             if (currentPeriod === 'daily') {
@@ -606,8 +642,8 @@
                             fill: true,
                             backgroundColor: gradCyan,
                             tension: 0.45,
-                            pointRadius: 5,
-                            pointHoverRadius: 8,
+                            pointRadius: 4,
+                            pointHoverRadius: 7,
                             pointBackgroundColor: '#00f0ff'
                         }]
                     },
@@ -616,7 +652,7 @@
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false }, tooltip: interactiveTooltip },
                         scales: {
-                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9, family: 'Outfit' } } },
+                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 8, family: 'Outfit' } } },
                             y: { display: false }
                         }
                     }
@@ -629,8 +665,8 @@
                         datasets: [{
                             label: 'Amount Spent',
                             data: catTotals,
-                            backgroundColor: ['#00f0ff', '#ec4899', '#8b5cf6', '#f59e0b', '#10b981'],
-                            borderRadius: 8
+                            backgroundColor: ['#00f0ff', '#ec4899', '#8b5cf6', '#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#84cc16', '#06b6d4'],
+                            borderRadius: 6
                         }]
                     },
                     options: {
@@ -638,7 +674,7 @@
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false }, tooltip: interactiveTooltip },
                         scales: {
-                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9, family: 'Outfit' } } },
+                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 8, family: 'Outfit' } } },
                             y: { display: false }
                         }
                     }
@@ -649,8 +685,8 @@
                     data: {
                         labels: categories,
                         datasets: [{
-                            data: catTotals.every(v => v === 0) ? [1, 1, 1, 1, 1] : catTotals,
-                            backgroundColor: ['#00f0ff', '#ec4899', '#8b5cf6', '#f59e0b', '#10b981'],
+                            data: catTotals.every(v => v === 0) ? new Array(categories.length).fill(1) : catTotals,
+                            backgroundColor: ['#00f0ff', '#ec4899', '#8b5cf6', '#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#84cc16', '#06b6d4'],
                             borderWidth: 0
                         }]
                     },
@@ -664,7 +700,7 @@
             }
         }
 
-        // Auth Modal Controls
+        // Auth Modal & Validation Logic
         function openAuthModal() {
             const modal = document.getElementById('auth-modal');
             modal.classList.remove('hidden');
@@ -688,6 +724,7 @@
         }
 
         function switchAuthTab(tab) {
+            document.getElementById('auth-status').classList.add('hidden');
             if (tab === 'login') {
                 document.getElementById('auth-tab-login').className = 'text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1';
                 document.getElementById('auth-tab-signup').className = 'text-xs font-bold text-gray-400 pb-1';
@@ -705,30 +742,66 @@
             e.preventDefault();
             const statusEl = document.getElementById('auth-status');
             statusEl.classList.remove('hidden');
-            
-            let username = "";
-            if (type === 'login') {
-                username = document.getElementById('login-username').value.trim();
-                statusEl.innerText = `Logged in successfully as ${username}!`;
-            } else {
-                username = document.getElementById('signup-username').value.trim();
-                statusEl.innerText = `Registered successfully for ${username}!`;
-            }
 
-            if (username) {
-                currentUser = username;
-                localStorage.setItem('auraspend_user', username);
-            }
+            if (type === 'signup') {
+                const username = document.getElementById('signup-username').value.trim();
+                const password = document.getElementById('signup-password').value;
 
-            setTimeout(() => {
-                closeAuthModal();
-            }, 1000);
+                if (!username || !password) return;
+
+                if (registeredUsers[username.toLowerCase()]) {
+                    statusEl.className = "text-[10px] text-center font-semibold text-red-400";
+                    statusEl.innerText = "Username already registered! Try logging in.";
+                    return;
+                }
+
+                // Register user details
+                registeredUsers[username.toLowerCase()] = { username: username, password: password };
+                localStorage.setItem('auraspend_registered_users', JSON.stringify(registeredUsers));
+
+                document.getElementById('signup-username').value = '';
+                document.getElementById('signup-password').value = '';
+
+                statusEl.className = "text-[10px] text-center font-semibold text-emerald-400";
+                statusEl.innerText = `Registered successfully! Please log in to proceed.`;
+
+                // Switch user to login form after registration
+                setTimeout(() => {
+                    switchAuthTab('login');
+                    document.getElementById('login-username').value = username;
+                }, 1200);
+
+            } else if (type === 'login') {
+                const usernameInput = document.getElementById('login-username').value.trim();
+                const passwordInput = document.getElementById('login-password').value;
+
+                const foundUser = registeredUsers[usernameInput.toLowerCase()];
+
+                if (!foundUser || foundUser.password !== passwordInput) {
+                    statusEl.className = "text-[10px] text-center font-semibold text-red-400";
+                    statusEl.innerText = "Invalid username or password!";
+                    return;
+                }
+
+                // Credentials verified
+                currentUser = foundUser.username;
+                localStorage.setItem('auraspend_active_user', currentUser);
+
+                statusEl.className = "text-[10px] text-center font-semibold text-emerald-400";
+                statusEl.innerText = `Welcome back, ${currentUser}!`;
+
+                setTimeout(() => {
+                    closeAuthModal();
+                    checkAppLockState();
+                }, 1000);
+            }
         }
 
         function handleLogout() {
             currentUser = null;
-            localStorage.removeItem('auraspend_user');
+            localStorage.removeItem('auraspend_active_user');
             closeAuthModal();
+            checkAppLockState();
         }
 
         // Settings Modal Controls
@@ -768,7 +841,7 @@
             const total = filtered.reduce((acc, tx) => acc + tx.amount, 0);
             document.getElementById('hist-total').innerText = `₹${total.toFixed(2)}`;
 
-            const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills'];
+            const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills', 'Fitness', 'Health', 'Education', 'Travel'];
             const catTotals = categories.map(cat => {
                 return filtered
                     .filter(tx => tx.category === cat)
@@ -781,7 +854,7 @@
             historyChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Food', 'Trans', 'Shop', 'Ent', 'Bills'],
+                    labels: ['Food', 'Trans', 'Shop', 'Ent', 'Bills', 'Fit', 'Hlth', 'Edu', 'Trvl'],
                     datasets: [{
                         data: catTotals,
                         backgroundColor: '#00f0ff',
@@ -793,7 +866,7 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 8, family: 'Outfit' } } },
+                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 7, family: 'Outfit' } } },
                         y: { display: false }
                     }
                 }
