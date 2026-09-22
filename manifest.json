@@ -17,22 +17,22 @@
       "purpose": "any"
     },
     {
-      "src": "./web-app-manifest-512x512.png",
-      "sizes": "360x360",
+      "src": "./web-app-updated-manifest-512x512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./web-app-manifest-512x512.png",
-      "sizes": "360x360",
+      "src": "./web-app-updated-manifest-512x512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
   "screenshots": [
     {
-      "src": "./web-app-manifest-512x512.png",
-      "sizes": "360x360",
+      "src": "./web-app-updated-manifest-512x512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "AuraSpend Expense Tracker Dashboard"
