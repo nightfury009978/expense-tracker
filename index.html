@@ -56,7 +56,7 @@ input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold);outl
 .neg{color:var(--red)}.pos{color:var(--green)}
 nav{position:fixed;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:402px;margin:0 auto;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:28px;display:flex;padding:6px;z-index:5;box-shadow:0 18px 40px -16px rgba(15,26,51,.4)}
 nav button{flex:1;border:0;background:none;color:var(--mute);font:700 11px Manrope;padding:7px;border-radius:22px;display:flex;flex-direction:column;align-items:center;gap:2px}
-nav button span{font-size:19px}nav button.on{background:var(--ink);color:var(--gold2)}
+nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}nav button.on{background:var(--ink);color:var(--gold2)}.hb{width:42px;height:42px;border-radius:14px;border:1px solid var(--line);background:var(--card);box-shadow:var(--sh);display:grid;place-items:center;color:var(--ink)}.hb svg,.chev{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}#drawer{position:fixed;inset:0;background:rgba(10,15,30,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:20;display:flex;justify-content:flex-end}#drawer aside{width:min(88vw,370px);height:100%;background:var(--bg);padding:calc(18px + env(safe-area-inset-top)) 14px 24px;overflow:auto;animation:slin .25s ease}@keyframes slin{from{transform:translateX(34px);opacity:0}}.acc{background:var(--card);border:1px solid var(--line);border-radius:18px;margin-bottom:10px;box-shadow:var(--sh);overflow:hidden}.ah{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:0;padding:16px;color:var(--gold);text-align:left}.shine.s{font-size:18px;font-weight:700;letter-spacing:-.3px}.chev{transition:transform .2s}.acc.open .chev{transform:rotate(90deg)}.ab{padding:0 16px 16px}.acc:not(.open) .ab{display:none}
 .dw{height:210px;margin:10px 0 6px}.lg{display:flex;align-items:center;gap:9px;padding:6px 0;border-top:1px solid var(--line)}.lg i{width:10px;height:10px;border-radius:50%}.lg span{flex:1}
 .m6{display:flex;align-items:flex-end;gap:8px;height:120px;margin-top:12px}.m6 div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px}.m6 i{width:100%;border-radius:8px;background:var(--line)}.m6 i.cur{background:var(--foil)}.m6 span{font-size:11px;color:var(--mute)}
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(98px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:14px;display:flex;gap:12px;align-items:center;z-index:9;font-weight:600;box-shadow:var(--sh)}
@@ -67,7 +67,7 @@ label{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px;font-weig
 </head>
 <body>
 <div class="wrap">
-<header><h1 class="shine">AuraSpend</h1><div class="row"><button class="btn ghost hide" id="inst" style="width:auto;padding:8px 12px" onclick="install()">Install</button></div></header>
+<header><h1 class="shine">AuraSpend</h1><div class="row"><button class="btn ghost hide" id="inst" style="width:auto;padding:8px 12px" onclick="install()">Install</button><button class="hb hide" id="mbtn" aria-label="Open menu" onclick="openMenu()"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></header>
 
 <section id="lock" class="card" style="margin-top:30px">
   <h2>Welcome</h2><p class="mute">Log in or create an account. Your data stays on this device.</p>
@@ -93,7 +93,7 @@ label{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px;font-weig
   <div class="card" id="addbox">
     <div class="seg" id="tseg" style="margin-bottom:8px"><button data-t="expense" class="on">Expense</button><button data-t="income">Income</button></div>
     <form onsubmit="add(event)">
-      <div class="g2"><input id="et" placeholder="Coffee with Riya" required maxlength="40"><input id="ea" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="Amount" required></div>
+      <div class="g2"><input id="et" placeholder="What was it for? e.g. Groceries" required maxlength="40"><input id="ea" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="Amount" required></div>
       <input id="ed" type="date" style="margin-top:8px">
       <div class="pills" id="cats" style="margin:10px 0"></div>
       <button class="btn gold">Add entry</button>
@@ -121,23 +121,13 @@ label{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px;font-weig
   <div class="card"><b>Budget by category</b><p class="mute" id="bc" style="margin-top:6px"></p></div>
 </section>
 
-<!-- SETTINGS -->
-<section id="v-set" class="hide">
-  <h2 style="margin-bottom:8px">Settings</h2>
-  <div class="card"><p class="mute" id="who"></p>
-    <div class="g2" style="margin-top:10px"><button class="btn ghost" onclick="toggleTheme()">Dark / light</button><button class="btn ghost" onclick="logout()">Log out</button></div></div>
-  <div class="card"><b>Reminders &amp; sync</b><p class="mute" style="margin:4px 0 10px">Daily check-in notification and background refresh.</p><button class="btn gold" onclick="enableReminders()">Enable reminders</button></div>
-  <div class="card"><b>Your data</b>
-    <div class="g2" style="margin-top:10px"><button class="btn ghost" onclick="exportCSV()">Export CSV</button><button class="btn ghost" onclick="exportJSON()">Backup JSON</button></div>
-    <button class="btn ghost" style="margin-top:8px" onclick="$('imp').click()">Restore from backup</button><input type="file" id="imp" accept=".json,.csv" class="hide" onchange="importFile(this.files[0]);this.value=''">
-    <button class="btn red" style="margin-top:8px" onclick="wipe()">Erase all my entries</button></div>
-</section>
 </main>
 </div>
 
 <nav id="nav" class="hide">
-  <button data-v="home" class="on"><span>🏠</span>Home</button><button data-v="stats"><span>📊</span>Insights</button><button data-v="budget"><span>🎯</span>Budget</button><button data-v="set"><span>⚙️</span>Settings</button>
+  <button data-v="home" class="on"><svg viewBox="0 0 24 24"><path d="M3.5 10.6 12 3.5l8.5 7.1V19a1.5 1.5 0 0 1-1.5 1.5h-3.8v-5.6H8.8v5.6H5A1.5 1.5 0 0 1 3.5 19z"/></svg>Home</button><button data-v="stats"><svg viewBox="0 0 24 24"><path d="M3 20.5h18"/><rect x="4.5" y="11" width="3.5" height="9.5" rx="1.2"/><rect x="10.2" y="4" width="3.5" height="16.5" rx="1.2"/><rect x="16" y="13.5" width="3.5" height="7" rx="1.2"/></svg>Insights</button><button data-v="budget"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/></svg>Budget</button>
 </nav>
+<div id="drawer" class="hide" onclick="if(event.target===this)closeMenu()"><aside><div class="row sp" style="margin-bottom:14px"><h2 class="shine" style="font-size:26px">Menu</h2><button class="x" aria-label="Close menu" onclick="closeMenu()">✕</button></div><div class="acc"><button class="ah" onclick="acc(this)"><span class="shine s">Account</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><div class="ab"><p class="mute" id="who" style="margin-bottom:10px"></p><button class="btn ghost" onclick="logout()">Log out</button></div></div><div class="acc"><button class="ah" onclick="acc(this)"><span class="shine s">Appearance</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><div class="ab"><p class="mute" style="margin-bottom:10px">Switch between the ivory and midnight themes.</p><button class="btn ghost" onclick="toggleTheme()">Dark / light</button></div></div><div class="acc"><button class="ah" onclick="acc(this)"><span class="shine s">Reminders &amp; sync</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><div class="ab"><p class="mute" style="margin-bottom:10px">Daily check-in notification and background refresh.</p><button class="btn gold" onclick="enableReminders()">Enable reminders</button></div></div><div class="acc"><button class="ah" onclick="acc(this)"><span class="shine s">Your data</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><div class="ab"><div class="g2"><button class="btn ghost" onclick="exportCSV()">Export CSV</button><button class="btn ghost" onclick="exportJSON()">Backup JSON</button></div><button class="btn ghost" style="margin-top:8px" onclick="$('imp').click()">Restore from backup</button><input type="file" id="imp" accept=".json,.csv" class="hide" onchange="importFile(this.files[0]);this.value=''"><button class="btn red" style="margin-top:8px" onclick="wipe()">Erase all my entries</button></div></div></aside></div>
 <div id="toast" class="hide"></div>
 
 <script>
@@ -178,13 +168,16 @@ function logout(){U=null;localStorage.removeItem('as4_active');location.reload()
 
 /* ---------- boot / nav ---------- */
 function boot(){
-  $('lock').classList.add('hide');$('app').classList.remove('hide');$('nav').classList.remove('hide');
+  $('lock').classList.add('hide');$('mbtn').classList.remove('hide');$('app').classList.remove('hide');$('nav').classList.remove('hide');
   document.documentElement.dataset.theme=S.theme;$('who').textContent='Signed in as '+(users[U]?.n||U);
   $('ed').value=new Date().toLocaleDateString('en-CA');$('bi').value=S.budget||'';$('cur').value=S.cur;
   $('fc').innerHTML='<option>All</option>'+CATS.map(c=>`<option>${c[0]}</option>`).join('')+'<option>Income</option>';
   drawCats();render();
   handleParams();if(pendingFile){importFile(pendingFile);pendingFile=null}}
-function show(v){['home','stats','budget','set'].forEach(x=>$('v-'+x).classList.toggle('hide',x!==v));
+function openMenu(){$('drawer').classList.remove('hide')}function closeMenu(){$('drawer').classList.add('hide')}
+function acc(b){b.parentElement.classList.toggle('open')}
+addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+function show(v){['home','stats','budget'].forEach(x=>$('v-'+x).classList.toggle('hide',x!==v));
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   if(v==='stats')renderStats();if(v==='budget')renderBudget();window.scrollTo(0,0)}
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
