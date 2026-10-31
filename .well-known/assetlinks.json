@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.nightfury009978.twa",
+        "sha256_cert_fingerprints": ["70:2E:BF:3A:FC:B6:F6:EB:0C:84:FF:78:DE:98:3D:80:5A:70:35:99:3B:95:FD:DD:EC:B0:AE:F8:84:02:2F:C3"]
+      }
+    }]
