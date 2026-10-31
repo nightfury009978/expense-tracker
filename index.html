@@ -1,895 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AuraSpend - Expense Tracker</title>
-    
-    <!-- Web App / PWA Meta Tags -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#05040a">
-    
-    <!-- App Manifest & Local App Icons -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="web-app-manifest-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="web-app-manifest-512x512.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <style>
-        * {
-            font-family: 'Outfit', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-        }
-
-        body {
-            background-color: #05040a;
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(236, 72, 153, 0.28) 0%, transparent 40%),
-                radial-gradient(circle at 85% 20%, rgba(0, 240, 255, 0.28) 0%, transparent 45%),
-                radial-gradient(circle at 50% 85%, rgba(168, 85, 247, 0.3) 0%, transparent 50%);
-            background-attachment: fixed;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        /* Glassmorphism Styling */
-        .glass-card {
-            background: rgba(15, 13, 29, 0.82);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Glowing Accent Borders */
-        .neon-border-cyan {
-            border: 1px solid rgba(0, 240, 255, 0.8);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.35), inset 0 0 12px rgba(0, 240, 255, 0.12);
-        }
-
-        .neon-border-pink {
-            border: 1px solid rgba(236, 72, 153, 0.8);
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.35), inset 0 0 12px rgba(236, 72, 153, 0.12);
-        }
-
-        /* Navigation Tab Buttons */
-        .tab-btn-active {
-            background: linear-gradient(135deg, #00f0ff 0%, #d946ef 50%, #8b5cf6 100%);
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.85), 0 0 15px rgba(217, 70, 239, 0.7);
-            color: #ffffff;
-            font-weight: 800;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-        }
-
-        .btn-glow-add {
-            background: linear-gradient(180deg, #00f0ff 0%, #ec4899 100%);
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.7), 0 0 25px rgba(236, 72, 153, 0.6);
-        }
-
-        .btn-glow-add:active {
-            transform: scale(0.95);
-        }
-
-        /* Category Pill Styling */
-        .cat-pill {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            transition: all 0.2s ease;
-        }
-
-        .cat-pill.active {
-            border-color: #00f0ff;
-            background: rgba(0, 240, 255, 0.3);
-            box-shadow: 0 0 16px rgba(0, 240, 255, 0.6);
-            color: #ffffff;
-            font-weight: 700;
-        }
-
-        input, select {
-            background: rgba(10, 8, 20, 0.85) !important;
-            border: 1px solid rgba(255, 255, 255, 0.18) !important;
-            color: #ffffff !important;
-            outline: none !important;
-        }
-
-        input:focus, select:focus {
-            border-color: #00f0ff !important;
-            box-shadow: 0 0 12px rgba(0, 240, 255, 0.6) !important;
-        }
-
-        ::-webkit-scrollbar { width: 0px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AuraSpend - Expense Tracker</title>
+<meta name="description" content="Private, offline-ready expense tracker with budgets, insights and charts.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AuraSpend">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#14213D">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#F4F1EA;--card:#fff;--ink:#14213D;--mute:#6b6656;--line:#e3ddcd;--gold:#C8963E;--gold2:#E6C468;--red:#b4443a;--green:#2f7d5b;--navy:#14213D}
+[data-theme=dark]{--bg:#0e1424;--card:#18203a;--ink:#f3eedf;--mute:#9aa0b4;--line:#2a3352;--navy:#1f2c52}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0}
+body{background:var(--bg);color:var(--ink);font:500 14px/1.45 Manrope,system-ui,sans-serif;padding:env(safe-area-inset-top) 14px calc(84px + env(safe-area-inset-bottom));min-height:100vh}
+.wrap{max-width:430px;margin:0 auto}.hide{display:none!important}
+h1,h2,.num{font-family:Fraunces,Georgia,serif}
+.shine{font-weight:800;font-size:26px;letter-spacing:-.5px;background:linear-gradient(110deg,var(--ink) 35%,var(--gold2) 46%,#fff4cf 50%,var(--gold2) 54%,var(--ink) 65%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 4.5s linear infinite}
+@keyframes sh{to{background-position:-150% 0}}
+@media(prefers-reduced-motion:reduce){.shine{animation:none}}
+h2{font-size:18px;font-weight:700}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+.hero{background:var(--navy);color:#F4F1EA;border:1px solid var(--gold);position:relative;overflow:hidden}
+.hero .big{font-size:36px;font-weight:800;color:var(--gold2)}
+.hero small,.mute{color:var(--mute);font-size:12px}.hero small{color:#b9bfd1}
+.row{display:flex;gap:8px;align-items:center}.sp{justify-content:space-between}.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;color:var(--mute);padding:8px;border-radius:11px;font:600 13px Manrope}
+.seg button.on{background:var(--ink);color:var(--bg)}
+input,select{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:11px 12px;font:500 14px Manrope;outline:0}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.btn{border:0;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px;font:700 14px Manrope;width:100%}
+.btn.gold{background:var(--gold);color:#fff}.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}.btn.red{background:none;color:var(--red);border:1px solid var(--red)}
+.pills{display:flex;flex-wrap:wrap;gap:6px}.pill{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:20px;padding:6px 10px;font:600 12px Manrope}.pill.on{background:var(--gold);border-color:var(--gold);color:#fff}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--gold);border-radius:6px;transition:width .4s}
+.tx{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.tx:last-child{border:0}
+.ic{width:36px;height:36px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:18px;flex:none}
+.tx .t{flex:1;min-width:0}.tx b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x{background:none;border:0;color:var(--mute);font-size:16px;padding:6px}
+.neg{color:var(--red)}.pos{color:var(--green)}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding:6px 10px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav button{flex:1;border:0;background:none;color:var(--mute);font:600 11px Manrope;padding:6px;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button span{font-size:20px}nav button.on{color:var(--gold)}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:8px}.dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--gold)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:12px;display:flex;gap:12px;align-items:center;z-index:9;font-weight:600}
+#toast button{background:none;border:0;color:var(--gold2);font:700 13px Manrope}
+label{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px;font-weight:600}
+.err{color:var(--red);font-size:12px;margin-top:8px;min-height:16px}
+</style>
 </head>
-<body class="min-h-screen pb-10 pt-4 px-3 flex justify-center items-start">
-
-    <div class="w-full max-w-sm mx-auto space-y-4">
-        
-        <!-- Header -->
-        <header class="flex items-center justify-between px-1">
-            <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-purple-500 drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">Expense tracker</span>
-            </h1>
-            <div class="flex items-center space-x-3">
-                <!-- User Profile Icon Button -->
-                <button type="button" onclick="openAuthModal()" class="w-9 h-9 rounded-full overflow-hidden border-2 border-cyan-400 shadow-[0_0_12px_#00f0ff] active:scale-95 transition relative flex items-center justify-center bg-gray-900">
-                    <img id="user-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-full h-full object-cover">
-                </button>
-                <!-- Settings Button -->
-                <button type="button" onclick="openSettingsModal()" class="w-9 h-9 rounded-xl glass-card flex items-center justify-center text-gray-300 hover:text-white border border-white/20 active:scale-95 transition">
-                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                    </svg>
-                </button>
-            </div>
-        </header>
-
-        <!-- Locked Screen Overlay Message -->
-        <div id="logged-out-lockscreen" class="glass-card neon-border-cyan p-6 rounded-3xl text-center space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto text-2xl border border-cyan-400/40 shadow-[0_0_15px_#00f0ff]">
-                🔒
-            </div>
-            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Access Locked</h2>
-            <p class="text-xs text-gray-400">Please log in or register an account to manage your expenses.</p>
-            <button onclick="openAuthModal()" class="w-full py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-400 to-purple-500 text-white shadow-[0_0_15px_rgba(0,240,255,0.4)] active:scale-95 transition">
-                Login / Register
-            </button>
-        </div>
-
-        <!-- App Dashboard Container (Hidden until logged in) -->
-        <div id="app-dashboard" class="space-y-4 hidden">
-            <!-- Time Period Selector -->
-            <div class="glass-card p-1 rounded-2xl flex items-center justify-between border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                <button onclick="setPeriod('daily')" id="tab-daily" class="w-1/3 py-2 text-xs rounded-xl tab-btn-active transition">
-                    Daily
-                </button>
-                <button onclick="setPeriod('weekly')" id="tab-weekly" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
-                    Weekly
-                </button>
-                <button onclick="setPeriod('monthly')" id="tab-monthly" class="w-1/3 py-2 text-xs rounded-xl text-gray-400 transition">
-                    Monthly
-                </button>
-            </div>
-
-            <!-- Total Overview Card -->
-            <div class="glass-card neon-border-cyan p-4 rounded-3xl space-y-3 relative overflow-hidden">
-                <div class="flex items-center justify-between text-xs text-gray-400">
-                    <span id="period-title" class="font-bold uppercase tracking-wider text-cyan-300">Total Today</span>
-                    <span class="text-emerald-400 font-bold flex items-center gap-0.5">▲ Live</span>
-                </div>
-
-                <div class="text-4xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]" id="main-total-amount">
-                    ₹0.00
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 pt-1">
-                    <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10 relative overflow-hidden">
-                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></div>
-                        <p class="text-[10px] text-gray-400 font-medium">Today</p>
-                        <p class="text-xs font-bold text-cyan-300 mt-0.5" id="stat-today">₹0.00</p>
-                    </div>
-                    <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10 relative overflow-hidden">
-                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-pink-500 shadow-[0_0_8px_#ec4899]"></div>
-                        <p class="text-[10px] text-gray-400 font-medium">This Week</p>
-                        <p class="text-xs font-bold text-pink-400 mt-0.5" id="stat-week">₹0.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Swipeable Interactive Analytics Carousel -->
-            <div class="glass-card p-3 rounded-3xl relative" id="chart-container">
-                <div class="flex justify-between items-center px-1 mb-1">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300" id="chart-type-label">Spline Wave Analytics</span>
-                    <span class="text-[9px] text-cyan-400 font-semibold">👈 Swipe or tap 👉</span>
-                </div>
-                
-                <div class="h-36 w-full relative touch-pan-y" id="chart-swipe-area">
-                    <canvas id="waveChart"></canvas>
-                </div>
-
-                <!-- Indicator Dots -->
-                <div class="flex justify-center items-center space-x-2 mt-2">
-                    <span id="dot-0" onclick="setChartTypeIndex(0)" class="w-2 h-2 rounded-full bg-cyan-400 cursor-pointer transition-all shadow-[0_0_10px_#00f0ff]"></span>
-                    <span id="dot-1" onclick="setChartTypeIndex(1)" class="w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all"></span>
-                    <span id="dot-2" onclick="setChartTypeIndex(2)" class="w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all"></span>
-                </div>
-            </div>
-
-            <!-- Quick Add Section with Expanded Categories -->
-            <div class="glass-card neon-border-pink p-4 rounded-3xl space-y-3">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-pink-300">Quick Add</h2>
-
-                <form onsubmit="handleAddExpense(event)" class="flex gap-2">
-                    <div class="flex-1 space-y-2">
-                        <div class="flex bg-black/50 border border-white/15 rounded-xl px-3 py-2 items-center">
-                            <input type="text" id="expTitle" placeholder="Expense title" required 
-                                class="bg-transparent text-xs w-full focus:outline-none text-white placeholder-gray-500">
-                            <span class="text-cyan-400 font-bold text-xs ml-1">₹</span>
-                            <input type="number" id="expAmount" placeholder="0" step="0.01" min="0.01" required 
-                                class="bg-transparent text-xs w-16 focus:outline-none text-white text-right placeholder-gray-500 font-bold">
-                        </div>
-
-                        <!-- Extended Category Pills -->
-                        <div class="flex flex-wrap gap-1 max-h-24 overflow-y-auto pr-1" id="cat-pill-group">
-                            <button type="button" onclick="selectCat('Food')" data-cat="Food" class="cat-pill active px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🍿 Food</button>
-                            <button type="button" onclick="selectCat('Transport')" data-cat="Transport" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🚗 Transport</button>
-                            <button type="button" onclick="selectCat('Shopping')" data-cat="Shopping" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🛍️ Shopping</button>
-                            <button type="button" onclick="selectCat('Entertainment')" data-cat="Entertainment" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🎬 Entertainment</button>
-                            <button type="button" onclick="selectCat('Bills')" data-cat="Bills" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">💡 Bills</button>
-                            <button type="button" onclick="selectCat('Fitness')" data-cat="Fitness" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🏋️ Fitness</button>
-                            <button type="button" onclick="selectCat('Health')" data-cat="Health" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">🩺 Health</button>
-                            <button type="button" onclick="selectCat('Education')" data-cat="Education" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">📚 Education</button>
-                            <button type="button" onclick="selectCat('Travel')" data-cat="Travel" class="cat-pill px-2.5 py-1 rounded-lg text-[10px] font-medium text-gray-300">✈️ Travel</button>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-glow-add w-12 rounded-2xl flex items-center justify-center text-white text-2xl font-black active:scale-95 transition">
-                        +
-                    </button>
-                </form>
-            </div>
-
-            <!-- Recent Expenses Section -->
-            <div class="space-y-2">
-                <h3 class="text-xs font-bold text-gray-300 uppercase tracking-wider px-1">Recent Expenses</h3>
-                <div id="expenses-list" class="grid grid-cols-2 gap-2">
-                    <!-- Dynamic Items Inserted Here -->
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- User Auth & Profile Modal -->
-    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden px-4">
-        <div class="glass-card neon-border-cyan p-5 rounded-3xl w-full max-w-xs space-y-4 relative">
-            <div class="flex items-center justify-between border-b border-white/10 pb-2">
-                <div class="flex space-x-3" id="auth-modal-tabs">
-                    <button onclick="switchAuthTab('login')" id="auth-tab-login" class="text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1">🔐 Login</button>
-                    <button onclick="switchAuthTab('signup')" id="auth-tab-signup" class="text-xs font-bold text-gray-400 pb-1">📝 Sign Up</button>
-                </div>
-                <button onclick="closeAuthModal()" class="text-gray-400 hover:text-white text-sm p-1">✕</button>
-            </div>
-
-            <!-- Login Form -->
-            <form id="auth-form-login" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-3">
-                <div>
-                    <label class="text-[10px] text-gray-400 font-semibold block mb-1">Username</label>
-                    <input type="text" id="login-username" required placeholder="Enter username" class="w-full px-3 py-2 rounded-xl text-xs">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-semibold block mb-1">Password</label>
-                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-3 py-2 rounded-xl text-xs">
-                </div>
-                <button type="submit" class="w-full py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-[0_0_15px_rgba(0,240,255,0.4)] active:scale-95 transition">
-                    Login
-                </button>
-            </form>
-
-            <!-- Sign Up Form -->
-            <form id="auth-form-signup" onsubmit="handleAuthSubmit(event, 'signup')" class="space-y-3 hidden">
-                <div>
-                    <label class="text-[10px] text-gray-400 font-semibold block mb-1">New Username</label>
-                    <input type="text" id="signup-username" required placeholder="Create username" class="w-full px-3 py-2 rounded-xl text-xs">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-semibold block mb-1">New Password</label>
-                    <input type="password" id="signup-password" required placeholder="••••••••" class="w-full px-3 py-2 rounded-xl text-xs">
-                </div>
-                <button type="submit" class="w-full py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-[0_0_15px_rgba(236,72,153,0.4)] active:scale-95 transition">
-                    Register Account
-                </button>
-            </form>
-
-            <!-- User Session Profile View (When Logged In) -->
-            <div id="user-profile-view" class="space-y-3 hidden text-center">
-                <div class="w-16 h-16 rounded-full mx-auto border-2 border-cyan-400 shadow-[0_0_15px_#00f0ff] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover">
-                </div>
-                <div>
-                    <h3 class="text-sm font-bold text-white" id="profile-display-name">User</h3>
-                    <p class="text-[10px] text-cyan-400">Account Active</p>
-                </div>
-                <button onclick="handleLogout()" class="w-full py-2 rounded-xl text-xs font-bold bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500/30 active:scale-95 transition">
-                    Logout
-                </button>
-            </div>
-
-            <div id="auth-status" class="text-[10px] text-center font-semibold text-emerald-400 hidden"></div>
-        </div>
-    </div>
-
-    <!-- Settings & History Modal -->
-    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden px-4">
-        <div class="glass-card neon-border-cyan p-5 rounded-3xl w-full max-w-xs space-y-4 relative">
-            <div class="flex items-center justify-between border-b border-white/10 pb-2">
-                <div class="flex space-x-3">
-                    <button onclick="switchModalTab('history')" id="modal-tab-history" class="text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1">📜 History</button>
-                    <button onclick="switchModalTab('settings')" id="modal-tab-settings" class="text-xs font-bold text-gray-400 pb-1">⚙️ Settings</button>
-                </div>
-                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white text-sm p-1">✕</button>
-            </div>
-
-            <!-- History Tab Content -->
-            <div id="modal-content-history" class="space-y-3">
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-semibold block mb-1">Month</label>
-                        <select id="hist-month" onchange="renderHistoryData()" class="w-full px-2 py-1.5 rounded-xl text-xs">
-                            <option value="0">January</option><option value="1">February</option>
-                            <option value="2">March</option><option value="3">April</option>
-                            <option value="4">May</option><option value="5">June</option>
-                            <option value="6">July</option><option value="7">August</option>
-                            <option value="8">September</option><option value="9">October</option>
-                            <option value="10">November</option><option value="11">December</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-semibold block mb-1">Year</label>
-                        <select id="hist-year" onchange="renderHistoryData()" class="w-full px-2 py-1.5 rounded-xl text-xs">
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="bg-black/40 p-3 rounded-2xl border border-white/10 space-y-1 text-center">
-                    <span class="text-[10px] text-gray-400 uppercase font-medium">Selected Month Spending</span>
-                    <p class="text-xl font-extrabold text-cyan-300" id="hist-total">₹0.00</p>
-                </div>
-
-                <div class="h-28 w-full relative">
-                    <canvas id="historyChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Settings Tab Content -->
-            <div id="modal-content-settings" class="space-y-3 hidden">
-                <p class="text-xs text-gray-300">Manage storage settings or wipe all transaction records from your device.</p>
-                <button onclick="clearAllData()" class="w-full py-2.5 rounded-xl text-xs font-bold bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500/30 active:scale-95 transition">
-                    ⚠️ Reset All Data
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript Logic -->
-    <script>
-        let selectedCategory = 'Food';
-        let currentPeriod = 'daily';
-        let activeChartIndex = 0; // 0: Wave, 1: Bar, 2: Doughnut
-        let chartInstance = null;
-        let historyChartInstance = null;
-
-        // User Auth & Session States
-        let currentUser = localStorage.getItem('auraspend_active_user') || null;
-        let registeredUsers = JSON.parse(localStorage.getItem('auraspend_registered_users')) || {};
-
-        // Transactions State
-        let transactions = JSON.parse(localStorage.getItem('auraspend_v3_txs')) || [];
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('hist-month').value = new Date().getMonth();
-            setupTouchSwipe();
-            checkAppLockState();
-        });
-
-        function checkAppLockState() {
-            const dashboard = document.getElementById('app-dashboard');
-            const lockscreen = document.getElementById('logged-out-lockscreen');
-
-            if (currentUser) {
-                dashboard.classList.remove('hidden');
-                lockscreen.classList.add('hidden');
-                updateUI();
-            } else {
-                dashboard.classList.add('hidden');
-                lockscreen.classList.remove('hidden');
-            }
-        }
-
-        // Touch Swipe Event Setup for Chart Carousel
-        function setupTouchSwipe() {
-            const swipeArea = document.getElementById('chart-swipe-area');
-            let touchStartX = 0;
-            let touchEndX = 0;
-
-            swipeArea.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
-
-            swipeArea.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipeGesture();
-            }, { passive: true });
-
-            function handleSwipeGesture() {
-                const diff = touchStartX - touchEndX;
-                if (Math.abs(diff) > 30) {
-                    if (diff > 0) {
-                        activeChartIndex = (activeChartIndex + 1) % 3;
-                    } else {
-                        activeChartIndex = (activeChartIndex - 1 + 3) % 3;
-                    }
-                    renderActiveChart();
-                }
-            }
-        }
-
-        function selectCat(cat) {
-            selectedCategory = cat;
-            document.querySelectorAll('#cat-pill-group .cat-pill').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
-            });
-        }
-
-        function handleAddExpense(e) {
-            e.preventDefault();
-            const title = document.getElementById('expTitle').value.trim();
-            const amount = parseFloat(document.getElementById('expAmount').value);
-
-            if (!title || isNaN(amount) || amount <= 0) return;
-
-            const newTx = {
-                id: Date.now(),
-                title: title,
-                amount: amount,
-                category: selectedCategory,
-                date: new Date().toISOString()
-            };
-
-            transactions.unshift(newTx);
-            saveData();
-            
-            document.getElementById('expTitle').value = '';
-            document.getElementById('expAmount').value = '';
-            
-            updateUI();
-        }
-
-        function deleteTx(id) {
-            transactions = transactions.filter(t => t.id !== id);
-            saveData();
-            updateUI();
-        }
-
-        function clearAllData() {
-            if(confirm('Are you sure you want to erase all stored expense history?')) {
-                transactions = [];
-                saveData();
-                closeSettingsModal();
-                updateUI();
-            }
-        }
-
-        function saveData() {
-            localStorage.setItem('auraspend_v3_txs', JSON.stringify(transactions));
-        }
-
-        function setPeriod(p) {
-            currentPeriod = p;
-            ['daily', 'weekly', 'monthly'].forEach(tab => {
-                const el = document.getElementById(`tab-${tab}`);
-                el.className = tab === p 
-                    ? 'w-1/3 py-2 text-xs rounded-xl tab-btn-active transition' 
-                    : 'w-1/3 py-2 text-xs rounded-xl text-gray-400 transition';
-            });
-
-            document.getElementById('period-title').innerText = 
-                p === 'daily' ? 'Total Today' : p === 'weekly' ? 'Total This Week' : 'Total This Month';
-
-            updateUI();
-        }
-
-        // Automatic Time Filtering
-        function getFilteredStats() {
-            const now = new Date();
-            
-            const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-            const dayOfWeek = now.getDay(); 
-            const distToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
-            const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distToMonday).getTime();
-            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-
-            let todayTotal = 0;
-            let weekTotal = 0;
-            let monthTotal = 0;
-
-            transactions.forEach(tx => {
-                const txTime = new Date(tx.date).getTime();
-                if (txTime >= startOfToday) todayTotal += tx.amount;
-                if (txTime >= startOfWeek) weekTotal += tx.amount;
-                if (txTime >= startOfMonth) monthTotal += tx.amount;
-            });
-
-            return { todayTotal, weekTotal, monthTotal };
-        }
-
-        function updateUI() {
-            if (!currentUser) return;
-
-            const { todayTotal, weekTotal, monthTotal } = getFilteredStats();
-
-            document.getElementById('stat-today').innerText = `₹${todayTotal.toFixed(2)}`;
-            document.getElementById('stat-week').innerText = `₹${weekTotal.toFixed(2)}`;
-
-            const mainTotal = currentPeriod === 'daily' ? todayTotal : currentPeriod === 'weekly' ? weekTotal : monthTotal;
-            document.getElementById('main-total-amount').innerText = `₹${mainTotal.toFixed(2)}`;
-
-            renderTransactionList();
-            renderActiveChart();
-        }
-
-        function renderTransactionList() {
-            const list = document.getElementById('expenses-list');
-            list.innerHTML = '';
-
-            if (transactions.length === 0) {
-                list.innerHTML = `<div class="col-span-2 text-center py-6 text-gray-500 text-xs">No transactions recorded yet.</div>`;
-                return;
-            }
-
-            const iconMap = {
-                'Food': '🍿', 'Transport': '🚗', 'Shopping': '🛍️', 
-                'Entertainment': '🎬', 'Bills': '💡', 'Fitness': '🏋️', 
-                'Health': '🩺', 'Education': '📚', 'Travel': '✈️'
-            };
-
-            transactions.forEach(tx => {
-                const card = document.createElement('div');
-                card.className = 'glass-card p-2.5 rounded-2xl flex flex-col justify-between border border-white/5 relative';
-
-                const dateObj = new Date(tx.date);
-                const formattedTime = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + ', ' + 
-                                      dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-                card.innerHTML = `
-                    <div class="flex items-center justify-between overflow-hidden mb-1">
-                        <div class="flex items-center space-x-1.5 overflow-hidden">
-                            <div class="w-6 h-6 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center text-[10px]">
-                                ${iconMap[tx.category] || '📁'}
-                            </div>
-                            <p class="text-[11px] font-bold text-white truncate">${escapeHtml(tx.title)}</p>
-                        </div>
-                        <button onclick="deleteTx(${tx.id})" class="text-[10px] text-gray-500 hover:text-red-400 px-1">✕</button>
-                    </div>
-                    <div class="flex items-end justify-between mt-1 pt-1 border-t border-white/5">
-                        <span class="text-[8px] text-gray-400 font-medium">${formattedTime}</span>
-                        <p class="text-xs font-bold text-pink-400">-₹${tx.amount.toFixed(2)}</p>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
-        function setChartTypeIndex(idx) {
-            activeChartIndex = idx;
-            renderActiveChart();
-        }
-
-        function renderActiveChart() {
-            const ctx = document.getElementById('waveChart').getContext('2d');
-            if (chartInstance) chartInstance.destroy();
-
-            [0, 1, 2].forEach(i => {
-                const dot = document.getElementById(`dot-${i}`);
-                dot.className = i === activeChartIndex 
-                    ? 'w-2 h-2 rounded-full bg-cyan-400 cursor-pointer transition-all shadow-[0_0_10px_#00f0ff]' 
-                    : 'w-2 h-2 rounded-full bg-cyan-400/30 cursor-pointer transition-all';
-            });
-
-            const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills', 'Fitness', 'Health', 'Education', 'Travel'];
-            
-            const now = new Date();
-            let cutoffTime = 0;
-            if (currentPeriod === 'daily') {
-                cutoffTime = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-            } else if (currentPeriod === 'weekly') {
-                const dayOfWeek = now.getDay();
-                const distToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
-                cutoffTime = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distToMonday).getTime();
-            } else {
-                cutoffTime = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-            }
-
-            const currentPeriodTxs = transactions.filter(t => new Date(t.date).getTime() >= cutoffTime);
-
-            const catTotals = categories.map(cat => {
-                return currentPeriodTxs
-                    .filter(tx => tx.category === cat)
-                    .reduce((acc, tx) => acc + tx.amount, 0);
-            });
-
-            const labels = ['Spline Wave Analytics', 'Category Breakdown', 'Distribution Dynamic'];
-            document.getElementById('chart-type-label').innerText = labels[activeChartIndex];
-
-            const interactiveTooltip = {
-                enabled: true,
-                backgroundColor: 'rgba(10, 8, 20, 0.95)',
-                titleColor: '#00f0ff',
-                bodyColor: '#ffffff',
-                borderColor: '#00f0ff',
-                borderWidth: 1,
-                padding: 8,
-                displayColors: false,
-                callbacks: {
-                    label: function(context) {
-                        return `${context.label}: ₹${context.raw.toFixed(2)}`;
-                    }
-                }
-            };
-
-            if (activeChartIndex === 0) {
-                const gradCyan = ctx.createLinearGradient(0, 0, 0, 140);
-                gradCyan.addColorStop(0, 'rgba(0, 240, 255, 0.45)');
-                gradCyan.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
-
-                chartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: categories,
-                        datasets: [{
-                            label: 'Spending',
-                            data: catTotals,
-                            borderColor: '#00f0ff',
-                            borderWidth: 3,
-                            fill: true,
-                            backgroundColor: gradCyan,
-                            tension: 0.45,
-                            pointRadius: 4,
-                            pointHoverRadius: 7,
-                            pointBackgroundColor: '#00f0ff'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false }, tooltip: interactiveTooltip },
-                        scales: {
-                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 8, family: 'Outfit' } } },
-                            y: { display: false }
-                        }
-                    }
-                });
-            } else if (activeChartIndex === 1) {
-                chartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: categories,
-                        datasets: [{
-                            label: 'Amount Spent',
-                            data: catTotals,
-                            backgroundColor: ['#00f0ff', '#ec4899', '#8b5cf6', '#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#84cc16', '#06b6d4'],
-                            borderRadius: 6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false }, tooltip: interactiveTooltip },
-                        scales: {
-                            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 8, family: 'Outfit' } } },
-                            y: { display: false }
-                        }
-                    }
-                });
-            } else if (activeChartIndex === 2) {
-                chartInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: categories,
-                        datasets: [{
-                            data: catTotals.every(v => v === 0) ? new Array(categories.length).fill(1) : catTotals,
-                            backgroundColor: ['#00f0ff', '#ec4899', '#8b5cf6', '#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#84cc16', '#06b6d4'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false }, tooltip: interactiveTooltip },
-                        cutout: '70%'
-                    }
-                });
-            }
-        }
-
-        // Auth Modal Controls
-        function openAuthModal() {
-            const modal = document.getElementById('auth-modal');
-            modal.classList.remove('hidden');
-
-            if (currentUser) {
-                document.getElementById('auth-modal-tabs').classList.add('hidden');
-                document.getElementById('auth-form-login').classList.add('hidden');
-                document.getElementById('auth-form-signup').classList.add('hidden');
-                document.getElementById('user-profile-view').classList.remove('hidden');
-                document.getElementById('profile-display-name').innerText = currentUser;
-            } else {
-                document.getElementById('auth-modal-tabs').classList.remove('hidden');
-                document.getElementById('user-profile-view').classList.add('hidden');
-                switchAuthTab('login');
-            }
-        }
-
-        function closeAuthModal() {
-            document.getElementById('auth-modal').classList.add('hidden');
-            document.getElementById('auth-status').classList.add('hidden');
-        }
-
-        function switchAuthTab(tab) {
-            document.getElementById('auth-status').classList.add('hidden');
-            if (tab === 'login') {
-                document.getElementById('auth-tab-login').className = 'text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1';
-                document.getElementById('auth-tab-signup').className = 'text-xs font-bold text-gray-400 pb-1';
-                document.getElementById('auth-form-login').classList.remove('hidden');
-                document.getElementById('auth-form-signup').classList.add('hidden');
-            } else {
-                document.getElementById('auth-tab-signup').className = 'text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1';
-                document.getElementById('auth-tab-login').className = 'text-xs font-bold text-gray-400 pb-1';
-                document.getElementById('auth-form-signup').classList.remove('hidden');
-                document.getElementById('auth-form-login').classList.add('hidden');
-            }
-        }
-
-        function handleAuthSubmit(e, type) {
-            e.preventDefault();
-            const statusEl = document.getElementById('auth-status');
-            statusEl.classList.remove('hidden');
-
-            if (type === 'signup') {
-                const username = document.getElementById('signup-username').value.trim();
-                const password = document.getElementById('signup-password').value;
-
-                if (!username || !password) return;
-
-                if (registeredUsers[username.toLowerCase()]) {
-                    statusEl.className = "text-[10px] text-center font-semibold text-red-400";
-                    statusEl.innerText = "Username already registered! Try logging in.";
-                    return;
-                }
-
-                registeredUsers[username.toLowerCase()] = { username: username, password: password };
-                localStorage.setItem('auraspend_registered_users', JSON.stringify(registeredUsers));
-
-                document.getElementById('signup-username').value = '';
-                document.getElementById('signup-password').value = '';
-
-                statusEl.className = "text-[10px] text-center font-semibold text-emerald-400";
-                statusEl.innerText = `Registered successfully! Please log in to proceed.`;
-
-                setTimeout(() => {
-                    switchAuthTab('login');
-                    document.getElementById('login-username').value = username;
-                }, 1200);
-
-            } else if (type === 'login') {
-                const usernameInput = document.getElementById('login-username').value.trim();
-                const passwordInput = document.getElementById('login-password').value;
-
-                const foundUser = registeredUsers[usernameInput.toLowerCase()];
-
-                if (!foundUser || foundUser.password !== passwordInput) {
-                    statusEl.className = "text-[10px] text-center font-semibold text-red-400";
-                    statusEl.innerText = "Invalid username or password!";
-                    return;
-                }
-
-                currentUser = foundUser.username;
-                localStorage.setItem('auraspend_active_user', currentUser);
-
-                statusEl.className = "text-[10px] text-center font-semibold text-emerald-400";
-                statusEl.innerText = `Welcome back, ${currentUser}!`;
-
-                setTimeout(() => {
-                    closeAuthModal();
-                    checkAppLockState();
-                }, 1000);
-            }
-        }
-
-        function handleLogout() {
-            currentUser = null;
-            localStorage.removeItem('auraspend_active_user');
-            closeAuthModal();
-            checkAppLockState();
-        }
-
-        // Settings Modal Controls
-        function openSettingsModal() {
-            document.getElementById('settings-modal').classList.remove('hidden');
-            renderHistoryData();
-        }
-
-        function closeSettingsModal() {
-            document.getElementById('settings-modal').classList.add('hidden');
-        }
-
-        function switchModalTab(tab) {
-            if (tab === 'history') {
-                document.getElementById('modal-tab-history').className = 'text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1';
-                document.getElementById('modal-tab-settings').className = 'text-xs font-bold text-gray-400 pb-1';
-                document.getElementById('modal-content-history').classList.remove('hidden');
-                document.getElementById('modal-content-settings').classList.add('hidden');
-                renderHistoryData();
-            } else {
-                document.getElementById('modal-tab-settings').className = 'text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 pb-1';
-                document.getElementById('modal-tab-history').className = 'text-xs font-bold text-gray-400 pb-1';
-                document.getElementById('modal-content-settings').classList.remove('hidden');
-                document.getElementById('modal-content-history').classList.add('hidden');
-            }
-        }
-
-        function renderHistoryData() {
-            const month = parseInt(document.getElementById('hist-month').value);
-            const year = parseInt(document.getElementById('hist-year').value);
-
-            const filtered = transactions.filter(tx => {
-                const d = new Date(tx.date);
-                return d.getMonth() === month && d.getFullYear() === year;
-            });
-
-            const total = filtered.reduce((acc, tx) => acc + tx.amount, 0);
-            document.getElementById('hist-total').innerText = `₹${total.toFixed(2)}`;
-
-            const categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Bills', 'Fitness', 'Health', 'Education', 'Travel'];
-            const catTotals = categories.map(cat => {
-                return filtered
-                    .filter(tx => tx.category === cat)
-                    .reduce((acc, tx) => acc + tx.amount, 0);
-            });
-
-            const ctx = document.getElementById('historyChart').getContext('2d');
-            if (historyChartInstance) historyChartInstance.destroy();
-
-            historyChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Food', 'Trans', 'Shop', 'Ent', 'Bills', 'Fit', 'Hlth', 'Edu', 'Trvl'],
-                    datasets: [{
-                        data: catTotals,
-                        backgroundColor: '#00f0ff',
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 7, family: 'Outfit' } } },
-                        y: { display: false }
-                    }
-                }
-            });
-        }
-    </script>
-
-    <!-- PWA Service Worker Registration & Caching Handler -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('Service Worker registered successfully:', reg.scope))
-            .catch(err => console.error('Service Worker registration failed:', err));
-        });
-      }
-    </script>
+<body>
+<div class="wrap">
+<header><h1 class="shine">AuraSpend</h1><div class="row"><button class="btn ghost hide" id="inst" style="width:auto;padding:8px 12px" onclick="install()">Install</button></div></header>
+
+<section id="lock" class="card" style="margin-top:30px">
+  <h2>Welcome</h2><p class="mute">Log in or create an account. Your data stays on this device.</p>
+  <form id="af" onsubmit="auth(event,'in')">
+    <label for="u">Username</label><input id="u" autocomplete="username" required>
+    <label for="p">Password</label><input id="p" type="password" autocomplete="current-password" required>
+    <div class="err" id="aerr"></div>
+    <div class="g2" style="margin-top:6px"><button class="btn">Log in</button><button type="button" class="btn gold" onclick="auth(event,'up')">Create account</button></div>
+  </form>
+</section>
+
+<main id="app" class="hide">
+<!-- HOME -->
+<section id="v-home">
+  <div class="seg" id="pseg"><button data-p="daily" class="on">Daily</button><button data-p="weekly">Weekly</button><button data-p="monthly">Monthly</button></div>
+  <div class="card hero">
+    <small id="ptitle">Spent today</small>
+    <div class="big num" id="total">0</div>
+    <div class="g2" style="margin-top:8px"><div><small>Income</small><div class="num pos" id="inc" style="color:#7ddba8;font-weight:700">0</div></div><div><small>Balance</small><div class="num" id="bal" style="font-weight:700">0</div></div></div>
+    <div style="margin-top:12px"><div class="row sp"><small id="bt">Monthly budget</small><small id="bp"></small></div><div class="bar" style="margin-top:4px"><i id="bf" style="width:0"></i></div></div>
+  </div>
+  <div class="card" id="chbox"><div class="row sp"><b id="ctitle">Trend</b><span class="mute">Swipe</span></div><div style="height:150px;margin-top:6px" id="sw"><canvas id="c1"></canvas></div><div class="dots" id="dots"><i></i><i></i><i></i></div></div>
+  <div class="card" id="addbox">
+    <div class="seg" id="tseg" style="margin-bottom:8px"><button data-t="expense" class="on">Expense</button><button data-t="income">Income</button></div>
+    <form onsubmit="add(event)">
+      <div class="g2"><input id="et" placeholder="Coffee with Riya" required maxlength="40"><input id="ea" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="Amount" required></div>
+      <input id="ed" type="date" style="margin-top:8px">
+      <div class="pills" id="cats" style="margin:10px 0"></div>
+      <button class="btn gold">Add entry</button>
+    </form>
+  </div>
+  <div class="row" style="margin-bottom:8px"><input id="q" placeholder="Search entries" oninput="renderList()"><select id="fc" style="width:46%" onchange="renderList()"></select></div>
+  <div class="card" id="list"></div>
+</section>
+
+<!-- STATS -->
+<section id="v-stats" class="hide">
+  <h2 style="margin-bottom:8px">Insights</h2><input type="month" id="sm" onchange="renderStats()" style="margin-bottom:12px">
+  <div class="g2"><div class="card"><small class="mute">Spent</small><div class="num" id="s1" style="font-size:22px;font-weight:700">0</div></div><div class="card"><small class="mute">Income</small><div class="num pos" id="s2" style="font-size:22px;font-weight:700">0</div></div></div>
+  <div class="card"><div id="ins" class="mute" style="line-height:1.7"></div></div>
+  <div class="card"><b>By category</b><div id="cl" style="margin-top:8px"></div></div>
+  <div class="card"><b>Last 6 months</b><div style="height:160px;margin-top:6px"><canvas id="c2"></canvas></div></div>
+</section>
+
+<!-- BUDGET -->
+<section id="v-budget" class="hide">
+  <h2 style="margin-bottom:8px">Budget</h2>
+  <div class="card"><label for="bi" style="margin-top:0">Monthly budget</label><input id="bi" type="number" inputmode="decimal" min="0" placeholder="e.g. 30000"><label for="cur">Currency symbol</label>
+  <select id="cur"><option>₹</option><option>$</option><option>€</option><option>£</option><option>¥</option><option>AED</option></select>
+  <button class="btn gold" style="margin-top:12px" onclick="saveBudget()">Save budget</button></div>
+  <div class="card"><b>Budget by category</b><p class="mute" id="bc" style="margin-top:6px"></p></div>
+</section>
+
+<!-- SETTINGS -->
+<section id="v-set" class="hide">
+  <h2 style="margin-bottom:8px">Settings</h2>
+  <div class="card"><p class="mute" id="who"></p>
+    <div class="g2" style="margin-top:10px"><button class="btn ghost" onclick="toggleTheme()">Dark / light</button><button class="btn ghost" onclick="logout()">Log out</button></div></div>
+  <div class="card"><b>Your data</b>
+    <div class="g2" style="margin-top:10px"><button class="btn ghost" onclick="exportCSV()">Export CSV</button><button class="btn ghost" onclick="exportJSON()">Backup JSON</button></div>
+    <button class="btn ghost" style="margin-top:8px" onclick="$('imp').click()">Restore from backup</button><input type="file" id="imp" accept=".json" class="hide" onchange="importJSON(this)">
+    <button class="btn red" style="margin-top:8px" onclick="wipe()">Erase all my entries</button></div>
+</section>
+</main>
+</div>
+
+<nav id="nav" class="hide">
+  <button data-v="home" class="on"><span>🏠</span>Home</button><button data-v="stats"><span>📊</span>Insights</button><button data-v="budget"><span>🎯</span>Budget</button><button data-v="set"><span>⚙️</span>Settings</button>
+</nav>
+<div id="toast" class="hide"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const CATS=[['Food','🍽️'],['Transport','🚗'],['Shopping','🛍️'],['Entertainment','🎬'],['Bills','💡'],['Fitness','🏋️'],['Health','🩺'],['Education','📚'],['Travel','✈️'],['Other','📌']];
+const IC=Object.fromEntries(CATS.concat([['Income','💰']]));
+const COL=['#14213D','#C8963E','#2f7d5b','#7a5c99','#b4443a','#3a7ca5','#d08c60','#5c6b73','#9a8c5a','#8d99ae'];
+const J=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
+let users=J('as4_users',{}),U=localStorage.getItem('as4_active'),tx=[],S={budget:0,cur:'₹',theme:'light'};
+let period='daily',cat='Food',type='expense',ci=0,c1,c2,undoT,dp;
+
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>S.cur+Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const T=t=>+new Date(t.date), exp=a=>a.filter(t=>t.type!=='income'), inc=a=>a.filter(t=>t.type==='income');
+const sum=a=>a.reduce((s,t)=>s+t.amount,0);
+const store=()=>{localStorage.setItem('as4_tx_'+U,JSON.stringify(tx));localStorage.setItem('as4_set_'+U,JSON.stringify(S))};
+const ink=()=>getComputedStyle(document.documentElement).getPropertyValue('--mute').trim();
+
+/* ---------- auth (salted SHA-256, local only) ---------- */
+async function hash(p,s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function mk(k,n,p){const salt=crypto.randomUUID();users[k]={n,salt,h:await hash(p,salt)};localStorage.setItem('as4_users',JSON.stringify(users))}
+async function auth(e,m){
+  e.preventDefault();const n=$('u').value.trim(),p=$('p').value,k=n.toLowerCase(),er=$('aerr');
+  if(!n||!p){er.textContent='Enter a username and password.';return}
+  if(m==='up'){
+    if(users[k]){er.textContent="That username's taken. Try logging in.";return}
+    if(p.length<4){er.textContent='Use at least 4 characters.';return}
+    await mk(k,n,p);return start(k)}
+  if(!users[k]){const o=J('auraspend_registered_users',{})[k];if(o&&o.password===p)await mk(k,o.username,p)}
+  const u=users[k];if(!u||u.h!==await hash(p,u.salt)){er.textContent='Wrong username or password.';return}
+  start(k)}
+function start(k){U=k;localStorage.setItem('as4_active',k);load();boot()}
+function load(){
+  tx=J('as4_tx_'+U,[]);S=Object.assign({budget:0,cur:'₹',theme:'light'},J('as4_set_'+U,{}));
+  const old=localStorage.getItem('auraspend_v3_txs');
+  if(old&&!localStorage.getItem('as4_tx_'+U)){tx=J('auraspend_v3_txs',[]).map(t=>({...t,type:'expense'}));store();localStorage.removeItem('auraspend_v3_txs')}}
+function logout(){U=null;localStorage.removeItem('as4_active');location.reload()}
+
+/* ---------- boot / nav ---------- */
+function boot(){
+  $('lock').classList.add('hide');$('app').classList.remove('hide');$('nav').classList.remove('hide');
+  document.documentElement.dataset.theme=S.theme;$('who').textContent='Signed in as '+(users[U]?.n||U);
+  $('ed').value=new Date().toLocaleDateString('en-CA');$('bi').value=S.budget||'';$('cur').value=S.cur;
+  $('fc').innerHTML='<option>All</option>'+CATS.map(c=>`<option>${c[0]}</option>`).join('')+'<option>Income</option>';
+  drawCats();render();
+  const a=new URLSearchParams(location.search).get('action');if(a==='stats')show('stats');if(a==='add'){show('home');$('et').focus()}}
+function show(v){['home','stats','budget','set'].forEach(x=>$('v-'+x).classList.toggle('hide',x!==v));
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v==='stats')renderStats();if(v==='budget')renderBudget();window.scrollTo(0,0)}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+$('pseg').onclick=e=>{const p=e.target.dataset.p;if(!p)return;period=p;[...$('pseg').children].forEach(b=>b.classList.toggle('on',b.dataset.p===p));render()};
+$('tseg').onclick=e=>{const t=e.target.dataset.t;if(!t)return;type=t;[...$('tseg').children].forEach(b=>b.classList.toggle('on',b.dataset.t===t));$('cats').classList.toggle('hide',t==='income')};
+function drawCats(){$('cats').innerHTML=CATS.map(c=>`<button type="button" class="pill${c[0]===cat?' on':''}" data-c="${c[0]}">${c[1]} ${c[0]}</button>`).join('')}
+$('cats').onclick=e=>{const c=e.target.dataset.c;if(c){cat=c;drawCats()}};
+
+/* ---------- data ops ---------- */
+function add(e){
+  e.preventDefault();const title=$('et').value.trim(),amount=parseFloat($('ea').value);if(!title||!(amount>0))return;
+  const d=$('ed').value,today=new Date().toLocaleDateString('en-CA');
+  const date=(!d||d===today)?new Date().toISOString():new Date(d+'T12:00:00').toISOString();
+  tx.unshift({id:Date.now(),title,amount,type,category:type==='income'?'Income':cat,date});
+  store();$('et').value='';$('ea').value='';render();toast(type==='income'?'Income added':'Expense added');
+  if(type==='expense'&&S.budget){const m=monthTx(new Date()),s=sum(exp(m));if(s>S.budget)toast('Over your monthly budget')}}
+function del(id){const i=tx.findIndex(t=>t.id===id);if(i<0)return;const [r]=tx.splice(i,1);store();render();toast('Entry deleted','Undo',()=>{tx.splice(i,0,r);store();render()})}
+function wipe(){if(confirm('Erase all entries for this account? This can\'t be undone.')){tx=[];store();render();toast('All entries erased')}}
+function toast(m,a,fn){const t=$('toast');t.classList.remove('hide');t.innerHTML=`<span>${esc(m)}</span>`+(a?`<button>${a}</button>`:'');
+  if(a)t.querySelector('button').onclick=()=>{fn();t.classList.add('hide')};clearTimeout(undoT);undoT=setTimeout(()=>t.classList.add('hide'),a?5000:2200)}
+function saveBudget(){S.budget=Math.max(0,parseFloat($('bi').value)||0);S.cur=$('cur').value;store();render();renderBudget();toast('Budget saved')}
+function toggleTheme(){S.theme=S.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=S.theme;store();render()}
+
+/* ---------- time helpers ---------- */
+function start0(p){const d=new Date();d.setHours(0,0,0,0);if(p==='weekly')d.setDate(d.getDate()-((d.getDay()+6)%7));if(p==='monthly')d.setDate(1);return+d}
+const monthTx=d=>tx.filter(t=>{const x=new Date(t.date);return x.getFullYear()===d.getFullYear()&&x.getMonth()===d.getMonth()});
+const pTx=()=>tx.filter(t=>T(t)>=start0(period));
+
+/* ---------- render home ---------- */
+function render(){
+  const a=pTx(),s=sum(exp(a)),i=sum(inc(a));
+  $('ptitle').textContent={daily:'Spent today',weekly:'Spent this week',monthly:'Spent this month'}[period];
+  $('total').textContent=fmt(s);$('inc').textContent=fmt(i);$('bal').textContent=fmt(i-s);
+  const ms=sum(exp(monthTx(new Date())));
+  if(S.budget){const p=ms/S.budget*100;$('bf').style.width=Math.min(100,p)+'%';$('bf').style.background=p>=100?'#e0675b':p>=80?'#e6a04d':'var(--gold)';
+    $('bt').textContent='Monthly budget';$('bp').textContent=`${fmt(ms)} of ${fmt(S.budget)}`}
+  else{$('bf').style.width='0';$('bt').textContent='No budget set. Add one in Budget.';$('bp').textContent=''}
+  renderList();drawChart()}
+function renderList(){
+  const q=$('q').value.toLowerCase(),f=$('fc').value;
+  const a=tx.filter(t=>(f==='All'||t.category===f)&&t.title.toLowerCase().includes(q)).sort((x,y)=>T(y)-T(x)).slice(0,60);
+  $('list').innerHTML=a.length?a.map(t=>{const d=new Date(t.date),inc=t.type==='income';
+    return`<div class="tx"><div class="ic">${IC[t.category]||'📌'}</div><div class="t"><b>${esc(t.title)}</b><span class="mute">${d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} · ${esc(t.category)}</span></div><b class="num ${inc?'pos':'neg'}" style="flex:none">${inc?'+':'-'}${fmt(t.amount)}</b><button class="x" aria-label="Delete" onclick="del(${t.id})">✕</button></div>`}).join('')
+   :'<p class="mute" style="text-align:center;padding:14px">No entries yet. Add your first expense above.</p>'}
+
+/* ---------- charts ---------- */
+function trend(){const l=[],d=[];
+  if(period==='monthly'){for(let i=5;i>=0;i--){const m=new Date();m.setDate(1);m.setMonth(m.getMonth()-i);l.push(m.toLocaleString('en',{month:'short'}));d.push(sum(exp(monthTx(m))))}}
+  else for(let i=6;i>=0;i--){const m=new Date();m.setHours(0,0,0,0);m.setDate(m.getDate()-i);const e=+m+864e5;l.push(m.toLocaleString('en',{weekday:'short'}));d.push(sum(exp(tx.filter(t=>T(t)>=m&&T(t)<e))))}
+  return{l,d}}
+function catTotals(a){const m={};exp(a).forEach(t=>m[t.category]=(m[t.category]||0)+t.amount);return Object.entries(m).sort((x,y)=>y[1]-x[1])}
+function drawChart(){
+  const tt={backgroundColor:'#14213D',titleColor:'#E6C468',bodyColor:'#fff',displayColors:false,callbacks:{label:c=>fmt(c.raw)}};
+  const mk=ink(),base={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:tt}};
+  const sc={x:{grid:{display:false},ticks:{color:mk,font:{size:10,family:'Manrope'}}},y:{display:false,beginAtZero:true}};
+  const titles=['Spending trend','By category','Share of spending'];$('ctitle').textContent=titles[ci];
+  [...$('dots').children].forEach((d,i)=>d.classList.toggle('on',i===ci));
+  if(c1)c1.destroy();const ctx=$('c1').getContext('2d');
+  if(ci===0){const t=trend(),g=ctx.createLinearGradient(0,0,0,150);g.addColorStop(0,'rgba(200,150,62,.4)');g.addColorStop(1,'rgba(200,150,62,0)');
+    c1=new Chart(ctx,{type:'line',data:{labels:t.l,datasets:[{data:t.d,borderColor:'#C8963E',backgroundColor:g,fill:true,tension:.4,borderWidth:3,pointRadius:3,pointBackgroundColor:'#14213D'}]},options:{...base,scales:sc}})}
+  else{const c=catTotals(pTx()),empty=!c.length,lb=empty?['No data']:c.map(x=>x[0]),dt=empty?[1]:c.map(x=>x[1]);
+    c1=new Chart(ctx,ci===1?{type:'bar',data:{labels:lb,datasets:[{data:dt,backgroundColor:COL,borderRadius:6}]},options:{...base,scales:sc}}
+      :{type:'doughnut',data:{labels:lb,datasets:[{data:dt,backgroundColor:empty?['#e3ddcd']:COL,borderWidth:0}]},options:{...base,cutout:'68%'}})}}
+(()=>{let x0=0;const a=$('sw');a.addEventListener('touchstart',e=>x0=e.changedTouches[0].screenX,{passive:true});
+ a.addEventListener('touchend',e=>{const d=x0-e.changedTouches[0].screenX;if(Math.abs(d)>35){ci=(ci+(d>0?1:2))%3;drawChart()}},{passive:true})})();
+$('dots').onclick=e=>{const i=[...$('dots').children].indexOf(e.target);if(i>-1){ci=i;drawChart()}};
+
+/* ---------- insights ---------- */
+function renderStats(){
+  const v=$('sm').value||(new Date().toISOString().slice(0,7));$('sm').value=v;const[y,m]=v.split('-').map(Number),d=new Date(y,m-1,1);
+  const a=monthTx(d),prev=monthTx(new Date(y,m-2,1)),s=sum(exp(a)),ps=sum(exp(prev)),days=new Date(y,m,0).getDate();
+  $('s1').textContent=fmt(s);$('s2').textContent=fmt(sum(inc(a)));const c=catTotals(a),L=[];
+  if(c.length){L.push(`Top category: <b>${IC[c[0][0]]} ${esc(c[0][0])}</b> (${fmt(c[0][1])})`);L.push(`Daily average: <b>${fmt(s/days)}</b>`);
+    if(ps)L.push(`Versus last month: <b class="${s>ps?'neg':'pos'}">${s>ps?'▲':'▼'} ${Math.abs((s-ps)/ps*100).toFixed(0)}%</b>`);
+    if(S.budget)L.push(s>S.budget?`<b class="neg">Over budget by ${fmt(s-S.budget)}</b>`:`Left in budget: <b class="pos">${fmt(S.budget-s)}</b>`)}
+  $('ins').innerHTML=L.join('<br>')||'No spending this month.';
+  $('cl').innerHTML=c.map(([n,v2])=>`<div style="margin-bottom:10px"><div class="row sp"><span>${IC[n]} ${esc(n)}</span><b>${fmt(v2)}</b></div><div class="bar" style="margin-top:4px"><i style="width:${v2/c[0][1]*100}%"></i></div></div>`).join('')||'<p class="mute">Nothing to show.</p>';
+  const l=[],dt=[];for(let i=5;i>=0;i--){const x=new Date(y,m-1-i,1);l.push(x.toLocaleString('en',{month:'short'}));dt.push(sum(exp(monthTx(x))))}
+  if(c2)c2.destroy();c2=new Chart($('c2'),{type:'bar',data:{labels:l,datasets:[{data:dt,backgroundColor:l.map((_,i)=>i===5?'#C8963E':'#14213D'),borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{displayColors:false,callbacks:{label:c=>fmt(c.raw)}}},scales:{x:{grid:{display:false},ticks:{color:ink()}},y:{display:false,beginAtZero:true}}}})}
+function renderBudget(){const c=catTotals(monthTx(new Date())),tot=sum(exp(monthTx(new Date())));
+  $('bc').innerHTML=c.length?c.map(([n,v])=>`${IC[n]} ${esc(n)}: <b>${(v/tot*100).toFixed(0)}%</b>`).join(' &nbsp; '):'Spending split for this month will appear here.'}
+
+/* ---------- export / import ---------- */
+function dl(name,txt,mime){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:mime}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function exportCSV(){const q=v=>'"'+String(v).replace(/"/g,'""')+'"';dl('auraspend.csv','Date,Type,Category,Title,Amount\n'+tx.map(t=>[t.date,t.type||'expense',t.category,q(t.title),t.amount].join(',')).join('\n'),'text/csv')}
+function exportJSON(){dl('auraspend-backup.json',JSON.stringify({tx,S}),'application/json')}
+function importJSON(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.tx))throw 0;
+  const ids=new Set(tx.map(t=>t.id));d.tx.filter(t=>t&&t.title&&t.amount>0&&!ids.has(t.id)).forEach(t=>tx.push({id:t.id||Date.now()+Math.random(),title:String(t.title).slice(0,40),amount:+t.amount,type:t.type==='income'?'income':'expense',category:t.category||'Other',date:t.date||new Date().toISOString()}));
+  store();render();toast('Backup restored')}catch{toast('That file isn\'t a valid backup')}el.value=''};r.readAsText(f)}
+
+/* ---------- PWA ---------- */
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').classList.remove('hide')});
+function install(){if(dp){dp.prompt();dp=null;$('inst').classList.add('hide')}}
+addEventListener('appinstalled',()=>$('inst').classList.add('hide'));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(r=>{
+  r.addEventListener('updatefound',()=>{const n=r.installing;n&&n.addEventListener('statechange',()=>{if(n.state==='installed'&&navigator.serviceWorker.controller)toast('Update ready','Refresh',()=>{n.postMessage('SKIP_WAITING');location.reload()})})})}).catch(()=>{}));
+
+if(U&&users[U]){load();boot()}
+</script>
 </body>
 </html>
