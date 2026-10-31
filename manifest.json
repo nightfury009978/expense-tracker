@@ -2,14 +2,14 @@
   "id": "/",
   "name": "AuraSpend - Expense Tracker",
   "short_name": "AuraSpend",
-  "description": "A private, offline-ready expense tracker with budgets, insights and charts.",
+  "description": "A private, offline-ready expense tracker with budgets, insights and a beautiful spending breakdown.",
   "start_url": "./index.html?source=pwa",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": ["window-controls-overlay", "tabbed", "standalone", "minimal-ui"],
   "orientation": "portrait",
-  "background_color": "#F4F1EA",
-  "theme_color": "#14213D",
+  "background_color": "#F5F0E6",
+  "theme_color": "#0F1A33",
   "lang": "en",
   "dir": "ltr",
   "categories": ["finance", "productivity", "lifestyle"],
@@ -21,6 +21,43 @@
   ],
   "shortcuts": [
     {"name": "Add expense", "short_name": "Add", "url": "./index.html?action=add", "icons": [{"src": "web-app-manifest-192x192.png", "sizes": "192x192"}]},
-    {"name": "View stats", "short_name": "Stats", "url": "./index.html?action=stats", "icons": [{"src": "web-app-manifest-192x192.png", "sizes": "192x192"}]}
+    {"name": "View insights", "short_name": "Insights", "url": "./index.html?action=stats", "icons": [{"src": "web-app-manifest-192x192.png", "sizes": "192x192"}]}
+  ],
+  "screenshots": [
+    {"src": "screenshots/home.png", "sizes": "1080x2412", "type": "image/png", "form_factor": "narrow", "label": "Dashboard and spending breakdown"},
+    {"src": "screenshots/insights.png", "sizes": "1080x2412", "type": "image/png", "form_factor": "narrow", "label": "Monthly insights"},
+    {"src": "screenshots/budget.png", "sizes": "1080x2412", "type": "image/png", "form_factor": "narrow", "label": "Budget"},
+    {"src": "screenshots/desktop.png", "sizes": "1920x1080", "type": "image/png", "form_factor": "wide", "label": "Desktop view"}
+  ],
+  "file_handlers": [
+    {"action": "./index.html", "accept": {"application/json": [".json"], "text/csv": [".csv"]}, "launch_type": "single-client"}
+  ],
+  "launch_handler": {"client_mode": ["navigate-existing", "auto"]},
+  "protocol_handlers": [
+    {"protocol": "web+auraspend", "url": "./index.html?add=%s"}
+  ],
+  "share_target": {
+    "action": "./index.html",
+    "method": "GET",
+    "params": {"title": "title", "text": "text", "url": "url"}
+  },
+  "edge_side_panel": {"preferred_width": 420},
+  "tab_strip": {"home_tab": "auto", "new_tab_button": {"url": "./index.html?action=add"}},
+  "note_taking": {"new_note_url": "./index.html?action=add"},
+  "widgets": [
+    {
+      "name": "Spending today",
+      "short_name": "Spend",
+      "tag": "spend",
+      "description": "Today's and this month's spending at a glance.",
+      "template": "spend-template",
+      "ms_ac_template": "widgets/spend-template.json",
+      "data": "widgets/data.json",
+      "type": "application/json",
+      "auth": false,
+      "update": 3600,
+      "icons": [{"src": "web-app-manifest-192x192.png", "sizes": "192x192"}],
+      "screenshots": [{"src": "widgets/preview.png", "sizes": "600x600", "label": "Spending widget"}]
+    }
   ]
 }
