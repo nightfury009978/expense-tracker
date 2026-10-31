@@ -23,12 +23,6 @@
     {"name": "Add expense", "short_name": "Add", "url": "./index.html?action=add", "icons": [{"src": "web-app-manifest-192x192.png", "sizes": "192x192"}]},
     {"name": "View insights", "short_name": "Insights", "url": "./index.html?action=stats", "icons": [{"src": "web-app-manifest-192x192.png", "sizes": "192x192"}]}
   ],
-  "screenshots": [
-    {"src": "screenshots/home.png", "sizes": "1080x2412", "type": "image/png", "form_factor": "narrow", "label": "Dashboard and spending breakdown"},
-    {"src": "screenshots/insights.png", "sizes": "1080x2412", "type": "image/png", "form_factor": "narrow", "label": "Monthly insights"},
-    {"src": "screenshots/budget.png", "sizes": "1080x2412", "type": "image/png", "form_factor": "narrow", "label": "Budget"},
-    {"src": "screenshots/desktop.png", "sizes": "1920x1080", "type": "image/png", "form_factor": "wide", "label": "Desktop view"}
-  ],
   "file_handlers": [
     {"action": "./index.html", "accept": {"application/json": [".json"], "text/csv": [".csv"]}, "launch_type": "single-client"}
   ],
