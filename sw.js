@@ -1,4 +1,4 @@
-const V='auraspend-v4',DATA='auraspend-data',TAG='spend';
+const V='auraspend-v5',DATA='auraspend-data',TAG='spend';
 const CORE=['./','./index.html','./offline.html','./manifest.json','./widgets/spend-template.json','./favicon.svg','./favicon.ico','./favicon-96x96.png','./apple-touch-icon.png','./web-app-manifest-192x192.png','./web-app-manifest-512x512.png'];
 
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>Promise.allSettled(CORE.map(u=>c.add(u)))))});
